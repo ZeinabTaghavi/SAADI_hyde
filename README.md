@@ -32,6 +32,8 @@ export HF_TOKEN=<your Hugging Face token>
 
 5. Run `hyde-dl19.ipynb`, it will run the experiment on the TREC DL19 dataset with `Qwen/Qwen3-30B-A3B-Instruct-2507`. Run `hyde-demo.ipynb`, it will go through HyDE pipeline with an example query.
 
+The notebooks load Qwen locally with Transformers using `device_map="auto"`, so `CUDA_VISIBLE_DEVICES` controls which GPUs are used and the `HF_HOME`/`TRANSFORMERS_CACHE` settings control where model files are cached.
+
 
 ## Citation
 

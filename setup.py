@@ -12,6 +12,7 @@ setup(
         'openai',
         'pyserini',
         'faiss-cpu',
-        'transformers>=4.51.0'
+        'transformers>=4.51.0',
+        'accelerate'
     ],
 )
