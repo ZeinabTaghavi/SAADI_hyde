@@ -8,9 +8,10 @@ setup(
     package_dir={'': 'src'},
     install_requires=[
         'cohere',
+        'huggingface_hub>=0.34.0',
         'openai',
         'pyserini',
         'faiss-cpu',
-        'transformers'
+        'transformers>=4.51.0'
     ],
 )

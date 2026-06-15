@@ -9,22 +9,28 @@ HyDE significantly outperforms Contriever across tasks and languages and it does
 
 ## Steps to run the code
 
-1. Install `pyserini` by following the [guide](https://github.com/castorini/pyserini#-installation). We use pyserini to conduct dense retrieval and evaluation.
+1. Install this package and its Python dependencies.
+
+```
+pip install -e .
+```
+
+2. Install `pyserini` by following the [guide](https://github.com/castorini/pyserini#-installation). We use pyserini to conduct dense retrieval and evaluation.
 
 
-2. Download the prebuilt Contrever faiss index
+3. Download the prebuilt Contrever faiss index
 ```
 wget  https://www.dropbox.com/s/dytqaqngaupp884/contriever_msmarco_index.tar.gz
 tar -xvf contriever_msmarco_index.tar.gz
 ```
 
-3. Setup GPT3 API key
+4. Setup Hugging Face API token for Qwen generation
 
 ```
-export OPENAI = <your key>
+export HF_TOKEN=<your Hugging Face token>
 ```
 
-4. Run `hyde-dl19.ipynb`, it will run the experiment on the TREC DL19 dataset. Run `hyde-demo.ipynb`, it will go through HyDE pipeline with an example query.
+5. Run `hyde-dl19.ipynb`, it will run the experiment on the TREC DL19 dataset with `Qwen/Qwen3-30B-A3B-Instruct-2507`. Run `hyde-demo.ipynb`, it will go through HyDE pipeline with an example query.
 
 
 ## Citation
