@@ -1,5 +1,7 @@
+import json
 import os
 import time
+from pathlib import Path
 
 
 QWEN3_30B_A3B_INSTRUCT_2507 = "Qwen/Qwen3-30B-A3B-Instruct-2507"
@@ -185,6 +187,15 @@ def _is_hf_offline_mode():
     return os.environ.get("HF_HUB_OFFLINE", "").lower() in {"1", "true", "yes", "on"}
 
 
+def _token_kwargs(token, local_files_only):
+    if local_files_only:
+        # Avoid using an expired token stored on disk when loading from cache.
+        return {"token": False}
+    if token:
+        return {"token": token}
+    return {}
+
+
 class TransformersGenerator(Generator):
     def __init__(
         self,
@@ -213,7 +224,7 @@ class TransformersGenerator(Generator):
         self.stop = stop or ["\n\n\n"]
         self.device_map = device_map
         self.torch_dtype = torch_dtype
-        self.cache_dir = cache_dir or os.environ.get("TRANSFORMERS_CACHE") or os.environ.get("HF_HOME")
+        self.cache_dir = cache_dir or os.environ.get("HF_HUB_CACHE")
         self.trust_remote_code = trust_remote_code
         self.attn_implementation = attn_implementation
         self.low_cpu_mem_usage = low_cpu_mem_usage
@@ -222,6 +233,70 @@ class TransformersGenerator(Generator):
         self.local_files_only = local_files_only
         self.tokenizer = None
         self.model = None
+
+    def _verify_snapshot(self, snapshot_path):
+        snapshot_path = Path(snapshot_path)
+        index_path = snapshot_path / "model.safetensors.index.json"
+        unsharded_path = snapshot_path / "model.safetensors"
+
+        if index_path.is_file():
+            with index_path.open() as f:
+                index = json.load(f)
+            expected_shards = sorted(set(index.get("weight_map", {}).values()))
+            missing_shards = [shard for shard in expected_shards if not (snapshot_path / shard).is_file()]
+            if missing_shards:
+                preview = ", ".join(missing_shards[:5])
+                if len(missing_shards) > 5:
+                    preview += f", ... ({len(missing_shards)} missing total)"
+                raise RuntimeError(
+                    f"Cached snapshot for {self.model_name} is incomplete at {snapshot_path}. "
+                    f"Missing safetensors shard(s): {preview}. Re-download the model with online "
+                    "Hub access, or clear the incomplete cache snapshot."
+                )
+            return snapshot_path
+
+        if unsharded_path.is_file():
+            return snapshot_path
+
+        shard_count = len(list(snapshot_path.glob("model-*.safetensors")))
+        raise RuntimeError(
+            f"Cached snapshot for {self.model_name} at {snapshot_path} has no "
+            "model.safetensors.index.json or model.safetensors file. "
+            f"Found {shard_count} safetensors shard file(s). The Qwen repo publishes sharded "
+            "safetensors, so the index file and all shards must be present."
+        )
+
+    def _snapshot_path(self):
+        try:
+            from huggingface_hub import snapshot_download
+        except ModuleNotFoundError as e:
+            raise ModuleNotFoundError(
+                "TransformersGenerator requires the 'huggingface_hub' package. "
+                "Install project dependencies with `pip install -e .`."
+            ) from e
+
+        allow_patterns = [
+            "config.json",
+            "generation_config.json",
+            "merges.txt",
+            "model-*.safetensors",
+            "model.safetensors",
+            "model.safetensors.index.json",
+            "tokenizer.json",
+            "tokenizer_config.json",
+            "vocab.json",
+        ]
+        snapshot_path = snapshot_download(
+            repo_id=self.model_name,
+            cache_dir=self.cache_dir,
+            allow_patterns=allow_patterns,
+            local_files_only=self.local_files_only,
+            **_token_kwargs(self.api_key, self.local_files_only),
+        )
+        return self._verify_snapshot(snapshot_path)
+
+    def prepare_snapshot(self):
+        return str(self._snapshot_path())
 
     def _load_model(self):
         if self.model is not None and self.tokenizer is not None:
@@ -235,29 +310,25 @@ class TransformersGenerator(Generator):
                 "Install project dependencies with `pip install -e .`."
             ) from e
 
+        model_path = self._snapshot_path()
         common_kwargs = {
-            "cache_dir": self.cache_dir,
             "trust_remote_code": self.trust_remote_code,
-            "local_files_only": self.local_files_only,
+            "local_files_only": True,
         }
-        if self.local_files_only:
-            # Avoid using an expired token stored on disk when loading from cache.
-            common_kwargs["token"] = False
-        elif self.api_key:
-            common_kwargs["token"] = self.api_key
 
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, **common_kwargs)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_path, **common_kwargs)
 
         model_kwargs = {
             **common_kwargs,
             "torch_dtype": self.torch_dtype,
             "device_map": self.device_map,
             "low_cpu_mem_usage": self.low_cpu_mem_usage,
+            "use_safetensors": True,
         }
         if self.attn_implementation:
             model_kwargs["attn_implementation"] = self.attn_implementation
 
-        self.model = AutoModelForCausalLM.from_pretrained(self.model_name, **model_kwargs)
+        self.model = AutoModelForCausalLM.from_pretrained(model_path, **model_kwargs)
         self.model.eval()
 
     def _input_device(self):
