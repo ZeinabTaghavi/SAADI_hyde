@@ -193,7 +193,9 @@ def _token_kwargs(token, local_files_only):
         return {"token": False}
     if token:
         return {"token": token}
-    return {}
+    # Qwen is public. Explicit anonymous access avoids accidentally using an
+    # expired token from the local Hugging Face login cache.
+    return {"token": False}
 
 
 class TransformersGenerator(Generator):
@@ -286,13 +288,24 @@ class TransformersGenerator(Generator):
             "tokenizer_config.json",
             "vocab.json",
         ]
-        snapshot_path = snapshot_download(
-            repo_id=self.model_name,
-            cache_dir=self.cache_dir,
-            allow_patterns=allow_patterns,
-            local_files_only=self.local_files_only,
-            **_token_kwargs(self.api_key, self.local_files_only),
-        )
+        try:
+            snapshot_path = snapshot_download(
+                repo_id=self.model_name,
+                cache_dir=self.cache_dir,
+                allow_patterns=allow_patterns,
+                local_files_only=self.local_files_only,
+                **_token_kwargs(self.api_key, self.local_files_only),
+            )
+        except Exception as e:
+            raise RuntimeError(
+                f"Could not prepare snapshot for {self.model_name}. "
+                f"cache_dir={self.cache_dir!r}, local_files_only={self.local_files_only}, "
+                f"HF_HOME={os.environ.get('HF_HOME')!r}, "
+                f"HF_HUB_CACHE={os.environ.get('HF_HUB_CACHE')!r}, "
+                f"HF_HUB_OFFLINE={os.environ.get('HF_HUB_OFFLINE')!r}. "
+                "If the model is not fully cached, unset HF_HUB_OFFLINE/TRANSFORMERS_OFFLINE "
+                "and ensure the cache directory is writable."
+            ) from e
         return self._verify_snapshot(snapshot_path)
 
     def prepare_snapshot(self):
