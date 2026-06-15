@@ -181,6 +181,10 @@ class HuggingFaceGenerator(Generator):
         return texts[: self.n]
 
 
+def _is_hf_offline_mode():
+    return os.environ.get("HF_HUB_OFFLINE", "").lower() in {"1", "true", "yes", "on"}
+
+
 class TransformersGenerator(Generator):
     def __init__(
         self,
@@ -197,8 +201,10 @@ class TransformersGenerator(Generator):
         trust_remote_code=False,
         attn_implementation=None,
         low_cpu_mem_usage=True,
+        local_files_only=None,
     ):
-        api_key = api_key or os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACEHUB_API_TOKEN")
+        if api_key is None:
+            api_key = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACEHUB_API_TOKEN")
         super().__init__(model_name, api_key)
         self.n = n
         self.max_new_tokens = max_new_tokens
@@ -211,6 +217,9 @@ class TransformersGenerator(Generator):
         self.trust_remote_code = trust_remote_code
         self.attn_implementation = attn_implementation
         self.low_cpu_mem_usage = low_cpu_mem_usage
+        if local_files_only is None:
+            local_files_only = _is_hf_offline_mode()
+        self.local_files_only = local_files_only
         self.tokenizer = None
         self.model = None
 
@@ -229,8 +238,12 @@ class TransformersGenerator(Generator):
         common_kwargs = {
             "cache_dir": self.cache_dir,
             "trust_remote_code": self.trust_remote_code,
+            "local_files_only": self.local_files_only,
         }
-        if self.api_key:
+        if self.local_files_only:
+            # Avoid using an expired token stored on disk when loading from cache.
+            common_kwargs["token"] = False
+        elif self.api_key:
             common_kwargs["token"] = self.api_key
 
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, **common_kwargs)
