@@ -1,0 +1,10 @@
+# Install a CUDA-compatible torch build for the target server first.
+accelerate>=0.30
+datasets>=2.18
+huggingface_hub>=0.34
+numpy>=1.26
+PyYAML>=6.0
+safetensors>=0.4
+torch>=2.2
+tqdm>=4.66
+transformers>=4.51

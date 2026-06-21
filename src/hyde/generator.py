@@ -215,6 +215,7 @@ class TransformersGenerator(Generator):
         attn_implementation=None,
         low_cpu_mem_usage=True,
         local_files_only=None,
+        max_attempts=None,
     ):
         if api_key is None:
             api_key = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACEHUB_API_TOKEN")
@@ -230,6 +231,7 @@ class TransformersGenerator(Generator):
         self.trust_remote_code = trust_remote_code
         self.attn_implementation = attn_implementation
         self.low_cpu_mem_usage = low_cpu_mem_usage
+        self.max_attempts = max_attempts
         if local_files_only is None:
             local_files_only = _is_hf_offline_mode()
         self.local_files_only = local_files_only
@@ -395,7 +397,14 @@ class TransformersGenerator(Generator):
 
     def generate(self, prompt):
         texts = []
+        attempts = 0
         while len(texts) < self.n:
+            if self.max_attempts is not None and attempts >= int(self.max_attempts):
+                raise RuntimeError(
+                    f"Generation produced {len(texts)}/{self.n} non-empty outputs "
+                    f"after {attempts} attempts for model {self.model_name}."
+                )
+            attempts += 1
             text = self._generate_once(prompt)
             if text:
                 texts.append(text)

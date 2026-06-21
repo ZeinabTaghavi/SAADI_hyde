@@ -13,7 +13,12 @@ setup(
         'openai',
         'pyserini',
         'faiss-cpu',
+        'datasets>=2.18',
+        'numpy>=1.26',
+        'PyYAML>=6.0',
         'safetensors',
+        'torch>=2.2',
+        'tqdm>=4.66',
         'transformers>=4.51.0',
         'accelerate'
     ],

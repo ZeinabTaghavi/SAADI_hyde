@@ -34,6 +34,122 @@ export HF_TOKEN=<your Hugging Face token>
 
 The notebooks load Qwen locally with Transformers using `device_map="auto"`, so `CUDA_VISIBLE_DEVICES` controls which GPUs are used and `HF_HUB_CACHE` controls where the sharded Qwen model snapshot is cached.
 
+## Standalone HyDE on LooGLE
+
+The repository also contains a standalone retrieval experiment for LooGLE. It does not import anything from the parent SAADI repository and can be copied to another server by itself.
+
+The default run reproduces the population in the saved HippoRAG comparison:
+
+- LooGLE `shortdep_qa`, test split
+- the frozen set of 25 document IDs in `configs/loogle_hipporag_subset.json`
+- 859 sentence-aware chunks of at most 500 whitespace-delimited words, without overlap
+- 534 questions with chunk-level evidence labels
+- per-document `facebook/contriever` retrieval
+- top-5 and top-10 metrics and table rows
+
+HyDE generation matches `hyde-dl19.ipynb`: local `Qwen/Qwen3-30B-A3B-Instruct-2507`, eight hypothetical passages, 512 new tokens, temperature 0.7, top-p 0.8, and `device_map="auto"`. The retrieval vector is the arithmetic mean of the normalized Contriever embeddings for the original question and all eight passages.
+
+### Installation on the experiment server
+
+Create an isolated environment and install a CUDA-compatible PyTorch build for that server. Then run:
+
+```bash
+pip install -r requirements-loogle.txt
+pip install -e . --no-deps
+```
+
+The second command installs this local package without reinstalling PyTorch. The LooGLE runner uses Transformers directly and does not require Java, Pyserini, or the DL19 index.
+
+Configure the model and dataset caches. The launcher uses the same defaults as the working notebook, but every value can be overridden:
+
+```bash
+export HF_TOKEN=<your-hugging-face-token>
+export SAADI_HF_CACHE_ROOT=/mnt/cache/taghavi
+export GPUS=4,5,6,7
+```
+
+If every model and dataset file is already cached, offline mode is supported:
+
+```bash
+export HF_HUB_OFFLINE=1
+export HF_DATASETS_OFFLINE=1
+export TRANSFORMERS_OFFLINE=1
+```
+
+### Validation, smoke test, and full run
+
+First verify the frozen population without loading Qwen or Contriever:
+
+```bash
+./run_loogle_hyde.sh --validate-only
+```
+
+This must report 25 documents, 859 chunks, 534 retrieval examples, and average chunk size `479.371362048894`. A mismatch stops the run before either model is loaded.
+
+Run a small real-model smoke test:
+
+```bash
+./run_loogle_hyde.sh \
+  --max-documents 1 \
+  --max-qa-entries 10 \
+  --run-name loogle_hyde_smoke
+```
+
+Run the full HippoRAG-comparable experiment:
+
+```bash
+./run_loogle_hyde.sh
+```
+
+Hypothetical documents are appended to `hyde_runs/loogle/hyde/<run-name>/hypotheses.jsonl` after every completed question. Document embeddings are cached beside them. If the process is interrupted, rerun the same command; resume is enabled by default. Use `--no-resume` to regenerate hypotheses, `--force-embeddings` to rebuild document embeddings, and `--force` to overwrite completed evaluation artifacts while retaining caches.
+
+Useful overrides include:
+
+```bash
+GPUS=0,1,2,3 ./run_loogle_hyde.sh
+./run_loogle_hyde.sh --embedding-device cuda:0
+./run_loogle_hyde.sh --top-ks 5 10 --log-level INFO
+```
+
+### Evaluation artifacts and tables
+
+Results are written to:
+
+```text
+hyde_evaluations/loogle/hyde/top_5/loogle_retrieval_ablation_hyde/
+hyde_evaluations/loogle/hyde/top_10/loogle_retrieval_ablation_hyde/
+```
+
+Each directory contains:
+
+```text
+index/chunk_index.jsonl
+index/index_stats.json
+retrieval/retrieval_examples.jsonl
+retrieval/retrieval_payloads.jsonl
+retrieval/retrieval_results.json
+metrics_per_query.jsonl
+metrics_summary.json
+leaderboard_row.json
+evaluation_manifest.json
+```
+
+The evaluation includes Gold, Silver-Loose, and Union-Loose Recall/MRR/nDCG, plus Gold Hit, Silver-Strict Hit, and Strict-Union Hit. Generate paper-ready JSONL, CSV, Markdown, and LaTeX rows with:
+
+```bash
+python generate_hyde_retriever_table.py
+```
+
+The files are written under `hyde_evaluations_Tables/`.
+
+### Tests
+
+The local test suite uses mocked model components and does not download Qwen, Contriever, or LooGLE:
+
+```bash
+PYTHONPATH=src pytest -q
+```
+
 
 ## Citation
 
