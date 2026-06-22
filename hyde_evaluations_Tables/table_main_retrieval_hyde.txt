@@ -1,0 +1,19 @@
+% HyDE retrieval summary table.
+% Ranking metrics: NDCG@10 and Recall@10 over Gold/Silver-L/Union-L.
+% Binary metrics: HR@5 and HR@10 over Gold/Silver-S/Union-S.
+\begin{table*}[t]
+\centering
+\caption{Main retrieval summary for HyDE. Values are percentages.}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllrrrrrrrrrrrr}
+\toprule
+Dataset & Retriever & Method & \multicolumn{6}{c}{Ranking Metrics} & \multicolumn{6}{c}{Binary Metrics} \\
+\cmidrule(lr){4-9}\cmidrule(lr){10-15}
+& & & \multicolumn{2}{c}{Gold} & \multicolumn{2}{c}{Silver-L} & \multicolumn{2}{c}{Union-L} & \multicolumn{2}{c}{Gold} & \multicolumn{2}{c}{Silver-S} & \multicolumn{2}{c}{Union-S} \\
+& & & NDCG@10 & Recall@10 & NDCG@10 & Recall@10 & NDCG@10 & Recall@10 & HR@5 & HR@10 & HR@5 & HR@10 & HR@5 & HR@10 \\
+\midrule
+LooGLE & Contriever & HyDE & 58.4 & 81.1 & 37.8 & 50.0 & 58.2 & 80.9 & 71.1 & 81.7 & 25.0 & 25.0 & 70.8 & 81.3 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

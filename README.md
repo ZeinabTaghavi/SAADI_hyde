@@ -34,9 +34,9 @@ export HF_TOKEN=<your Hugging Face token>
 
 The notebooks load Qwen locally with Transformers using `device_map="auto"`, so `CUDA_VISIBLE_DEVICES` controls which GPUs are used and `HF_HUB_CACHE` controls where the sharded Qwen model snapshot is cached.
 
-## Standalone HyDE on LooGLE
+## Standalone HyDE benchmark runners
 
-The repository also contains a standalone retrieval experiment for LooGLE. It does not import anything from the parent SAADI repository and can be copied to another server by itself.
+The repository also contains standalone retrieval experiments for LooGLE, QASPER, and NovelHopQA. They do not import anything from the parent SAADI repository and can be copied to another server by themselves.
 
 The default run reproduces the population in the saved HippoRAG comparison:
 
@@ -86,6 +86,17 @@ First verify the frozen population without loading Qwen or Contriever:
 
 This must report 25 documents, 859 chunks, 534 retrieval examples, and average chunk size `479.371362048894`. A mismatch stops the run before either model is loaded.
 
+Validate the other frozen HippoRAG comparison populations with:
+
+```bash
+./run_qasper_hyde.sh --validate-only
+
+export NOVELHOPQA_BOOKS_ROOT=/path/to/novelhopqa/book-corpus-root
+./run_novelhopqa_hyde.sh --validate-only
+```
+
+QASPER must report 25 documents, 169 chunks, and 80 labeled queries. NovelHopQA must report 18 books, 7,736 chunks, and 985 labeled queries. NovelHopQA requires the external whole-book corpus containing `bookmeta.json` and `Books/`; the launcher automatically detects the parent repository corpus when it is available.
+
 Run a small real-model smoke test:
 
 ```bash
@@ -99,9 +110,11 @@ Run the full HippoRAG-comparable experiment:
 
 ```bash
 ./run_loogle_hyde.sh
+./run_qasper_hyde.sh
+./run_novelhopqa_hyde.sh
 ```
 
-Hypothetical documents are appended to `hyde_runs/loogle/hyde/<run-name>/hypotheses.jsonl` after every completed question. Document embeddings are cached beside them. If the process is interrupted, rerun the same command; resume is enabled by default. Use `--no-resume` to regenerate hypotheses, `--force-embeddings` to rebuild document embeddings, and `--force` to overwrite completed evaluation artifacts while retaining caches.
+Hypothetical documents are appended to `hyde_runs/<dataset>/hyde/<run-name>/hypotheses.jsonl` after every completed question. Document embeddings are cached beside them. If the process is interrupted, rerun the same command; resume is enabled by default. Use `--no-resume` to regenerate hypotheses, `--force-embeddings` to rebuild document embeddings, and `--force` to overwrite completed evaluation artifacts while retaining caches.
 
 Useful overrides include:
 
@@ -118,6 +131,8 @@ Results are written to:
 ```text
 hyde_evaluations/loogle/hyde/top_5/loogle_retrieval_ablation_hyde/
 hyde_evaluations/loogle/hyde/top_10/loogle_retrieval_ablation_hyde/
+hyde_evaluations/qasper/hyde/top_10/qasper_retrieval_ablation_hyde/
+hyde_evaluations/novelhopqa/hyde/top_10/novelhopqa_retrieval_ablation_hyde/
 ```
 
 Each directory contains:
@@ -134,13 +149,18 @@ leaderboard_row.json
 evaluation_manifest.json
 ```
 
-The evaluation includes Gold, Silver-Loose, and Union-Loose Recall/MRR/nDCG, plus Gold Hit, Silver-Strict Hit, and Strict-Union Hit. Generate paper-ready JSONL, CSV, Markdown, and LaTeX rows with:
+The evaluation includes Gold, Silver-Loose, and Union-Loose Recall/MRR/nDCG,
+plus Gold Hit, Silver-Strict Hit, and Strict-Union Hit. Generate a table with
+the exact columns of the project’s main retrieval table with:
 
 ```bash
-python generate_hyde_retriever_table.py
+./generate_results_table.sh
+cat hyde_evaluations_Tables/table_main_retrieval_hyde.txt
 ```
 
-The files are written under `hyde_evaluations_Tables/`.
+The generator merges each dataset’s `top_5` and `top_10` outputs into one row
+labeled `Retriever = Contriever` and `Method = HyDE`. JSONL, CSV, Markdown,
+LaTeX, and `.txt` files are written under `hyde_evaluations_Tables/`.
 
 ### Tests
 

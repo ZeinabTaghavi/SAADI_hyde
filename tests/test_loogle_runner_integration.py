@@ -102,6 +102,9 @@ def test_mocked_end_to_end_run_writes_top5_top10_and_tables(tmp_path, monkeypatc
 
     table_dir = tmp_path / "tables"
     assert table_generator.main(["--input-root", str(tmp_path / "evaluations"), "--output-dir", str(table_dir)]) == 0
-    assert (table_dir / "hyde_retriever_rows.csv").is_file()
-    assert (table_dir / "hyde_retriever_rows.md").is_file()
-    assert (table_dir / "hyde_retriever_rows.tex").is_file()
+    assert (table_dir / "table_main_retrieval_hyde.csv").is_file()
+    assert (table_dir / "table_main_retrieval_hyde.md").is_file()
+    assert (table_dir / "table_main_retrieval_hyde.tex").is_file()
+    table = (table_dir / "table_main_retrieval_hyde.txt").read_text()
+    assert r"\begin{tabular}{lllrrrrrrrrrrrr}" in table
+    assert "LooGLE & Contriever & HyDE" in table

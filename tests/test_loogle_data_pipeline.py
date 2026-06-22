@@ -3,6 +3,8 @@ from __future__ import annotations
 from hyde.loogle.chunking import chunk_documents_grouped_records, chunk_text
 from hyde.loogle.dataset import parse_loogle_rows, select_frozen_subset
 from hyde.loogle.labeling import build_retrieval_examples
+from hyde.loogle.novelhopqa import parse_novelhop_rows
+from hyde.loogle.qasper import parse_qasper_rows
 
 
 def test_nested_and_flat_loogle_rows_have_stable_query_ids():
@@ -67,3 +69,71 @@ def test_labeling_builds_gold_and_cross_chunk_silver_group():
     assert examples[1].gold_chunk_ids == []
     assert examples[1].silver_chunk_ids == ["d1:0", "d1:1"]
     assert examples[1].silver_chunk_groups == [["d1:0", "d1:1"]]
+
+
+def test_window_labeling_matches_all_chunks_overlapped_by_context():
+    chunks = chunk_documents_grouped_records(
+        ["alpha beta gamma delta. epsilon zeta eta theta."], doc_ids=["book"], chunk_size=4
+    )[0]
+    examples = build_retrieval_examples(
+        [
+            {
+                "id": "hop_2:1",
+                "document_id": "book",
+                "question": "What crosses the boundary?",
+                "retrieval_span_mode": "window",
+                "retrieval_spans": ["gamma delta epsilon zeta"],
+            }
+        ],
+        {"book": chunks},
+    )
+    assert examples[0].silver_chunk_groups == [["book:0", "book:1"]]
+
+
+def test_qasper_parser_preserves_evidence_and_answer_variants():
+    documents, qa_entries = parse_qasper_rows(
+        [
+            {
+                "id": "paper-1",
+                "full_text": {"paragraphs": [["First paragraph."], ["Second paragraph."]]},
+                "qas": {
+                    "question": ["What happened?"],
+                    "answers": [
+                        {
+                            "answer": [
+                                {
+                                    "unanswerable": False,
+                                    "extractive_spans": ["an answer"],
+                                    "evidence": ["First paragraph."],
+                                }
+                            ]
+                        }
+                    ],
+                },
+            }
+        ]
+    )
+    assert documents == {"paper-1": "First paragraph.\nSecond paragraph."}
+    assert qa_entries[0]["answers"] == ["an answer"]
+    assert qa_entries[0]["retrieval_spans"] == ["First paragraph."]
+
+
+def test_novelhop_parser_uses_hop_ids_and_window_mode():
+    qa_entries, missing = parse_novelhop_rows(
+        {
+            "hop_1": [
+                {
+                    "id": "question-1",
+                    "book": "The Example Book",
+                    "context": "A gold context window.",
+                    "question": "Example question?",
+                    "answer": "Example answer.",
+                }
+            ]
+        },
+        title_to_doc={"the example book": "B01"},
+    )
+    assert not missing
+    assert qa_entries[0]["id"] == "hop_1:question-1"
+    assert qa_entries[0]["document_id"] == "B01"
+    assert qa_entries[0]["retrieval_span_mode"] == "window"

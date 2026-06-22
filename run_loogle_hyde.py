@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the standalone HyDE retrieval baseline on the frozen LooGLE subset."""
+"""Run a standalone HyDE retrieval baseline from a frozen dataset configuration."""
 
 from __future__ import annotations
 
@@ -66,7 +66,7 @@ def main(argv: list[str] | None = None) -> int:
             validate_only=args.validate_only,
         )
     except Exception as exc:
-        logging.getLogger("run_loogle_hyde").exception("HyDE–LooGLE run failed: %s", exc)
+        logging.getLogger("run_hyde").exception("HyDE dataset run failed: %s", exc)
         return 1
     if outputs:
         print(json.dumps({"output_dirs": [str(path) for path in outputs]}, indent=2))

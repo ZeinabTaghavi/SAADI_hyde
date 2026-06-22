@@ -1,4 +1,4 @@
-"""End-to-end standalone HyDE retrieval runner for the frozen LooGLE subset."""
+"""End-to-end standalone HyDE retrieval runner for frozen benchmark subsets."""
 
 from __future__ import annotations
 
@@ -34,6 +34,8 @@ from .dataset import load_loogle_bundle, load_subset_manifest, select_frozen_sub
 from .evaluation import HIT_VIEWS, METHOD_NAME, RANKING_VIEWS, result_to_query_metrics, summarize_metrics
 from .io import write_json, write_jsonl
 from .labeling import build_retrieval_examples
+from .novelhopqa import load_novelhopqa_bundle
+from .qasper import load_qasper_bundle
 from .types import ChunkRecord, RetrievalExample, RetrievalResult
 
 logger = logging.getLogger(__name__)
@@ -112,15 +114,43 @@ def prepare_data(
     max_qa_entries: int | None,
 ) -> tuple[list[ChunkRecord], dict[str, list[ChunkRecord]], list[RetrievalExample], dict[str, Any]]:
     dataset_cfg = dict(config.get("dataset", {}) or {})
-    documents, qa_entries, dataset_metadata = load_loogle_bundle(
-        split=str(dataset_cfg.get("split", "test")),
-        config_name=str(dataset_cfg.get("config_name", "shortdep_qa")),
-    )
-    manifest_value = dataset_cfg.get("subset_manifest", "loogle_hipporag_subset.json")
+    dataset_name = str(dataset_cfg.get("name", "loogle")).strip().lower()
+    if dataset_name in {"novelhop", "novelhop_qa"}:
+        dataset_name = "novelhopqa"
+    if dataset_name not in {"loogle", "qasper", "novelhopqa"}:
+        raise ValueError(f"Unsupported standalone HyDE dataset={dataset_name!r}")
+    manifest_value = dataset_cfg.get("subset_manifest", f"{dataset_name}_hipporag_subset.json")
     manifest_path = Path(str(manifest_value)).expanduser()
     if not manifest_path.is_absolute():
         manifest_path = (config_path.parent / manifest_path).resolve()
     manifest = load_subset_manifest(manifest_path)
+    frozen_ids = [str(value) for value in manifest["document_ids"]]
+    allowed_ids = set(frozen_ids[:max_documents] if max_documents is not None else frozen_ids)
+    split = str(dataset_cfg.get("split", "test"))
+    config_name = dataset_cfg.get("config_name")
+    if dataset_name == "loogle":
+        documents, qa_entries, dataset_metadata = load_loogle_bundle(
+            split=split,
+            config_name=str(config_name or "shortdep_qa"),
+        )
+    elif dataset_name == "qasper":
+        documents, qa_entries, dataset_metadata = load_qasper_bundle(
+            split=split,
+            config_name=str(config_name or "default"),
+        )
+    else:
+        books_root = dataset_cfg.get("books_root")
+        if books_root:
+            books_path = Path(str(books_root)).expanduser()
+            if not books_path.is_absolute():
+                books_path = (config_path.parent / books_path).resolve()
+            books_root = str(books_path)
+        documents, qa_entries, dataset_metadata = load_novelhopqa_bundle(
+            split=split,
+            config_name=str(config_name or "all"),
+            books_root=books_root,
+            allowed_doc_ids=allowed_ids,
+        )
     documents, qa_entries, selection_metadata = select_frozen_subset(
         documents,
         qa_entries,
@@ -143,7 +173,7 @@ def prepare_data(
     chunks_by_doc = {doc_id: doc_chunks for doc_id, doc_chunks in zip(doc_ids, grouped)}
     examples = build_retrieval_examples(qa_entries, chunks_by_doc)
     if not examples:
-        raise RuntimeError("No labeled LooGLE retrieval examples were built")
+        raise RuntimeError(f"No labeled {dataset_name} retrieval examples were built")
 
     limited = bool(selection_metadata["limited"])
     expected = dict(manifest.get("expected", {}) or {})
@@ -157,17 +187,18 @@ def prepare_data(
         for field in ("documents", "chunks", "retrieval_examples"):
             if field in expected and int(expected[field]) != int(actual[field]):
                 raise RuntimeError(
-                    f"Frozen LooGLE population mismatch for {field}: expected {expected[field]}, got {actual[field]}. "
+                    f"Frozen {dataset_name} population mismatch for {field}: expected {expected[field]}, got {actual[field]}. "
                     "Check the dataset revision and standalone chunk/label implementation."
                 )
         if "average_chunk_tokens" in expected:
             difference = abs(float(expected["average_chunk_tokens"]) - float(actual["average_chunk_tokens"] or 0.0))
             if difference > 1e-9:
                 raise RuntimeError(
-                    "Frozen LooGLE average chunk size mismatch: "
+                    f"Frozen {dataset_name} average chunk size mismatch: "
                     f"expected {expected['average_chunk_tokens']}, got {actual['average_chunk_tokens']}"
                 )
     return chunks, chunks_by_doc, examples, {
+        "dataset_name": dataset_name,
         "dataset": dataset_metadata,
         "subset_manifest": str(manifest_path),
         "selection": selection_metadata,
@@ -324,7 +355,7 @@ def _write_run_artifacts(
                 "hit_rate_metrics": ["hit_rate"],
             },
             "assumptions": [
-                "Retrieval is restricted to chunks from the query's source LooGLE document.",
+                "Retrieval is restricted to chunks from the query's source document.",
                 "The HyDE vector is the arithmetic mean of the normalized Contriever embeddings for the question and eight hypothetical documents.",
                 "Retrieved chunk IDs are deduplicated while preserving rank before metric calculation.",
                 "Silver-S Hit@K requires a complete silver_chunk_group; Union-S is Gold Hit@K OR Silver-S Hit@K.",
@@ -372,24 +403,25 @@ def run_experiment(
     if not top_ks or min(top_ks) <= 0:
         raise ValueError("top_ks must contain positive integers")
     limited = max_documents is not None or max_qa_entries is not None
-    if run_name is None:
-        run_name = "loogle_retrieval_ablation_hyde"
-        if limited:
-            run_name += f"_smoke_d{max_documents or 'all'}_q{max_qa_entries or 'all'}"
     output_root = Path(output_root).expanduser().resolve()
     work_root = Path(work_root).expanduser().resolve()
-    output_dirs = [output_root / "loogle" / METHOD_NAME / f"top_{top_k}" / run_name for top_k in top_ks]
-    if not force and any((path / "leaderboard_row.json").exists() for path in output_dirs):
-        raise FileExistsError(f"Completed output already exists for run={run_name}; pass --force to overwrite artifacts")
-
     chunks, chunks_by_doc, examples, preparation = prepare_data(
         config,
         config_path=config_path,
         max_documents=max_documents,
         max_qa_entries=max_qa_entries,
     )
+    dataset_name = preparation["dataset_name"]
+    if run_name is None:
+        run_name = f"{dataset_name}_retrieval_ablation_hyde"
+        if limited:
+            run_name += f"_smoke_d{max_documents or 'all'}_q{max_qa_entries or 'all'}"
+    output_dirs = [output_root / dataset_name / METHOD_NAME / f"top_{top_k}" / run_name for top_k in top_ks]
+    if not force and any((path / "leaderboard_row.json").exists() for path in output_dirs):
+        raise FileExistsError(f"Completed output already exists for run={run_name}; pass --force to overwrite artifacts")
     logger.info(
-        "Prepared frozen LooGLE population documents=%d chunks=%d labeled_queries=%d",
+        "Prepared frozen %s population documents=%d chunks=%d labeled_queries=%d",
+        dataset_name,
         preparation["actual_population"]["documents"],
         len(chunks),
         len(examples),
@@ -413,7 +445,7 @@ def run_experiment(
         local_files_only=None,
     )
 
-    work_dir = work_root / "loogle" / METHOD_NAME / run_name
+    work_dir = work_root / dataset_name / METHOD_NAME / run_name
     hypothesis_cache = HypothesisCache(work_dir / "hypotheses.jsonl", resume=resume)
     embedding_root = work_dir / "document_embeddings"
     max_top_k = max(top_ks)
@@ -521,7 +553,7 @@ def run_experiment(
     command_used = " ".join([Path(sys.argv[0]).name, *sys.argv[1:]])
     common_context = {
         "method_name": METHOD_NAME,
-        "dataset_name": "loogle",
+        "dataset_name": dataset_name,
         "split": str(config.get("dataset", {}).get("split", "test")),
         "run_name": run_name,
         "retrieval_scope": "per_document",
@@ -558,7 +590,7 @@ def run_experiment(
             examples=examples,
             results=truncated_results,
             payload_rows=truncated_payloads,
-            dataset_name="loogle",
+            dataset_name=dataset_name,
             split=common_context["split"],
             run_name=run_name,
             k_values=k_values,
