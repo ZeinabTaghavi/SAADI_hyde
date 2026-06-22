@@ -1,0 +1,20 @@
+{
+  "method_name": "hyde",
+  "dataset_name": "loogle",
+  "split": "test",
+  "run_name": "loogle_retrieval_ablation_hyde",
+  "average_chunk_tokens": 479.371362048894,
+  "n_queries": 534,
+  "gold_recall@5": 0.703900580552,
+  "gold_mrr@5": 0.498113207547,
+  "gold_ndcg@5": 0.549177626211,
+  "silver_loose_recall@5": 0.375,
+  "silver_loose_mrr@5": 0.333333333333,
+  "silver_loose_ndcg@5": 0.326643399096,
+  "union_loose_recall@5": 0.701436905791,
+  "union_loose_mrr@5": 0.496878901373,
+  "union_loose_ndcg@5": 0.547510703162,
+  "gold_hit@5": 0.711320754717,
+  "silver_strict_hit@5": 0.25,
+  "strict_union_hit@5": 0.707865168539
+}

@@ -1,6 +1,6 @@
 __pycache__/
 *.egg-info/
 .pytest_cache/
-hyde_runs/
-hyde_evaluations/
+# hyde_runs/
+# hyde_evaluations/
 hyde_evaluations_Tables/

@@ -1,0 +1,224 @@
+{
+  "input_files_used": {
+    "config": "/home/iataghav/SAADI_hyde/configs/loogle_hyde.yaml",
+    "subset_manifest": "/home/iataghav/SAADI_hyde/configs/loogle_hipporag_subset.json",
+    "chunk_index_jsonl": "/home/iataghav/SAADI_hyde/hyde_evaluations/loogle/hyde/top_5/loogle_retrieval_ablation_hyde/index/chunk_index.jsonl",
+    "index_stats_json": "/home/iataghav/SAADI_hyde/hyde_evaluations/loogle/hyde/top_5/loogle_retrieval_ablation_hyde/index/index_stats.json",
+    "retrieval_results_json": "/home/iataghav/SAADI_hyde/hyde_evaluations/loogle/hyde/top_5/loogle_retrieval_ablation_hyde/retrieval/retrieval_results.json",
+    "retrieval_examples_jsonl": "/home/iataghav/SAADI_hyde/hyde_evaluations/loogle/hyde/top_5/loogle_retrieval_ablation_hyde/retrieval/retrieval_examples.jsonl",
+    "retrieval_payloads_jsonl": "/home/iataghav/SAADI_hyde/hyde_evaluations/loogle/hyde/top_5/loogle_retrieval_ablation_hyde/retrieval/retrieval_payloads.jsonl",
+    "hypothesis_cache_jsonl": "/home/iataghav/SAADI_hyde/hyde_runs/loogle/hyde/loogle_retrieval_ablation_hyde/hypotheses.jsonl"
+  },
+  "output_files_written": {
+    "metrics_summary_json": "/home/iataghav/SAADI_hyde/hyde_evaluations/loogle/hyde/top_5/loogle_retrieval_ablation_hyde/metrics_summary.json",
+    "metrics_per_query_jsonl": "/home/iataghav/SAADI_hyde/hyde_evaluations/loogle/hyde/top_5/loogle_retrieval_ablation_hyde/metrics_per_query.jsonl",
+    "leaderboard_row_json": "/home/iataghav/SAADI_hyde/hyde_evaluations/loogle/hyde/top_5/loogle_retrieval_ablation_hyde/leaderboard_row.json",
+    "evaluation_manifest_json": "/home/iataghav/SAADI_hyde/hyde_evaluations/loogle/hyde/top_5/loogle_retrieval_ablation_hyde/evaluation_manifest.json"
+  },
+  "relevance_source_used": {
+    "labels_file": "/home/iataghav/SAADI_hyde/hyde_evaluations/loogle/hyde/top_5/loogle_retrieval_ablation_hyde/retrieval/retrieval_examples.jsonl",
+    "fields": [
+      "gold_chunk_ids",
+      "silver_chunk_ids",
+      "silver_chunk_groups"
+    ],
+    "label_rows_loaded": 534
+  },
+  "metric_schema": {
+    "ranking_views": [
+      "gold",
+      "silver_loose",
+      "union_loose"
+    ],
+    "ranking_metrics": [
+      "recall",
+      "mrr",
+      "ndcg"
+    ],
+    "hit_rate_views": [
+      "gold_hit",
+      "silver_strict_hit",
+      "strict_union_hit"
+    ],
+    "hit_rate_metrics": [
+      "hit_rate"
+    ]
+  },
+  "assumptions": [
+    "Retrieval is restricted to chunks from the query's source LooGLE document.",
+    "The HyDE vector is the arithmetic mean of the normalized Contriever embeddings for the question and eight hypothetical documents.",
+    "Retrieved chunk IDs are deduplicated while preserving rank before metric calculation.",
+    "Silver-S Hit@K requires a complete silver_chunk_group; Union-S is Gold Hit@K OR Silver-S Hit@K."
+  ],
+  "missing_metrics": [],
+  "command_used": "run_loogle_hyde.py --config /home/iataghav/SAADI_hyde/configs/loogle_hyde.yaml --output-root /home/iataghav/SAADI_hyde/hyde_evaluations --work-root /home/iataghav/SAADI_hyde/hyde_runs",
+  "package_versions": {
+    "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+    "platform": "Linux-6.8.0-111-generic-x86_64-with-glibc2.39",
+    "git_commit": "a8e48445352ec76e56581c8fc93e8e3dc6310755",
+    "datasets": "4.6.1",
+    "numpy": "2.3.5",
+    "torch": "2.11.0+cu129",
+    "transformers": "5.12.0",
+    "huggingface_hub": "1.19.0"
+  },
+  "run_metadata": {
+    "method_name": "hyde",
+    "dataset_name": "loogle",
+    "split": "test",
+    "run_name": "loogle_retrieval_ablation_hyde",
+    "retrieval_scope": "per_document",
+    "config": {
+      "dataset": {
+        "name": "loogle",
+        "hf_dataset": "bigai-nlco/LooGLE",
+        "config_name": "shortdep_qa",
+        "split": "test",
+        "subset_manifest": "loogle_hipporag_subset.json"
+      },
+      "chunking": {
+        "method": "saadi_sentence_aware_words",
+        "chunk_size": 500,
+        "chunk_overlap": 0
+      },
+      "retrieval": {
+        "scope": "per_document",
+        "top_ks": [
+          5,
+          10
+        ],
+        "encoder": {
+          "model_name": "facebook/contriever",
+          "pooling": "mean",
+          "normalize_embeddings": true,
+          "batch_size": 128,
+          "max_length": 512
+        }
+      },
+      "hyde": {
+        "prompt_task": "web search",
+        "include_original_query": true,
+        "aggregation": "arithmetic_mean",
+        "generator": {
+          "backend": "transformers",
+          "model_name": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+          "n": 8,
+          "max_new_tokens": 512,
+          "temperature": 0.7,
+          "top_p": 0.8,
+          "stop": [
+            "\n\n\n"
+          ],
+          "device_map": "auto",
+          "torch_dtype": "auto",
+          "trust_remote_code": true,
+          "attempts_per_hypothesis": 3
+        }
+      },
+      "seed": null
+    },
+    "preparation": {
+      "dataset": {
+        "dataset_source": "huggingface",
+        "dataset_ids_tried": [
+          "bigai-nlco/LooGLE",
+          "bigainlco/LooGLE"
+        ],
+        "requested_revision": "refs/convert/parquet",
+        "dataset_fingerprint": "613850654f8db18a",
+        "dataset_name": "loogle",
+        "config_name": "shortdep_qa",
+        "split": "test",
+        "documents": 105,
+        "qa_entries": 1951
+      },
+      "subset_manifest": "/home/iataghav/SAADI_hyde/configs/loogle_hipporag_subset.json",
+      "selection": {
+        "frozen_manifest_name": "loogle_hipporag_v2_saved_25_documents",
+        "selected_document_ids": [
+          "03c1b3e8-8aba-4a59-8a56-e24c4a2b88ec",
+          "5984f759-6d02-4c94-858c-b4ca561ca5e5",
+          "96e6d71f-b8ee-4414-b62b-b83d5594ffca",
+          "97c994c8-806d-4ddc-bf53-24c64669d362",
+          "bf6ceef1-abf6-4f61-a5e3-cdc8b21fff1e",
+          "1284fc10-8411-47ee-8a20-26118ecf193b",
+          "dee9c02f-25f3-4019-a578-487c71709a5b",
+          "e17debb6-5ed4-40f7-a345-dddca265cc46",
+          "3c18c73f-a767-4510-b20b-9873fe0d2e82",
+          "e9686639-39a5-4efd-b9f1-941d633cd341",
+          "fbb3a092-e331-4085-ab92-0d5e35e3377e",
+          "53125ece-f520-41f7-94bf-d3e1967f6498",
+          "c23b6929-dcba-4dfa-bd16-29435115394d",
+          "1014f6b2-bf2f-4591-b1f4-6c380d183280",
+          "fdca1a7c-2b27-443b-b588-e991eed2562d",
+          "8826f7db-6edb-44f8-8e16-34d88b3643b9",
+          "fd33b92f-bd27-42a2-90b4-ee34584d5961",
+          "aad7cafe-3e65-4dc6-8193-b09cbdf3813d",
+          "d5340fa9-5568-4722-aed7-52149c2d5c71",
+          "c40ce355-2b12-42b7-8116-bfc7d05200cd",
+          "4e54ee8f-50bd-4f31-81f1-826ac72b0e44",
+          "8c5ec9c6-4ad4-473a-b536-a0e76bccbae7",
+          "b5ff79f8-321e-449e-b167-5020adbd8c5a",
+          "ef1bd434-bec1-4def-89e4-2e445daf654b",
+          "cc4f70a5-28a1-46b9-9a55-2899335979db"
+        ],
+        "documents_selected": 25,
+        "qa_entries_selected": 557,
+        "limited": false
+      },
+      "expected_population": {
+        "documents": 25,
+        "chunks": 859,
+        "retrieval_examples": 534,
+        "average_chunk_tokens": 479.371362048894
+      },
+      "actual_population": {
+        "documents": 25,
+        "chunks": 859,
+        "retrieval_examples": 534,
+        "average_chunk_tokens": 479.37136204889407
+      },
+      "chunk_size": 500,
+      "chunk_overlap": 0
+    },
+    "generation": {
+      "prompt_task": "web search",
+      "model_name": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "n": 8,
+      "max_new_tokens": 512,
+      "temperature": 0.7,
+      "top_p": 0.8,
+      "stop": [
+        "\n\n\n"
+      ],
+      "device_map": "auto",
+      "torch_dtype": "auto",
+      "trust_remote_code": true,
+      "attempts_per_hypothesis": 3
+    },
+    "seed": null,
+    "model_snapshot": "/mnt/cache/taghavi/hub/models--Qwen--Qwen3-30B-A3B-Instruct-2507/snapshots/0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
+    "embedding_model_name": "facebook/contriever",
+    "embedding_model_revision": "2bd46a25019aeea091fd42d1f0fd4801675cf699",
+    "embedding_device": "cuda",
+    "hypothesis_cache": "/home/iataghav/SAADI_hyde/hyde_runs/loogle/hyde/loogle_retrieval_ablation_hyde/hypotheses.jsonl",
+    "document_embedding_cache_root": "/home/iataghav/SAADI_hyde/hyde_runs/loogle/hyde/loogle_retrieval_ablation_hyde/document_embeddings",
+    "hypothesis_cache_hits": 0,
+    "document_embedding_cache_hits": 0,
+    "generation_seconds": 56115.262,
+    "embedding_and_retrieval_seconds": 14.253,
+    "elapsed_seconds": 56626.103,
+    "top_k": 5
+  },
+  "counts": {
+    "queries_evaluated": 534,
+    "eligible_queries_by_view": {
+      "gold": 530,
+      "silver_loose": 4,
+      "union_loose": 534,
+      "gold_hit": 530,
+      "silver_strict_hit": 4,
+      "strict_union_hit": 534
+    }
+  }
+}
