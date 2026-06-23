@@ -154,7 +154,7 @@ def load_book_subset(
     return documents, title_to_doc
 
 
-def _load_hop(split_name: str):
+def _load_huggingface_dataset():
     try:
         from datasets import load_dataset
     except ImportError as exc:
@@ -163,9 +163,50 @@ def _load_hop(split_name: str):
     if (_datasets_major() or 0) >= 4:
         kwargs["revision"] = "refs/convert/parquet"
     try:
-        return load_dataset(DATASET_ID, "default", split=split_name, **kwargs)
+        return load_dataset(DATASET_ID, "default", **kwargs)
     except TypeError:
-        return load_dataset(DATASET_ID, split=split_name, **kwargs)
+        return load_dataset(DATASET_ID, **kwargs)
+
+
+def partition_novelhop_rows(
+    dataset: Any,
+    selected_splits: list[str],
+) -> tuple[dict[str, list[dict[str, Any]]], str]:
+    """Accept either physical hop splits or the Hub's combined train conversion."""
+
+    available = set(dataset.keys())
+    if all(split_name in available for split_name in selected_splits):
+        return (
+            {
+                split_name: [row for row in dataset[split_name] if isinstance(row, dict)]
+                for split_name in selected_splits
+            },
+            "physical_hop_splits",
+        )
+    if "train" not in available:
+        raise RuntimeError(
+            f"NovelHopQA exposes splits {sorted(available)}, but neither the requested hop splits "
+            "nor the combined train split are available."
+        )
+    selected = set(selected_splits)
+    rows_by_split: dict[str, list[dict[str, Any]]] = {split_name: [] for split_name in selected_splits}
+    for row in dataset["train"]:
+        if not isinstance(row, dict):
+            continue
+        raw_hops = row.get("number_of_hops") or row.get("num_hops") or row.get("hop")
+        match = re.search(r"([1-4])", str(raw_hops or ""))
+        if match is None:
+            raise RuntimeError(
+                "NovelHopQA's combined train split has no usable number_of_hops value; "
+                "cannot reconstruct stable hop_1..hop_4 query IDs."
+            )
+        split_name = f"hop_{match.group(1)}"
+        if split_name in selected:
+            rows_by_split[split_name].append(row)
+    empty = [split_name for split_name, rows in rows_by_split.items() if not rows]
+    if empty:
+        raise RuntimeError(f"NovelHopQA combined train split yielded no rows for {empty}")
+    return rows_by_split, "combined_train_partitioned_by_number_of_hops"
 
 
 def parse_novelhop_rows(
@@ -217,10 +258,7 @@ def load_novelhopqa_bundle(
     if any(value not in HOP_SPLITS for value in selected_splits):
         raise ValueError(f"Unsupported NovelHopQA config_name={config_name!r}")
     documents, title_to_doc = load_book_subset(books_root, allowed_doc_ids)
-    rows_by_split = {
-        split_name: [row for row in _load_hop(split_name) if isinstance(row, dict)]
-        for split_name in selected_splits
-    }
+    rows_by_split, hub_layout = partition_novelhop_rows(_load_huggingface_dataset(), selected_splits)
     qa_entries, missing_titles = parse_novelhop_rows(rows_by_split, title_to_doc=title_to_doc)
     if missing_titles:
         logger.info("Ignored %d NovelHopQA title(s) outside the frozen book subset", len(missing_titles))
@@ -231,6 +269,7 @@ def load_novelhopqa_bundle(
         "dataset_name": "novelhopqa",
         "config_name": config_name,
         "hop_splits": selected_splits,
+        "hub_split_layout": hub_layout,
         "split": split,
         "books_root": str(_resolve_books_root(books_root)),
         "documents": len(documents),

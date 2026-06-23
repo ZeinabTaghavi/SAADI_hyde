@@ -3,7 +3,7 @@ from __future__ import annotations
 from hyde.loogle.chunking import chunk_documents_grouped_records, chunk_text
 from hyde.loogle.dataset import parse_loogle_rows, select_frozen_subset
 from hyde.loogle.labeling import build_retrieval_examples
-from hyde.loogle.novelhopqa import parse_novelhop_rows
+from hyde.loogle.novelhopqa import parse_novelhop_rows, partition_novelhop_rows
 from hyde.loogle.qasper import parse_qasper_rows
 
 
@@ -137,3 +137,20 @@ def test_novelhop_parser_uses_hop_ids_and_window_mode():
     assert qa_entries[0]["id"] == "hop_1:question-1"
     assert qa_entries[0]["document_id"] == "B01"
     assert qa_entries[0]["retrieval_span_mode"] == "window"
+
+
+def test_novelhop_combined_train_is_partitioned_into_stable_hop_splits():
+    rows_by_split, layout = partition_novelhop_rows(
+        {
+            "train": [
+                {"question": "one", "number_of_hops": 1},
+                {"question": "two", "number_of_hops": "2"},
+                {"question": "four", "number_of_hops": 4},
+            ]
+        },
+        ["hop_1", "hop_2", "hop_4"],
+    )
+    assert layout == "combined_train_partitioned_by_number_of_hops"
+    assert [row["question"] for row in rows_by_split["hop_1"]] == ["one"]
+    assert [row["question"] for row in rows_by_split["hop_2"]] == ["two"]
+    assert [row["question"] for row in rows_by_split["hop_4"]] == ["four"]
