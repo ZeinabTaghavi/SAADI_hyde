@@ -1,0 +1,47 @@
+{
+  "method_name": "hyde",
+  "dataset_name": "novelhopqa",
+  "split": "test",
+  "run_name": "novelhopqa_retrieval_ablation_hyde",
+  "average_chunk_tokens": 488.282187176836,
+  "n_queries": 985,
+  "k_values": [
+    5
+  ],
+  "ranking_metrics_by_view": {
+    "gold": {
+      "recall@5": 0.33234421365,
+      "mrr@5": 0.205192878338,
+      "ndcg@5": 0.236665495071
+    },
+    "silver_loose": {
+      "recall@5": 0.101738659227,
+      "mrr@5": 0.160342979636,
+      "ndcg@5": 0.105448802293
+    },
+    "union_loose": {
+      "recall@5": 0.259533728954,
+      "mrr@5": 0.1910321489,
+      "ndcg@5": 0.195235656032
+    }
+  },
+  "hit_rate_metrics_by_view": {
+    "gold_hit": {
+      "hit_rate@5": 0.33234421365
+    },
+    "silver_strict_hit": {
+      "hit_rate@5": 0.03536977492
+    },
+    "strict_union_hit": {
+      "hit_rate@5": 0.238578680203
+    }
+  },
+  "eligible_queries_by_view": {
+    "gold": 674,
+    "silver_loose": 311,
+    "union_loose": 985,
+    "gold_hit": 674,
+    "silver_strict_hit": 311,
+    "strict_union_hit": 985
+  }
+}
