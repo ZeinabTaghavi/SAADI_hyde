@@ -99,7 +99,7 @@ def embedding_cache_path(root: str | Path, doc_id: str) -> Path:
 
 
 def load_or_encode_document(
-    encoder: ContrieverEncoder,
+    encoder: Any,
     chunks: list[ChunkRecord],
     cache_path: str | Path,
     *,
@@ -114,18 +114,33 @@ def load_or_encode_document(
                 embeddings = np.asarray(cached["embeddings"], dtype=np.float32)
             if (
                 metadata.get("chunk_signature") == signature
+                and metadata.get("retriever_name", "contriever")
+                == getattr(encoder, "retriever_name", "contriever")
                 and metadata.get("model_name") == encoder.model_name
                 and metadata.get("max_length") == getattr(encoder, "max_length", None)
+                and metadata.get("pooling", "mean") == getattr(encoder, "pooling", "mean")
+                and metadata.get("normalize_embeddings", True)
+                == getattr(encoder, "normalize_embeddings", True)
+                and metadata.get("document_prefix", "")
+                == getattr(encoder, "document_prefix", "")
                 and embeddings.shape[0] == len(chunks)
             ):
                 return embeddings, True
         except Exception:
             pass
-    embeddings = encoder.encode([chunk.raw_text for chunk in chunks])
+    texts = [chunk.raw_text for chunk in chunks]
+    if hasattr(encoder, "encode_documents"):
+        embeddings = encoder.encode_documents(texts)
+    else:
+        embeddings = encoder.encode(texts)
     metadata = {
         "doc_id": chunks[0].doc_id if chunks else "",
+        "retriever_name": getattr(encoder, "retriever_name", "contriever"),
         "model_name": encoder.model_name,
         "max_length": getattr(encoder, "max_length", None),
+        "pooling": getattr(encoder, "pooling", "mean"),
+        "normalize_embeddings": getattr(encoder, "normalize_embeddings", True),
+        "document_prefix": getattr(encoder, "document_prefix", ""),
         "chunk_signature": signature,
         "chunk_ids": [chunk.chunk_id for chunk in chunks],
         "shape": list(embeddings.shape),

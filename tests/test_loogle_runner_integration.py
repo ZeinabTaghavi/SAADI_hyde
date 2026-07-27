@@ -73,13 +73,23 @@ def test_mocked_end_to_end_run_writes_top5_top10_and_tables(tmp_path, monkeypatc
     ]
     monkeypatch.setattr(runner, "load_loogle_bundle", lambda **_: (documents, qa_entries, {"dataset_name": "loogle"}))
 
-    outputs = runner.run_experiment(
+    generation_outputs = runner.run_experiment(
         config_path=config_path,
         output_root=tmp_path / "evaluations",
         work_root=tmp_path / "runs",
         top_ks=[5, 10],
         generator_override=FakeGenerator(),
+        generate_only=True,
+    )
+    assert generation_outputs == []
+
+    outputs = runner.run_experiment(
+        config_path=config_path,
+        output_root=tmp_path / "evaluations",
+        work_root=tmp_path / "runs",
+        top_ks=[5, 10],
         encoder_override=FakeEncoder(),
+        retrieval_only=True,
     )
     assert len(outputs) == 2
     for output in outputs:
@@ -97,8 +107,22 @@ def test_mocked_end_to_end_run_writes_top5_top10_and_tables(tmp_path, monkeypatc
             assert (output / relative).is_file(), relative
     top10 = json.loads((outputs[1] / "leaderboard_row.json").read_text())
     assert top10["method_name"] == "hyde"
+    assert top10["retriever_name"] == "contriever"
     assert top10["n_queries"] == 2
     assert "gold_recall@5" in top10 and "gold_recall@10" in top10
+
+    bm25_outputs = runner.run_experiment(
+        config_path=config_path,
+        output_root=tmp_path / "evaluations",
+        work_root=tmp_path / "runs",
+        top_ks=[5, 10],
+        retriever_name="bm25",
+        retrieval_only=True,
+    )
+    assert len(bm25_outputs) == 2
+    bm25_top10 = json.loads((bm25_outputs[1] / "leaderboard_row.json").read_text())
+    assert bm25_top10["retriever_name"] == "bm25"
+    assert bm25_top10["n_queries"] == 2
 
     table_dir = tmp_path / "tables"
     assert table_generator.main(["--input-root", str(tmp_path / "evaluations"), "--output-dir", str(table_dir)]) == 0
@@ -106,5 +130,6 @@ def test_mocked_end_to_end_run_writes_top5_top10_and_tables(tmp_path, monkeypatc
     assert (table_dir / "table_main_retrieval_hyde.md").is_file()
     assert (table_dir / "table_main_retrieval_hyde.tex").is_file()
     table = (table_dir / "table_main_retrieval_hyde.txt").read_text()
-    assert r"\begin{tabular}{lllrrrrrrrrrrrr}" in table
+    assert r"\begin{tabular}{lllrrrrrrrrrrrrrrrrrr}" in table
+    assert "LooGLE & BM25 & HyDE" in table
     assert "LooGLE & Contriever & HyDE" in table

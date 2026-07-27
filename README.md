@@ -116,6 +116,39 @@ Run the full HippoRAG-comparable experiment:
 
 Hypothetical documents are appended to `hyde_runs/<dataset>/hyde/<run-name>/hypotheses.jsonl` after every completed question. Document embeddings are cached beside them. If the process is interrupted, rerun the same command; resume is enabled by default. Use `--no-resume` to regenerate hypotheses, `--force-embeddings` to rebuild document embeddings, and `--force` to overwrite completed evaluation artifacts while retaining caches.
 
+### LooGLE + NovelHopQA retriever matrix
+
+The standalone matrix supports BM25, Contriever, BGE-M3, Qwen embeddings, and
+Jina. E5 is intentionally excluded. Hypothetical passages are generated once
+per dataset and reused unchanged by every retriever.
+
+Check what has already completed:
+
+```bash
+./run_all_hyde_retrievers.sh --check-only
+```
+
+Run every missing experiment and regenerate the main-style table:
+
+```bash
+./run_all_hyde_retrievers.sh
+```
+
+Useful filters and controls:
+
+```bash
+DATASETS_CSV=loogle RETRIEVERS_CSV=bm25,contriever ./run_all_hyde_retrievers.sh
+GPUS=0,1,2,3 HYDE_QWEN_DEVICE_MAP=auto ./run_all_hyde_retrievers.sh
+./run_all_hyde_retrievers.sh --dry-run
+```
+
+The launcher first runs a generation-only process for each dataset. It then
+runs each retriever in a separate process with `--retrieval-only`, preventing
+the 30B generation model and dense retriever models from remaining loaded
+together. BM25 combines the original question and hypothetical passages by
+averaging their per-document min-max-normalized score vectors. Dense retrievers
+average their normalized embeddings.
+
 Useful overrides include:
 
 ```bash
@@ -129,10 +162,10 @@ GPUS=0,1,2,3 ./run_loogle_hyde.sh
 Results are written to:
 
 ```text
-hyde_evaluations/loogle/hyde/top_5/loogle_retrieval_ablation_hyde/
-hyde_evaluations/loogle/hyde/top_10/loogle_retrieval_ablation_hyde/
-hyde_evaluations/qasper/hyde/top_10/qasper_retrieval_ablation_hyde/
-hyde_evaluations/novelhopqa/hyde/top_10/novelhopqa_retrieval_ablation_hyde/
+hyde_evaluations/loogle/hyde/<retriever>/top_5/loogle_retrieval_ablation_hyde/
+hyde_evaluations/loogle/hyde/<retriever>/top_10/loogle_retrieval_ablation_hyde/
+hyde_evaluations/qasper/hyde/<retriever>/top_10/qasper_retrieval_ablation_hyde/
+hyde_evaluations/novelhopqa/hyde/<retriever>/top_10/novelhopqa_retrieval_ablation_hyde/
 ```
 
 Each directory contains:
@@ -158,8 +191,9 @@ the exact columns of the project’s main retrieval table with:
 cat hyde_evaluations_Tables/table_main_retrieval_hyde.txt
 ```
 
-The generator merges each dataset’s `top_5` and `top_10` outputs into one row
-labeled `Retriever = Contriever` and `Method = HyDE`. JSONL, CSV, Markdown,
+The generator merges each dataset/retriever pair’s `top_5` and `top_10`
+outputs into one row labeled `Method = HyDE`. Its ranking and binary metric
+columns match the main SAADI retrieval table. JSONL, CSV, Markdown,
 LaTeX, and `.txt` files are written under `hyde_evaluations_Tables/`.
 
 ### Tests

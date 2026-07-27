@@ -13,6 +13,36 @@ chunking:
 retrieval:
   scope: per_document
   top_ks: [5, 10]
+  # Standalone HyDE matrix: E5 is intentionally excluded.
+  retriever_configs:
+    bm25:
+      score_fusion: minmax_mean
+    contriever:
+      model_name: facebook/contriever
+      pooling: mean
+      normalize_embeddings: true
+      batch_size: 128
+      max_length: 512
+    bge_m3:
+      model_name: BAAI/bge-m3
+      pooling: cls
+      normalize_embeddings: true
+      batch_size: 16
+      max_length: 8192
+    qwen:
+      model_name: Qwen/Qwen3-Embedding-8B
+      pooling: last_token
+      normalize_embeddings: true
+      batch_size: 8
+      max_length: 512
+      trust_remote_code: true
+    jina:
+      model_name: jinaai/jina-embeddings-v3
+      pooling: mean
+      normalize_embeddings: true
+      batch_size: 32
+      max_length: 512
+      trust_remote_code: true
   encoder:
     model_name: facebook/contriever
     pooling: mean

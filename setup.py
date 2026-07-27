@@ -14,6 +14,7 @@ setup(
         'pyserini',
         'faiss-cpu',
         'datasets>=2.18',
+        'einops>=0.7',
         'numpy>=1.26',
         'PyYAML>=6.0',
         'safetensors',

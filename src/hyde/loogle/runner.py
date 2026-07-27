@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import gc
 import json
 import logging
 import os
@@ -24,7 +25,6 @@ from hyde.promptor import Promptor
 from .cache import HypothesisCache
 from .chunking import chunk_documents_grouped_records
 from .contriever import (
-    ContrieverEncoder,
     combine_hyde_embeddings,
     embedding_cache_path,
     load_or_encode_document,
@@ -36,6 +36,14 @@ from .io import write_json, write_jsonl
 from .labeling import build_retrieval_examples
 from .novelhopqa import load_novelhopqa_bundle
 from .qasper import load_qasper_bundle
+from .retrievers import (
+    BM25Index,
+    build_dense_encoder,
+    normalize_retriever_name,
+    rank_score_vector,
+    retriever_metadata,
+    retriever_spec,
+)
 from .types import ChunkRecord, RetrievalExample, RetrievalResult
 
 logger = logging.getLogger(__name__)
@@ -282,6 +290,7 @@ def _write_run_artifacts(
     results: list[RetrievalResult],
     payload_rows: list[dict[str, Any]],
     dataset_name: str,
+    retriever_name: str,
     split: str,
     run_name: str,
     k_values: list[int],
@@ -305,7 +314,12 @@ def _write_run_artifacts(
     average_tokens = _average_chunk_tokens(chunks)
     index_stats_path = write_json(
         index_dir / "index_stats.json",
-        {"method_name": METHOD_NAME, "n_chunks": len(chunks), "average_chunk_tokens": average_tokens},
+        {
+            "method_name": METHOD_NAME,
+            "retriever_name": retriever_name,
+            "n_chunks": len(chunks),
+            "average_chunk_tokens": average_tokens,
+        },
     )
     results_path = write_json(retrieval_dir / "retrieval_results.json", [result.to_dict() for result in results])
     examples_path = write_jsonl(retrieval_dir / "retrieval_examples.jsonl", (example.to_dict() for example in examples))
@@ -319,6 +333,7 @@ def _write_run_artifacts(
         run_name=run_name,
         k_values=k_values,
         average_chunk_tokens=average_tokens,
+        retriever_name=retriever_name,
     )
     summary_path = write_json(run_dir / "metrics_summary.json", summary)
     per_query_path = write_jsonl(run_dir / "metrics_per_query.jsonl", per_query)
@@ -356,7 +371,8 @@ def _write_run_artifacts(
             },
             "assumptions": [
                 "Retrieval is restricted to chunks from the query's source document.",
-                "The HyDE vector is the arithmetic mean of the normalized Contriever embeddings for the question and eight hypothetical documents.",
+                "Dense HyDE retrieval averages normalized embeddings for the question and all hypothetical documents.",
+                "BM25 HyDE retrieval averages min-max-normalized score vectors for the same query variants.",
                 "Retrieved chunk IDs are deduplicated while preserving rank before metric calculation.",
                 "Silver-S Hit@K requires a complete silver_chunk_group; Union-S is Gold Hit@K OR Silver-S Hit@K.",
             ],
@@ -385,20 +401,28 @@ def run_experiment(
     work_root: str | Path,
     top_ks: list[int],
     run_name: str | None = None,
+    retriever_name: str = "contriever",
     max_documents: int | None = None,
     max_qa_entries: int | None = None,
     embedding_device: str | None = None,
+    embedding_device_map: str | None = None,
     resume: bool = True,
     force: bool = False,
     force_embeddings: bool = False,
     validate_only: bool = False,
+    generate_only: bool = False,
+    retrieval_only: bool = False,
     generator_override: Any | None = None,
     encoder_override: Any | None = None,
 ) -> list[Path]:
+    if generate_only and retrieval_only:
+        raise ValueError("generate_only and retrieval_only are mutually exclusive")
     started = time.perf_counter()
     config_path = Path(config_path).expanduser().resolve()
     repository_root = config_path.parent.parent
     config = load_config(config_path)
+    retriever_name = normalize_retriever_name(retriever_name)
+    selected_retriever = retriever_spec(retriever_name, config)
     top_ks = sorted(set(int(value) for value in top_ks))
     if not top_ks or min(top_ks) <= 0:
         raise ValueError("top_ks must contain positive integers")
@@ -416,9 +440,10 @@ def run_experiment(
         run_name = f"{dataset_name}_retrieval_ablation_hyde"
         if limited:
             run_name += f"_smoke_d{max_documents or 'all'}_q{max_qa_entries or 'all'}"
-    output_dirs = [output_root / dataset_name / METHOD_NAME / f"top_{top_k}" / run_name for top_k in top_ks]
-    if not force and any((path / "leaderboard_row.json").exists() for path in output_dirs):
-        raise FileExistsError(f"Completed output already exists for run={run_name}; pass --force to overwrite artifacts")
+    output_dirs = [
+        output_root / dataset_name / METHOD_NAME / retriever_name / f"top_{top_k}" / run_name
+        for top_k in top_ks
+    ]
     logger.info(
         "Prepared frozen %s population documents=%d chunks=%d labeled_queries=%d",
         dataset_name,
@@ -429,46 +454,40 @@ def run_experiment(
     if validate_only:
         print(json.dumps({"validated": True, **preparation["actual_population"]}, indent=2))
         return []
+    if not generate_only and not force and all((path / "leaderboard_row.json").exists() for path in output_dirs):
+        logger.info(
+            "Skipping completed HyDE run dataset=%s retriever=%s run=%s",
+            dataset_name,
+            retriever_name,
+            run_name,
+        )
+        return output_dirs
+    if not generate_only and not force and retriever_name == "contriever":
+        legacy_output_dirs = [
+            output_root / dataset_name / METHOD_NAME / f"top_{top_k}" / run_name
+            for top_k in top_ks
+        ]
+        if all((path / "leaderboard_row.json").exists() for path in legacy_output_dirs):
+            logger.info(
+                "Skipping completed legacy HyDE run dataset=%s retriever=contriever run=%s",
+                dataset_name,
+                run_name,
+            )
+            return legacy_output_dirs
 
     generation = _generation_settings(config)
     seed = config.get("seed")
     seed = int(seed) if seed is not None else None
     _set_seed(seed)
-    retrieval_cfg = dict(config.get("retrieval", {}) or {})
-    encoder_cfg = dict(retrieval_cfg.get("encoder", {}) or {})
-    encoder = encoder_override or ContrieverEncoder(
-        str(encoder_cfg.get("model_name", "facebook/contriever")),
-        device=embedding_device or encoder_cfg.get("device"),
-        batch_size=int(encoder_cfg.get("batch_size", 128)),
-        max_length=int(encoder_cfg.get("max_length", 512)),
-        cache_dir=os.getenv("HF_HUB_CACHE"),
-        local_files_only=None,
-    )
-
     work_dir = work_root / dataset_name / METHOD_NAME / run_name
     hypothesis_cache = HypothesisCache(work_dir / "hypotheses.jsonl", resume=resume)
-    embedding_root = work_dir / "document_embeddings"
-    max_top_k = max(top_ks)
-    document_embeddings: dict[str, np.ndarray] = {}
-    embedding_cache_hits = 0
-    for doc_id, doc_chunks in chunks_by_doc.items():
-        embeddings, hit = load_or_encode_document(
-            encoder,
-            doc_chunks,
-            embedding_cache_path(embedding_root, doc_id),
-            force=force_embeddings,
-        )
-        document_embeddings[doc_id] = embeddings
-        embedding_cache_hits += int(hit)
-
     promptor = Promptor(generation["prompt_task"])
     generator = generator_override
     model_snapshot: str | None = None
-    results: list[RetrievalResult] = []
-    payload_rows: list[dict[str, Any]] = []
+    hypotheses_by_query: dict[str, list[str]] = {}
+    generation_seconds_by_query: dict[str, float] = {}
     cached_queries = 0
     total_generation_seconds = 0.0
-    total_retrieval_seconds = 0.0
     for query_number, example in enumerate(examples, 1):
         prompt = promptor.build_prompt(example.question)
         cached = hypothesis_cache.get(example.query_id, expected_count=generation["n"])
@@ -483,6 +502,11 @@ def run_experiment(
             generation_seconds = 0.0
             cached_queries += 1
         else:
+            if retrieval_only:
+                raise RuntimeError(
+                    f"Missing or incompatible HyDE hypothesis cache for query_id={example.query_id}. "
+                    "Run the dataset with --generate-only before --retrieval-only."
+                )
             if generator is None:
                 generator = _make_generator(generation)
                 if hasattr(generator, "prepare_snapshot"):
@@ -508,12 +532,108 @@ def run_experiment(
                     "generation_seconds": round(generation_seconds, 6),
                 }
             )
+        hypotheses_by_query[str(example.query_id)] = hypotheses
+        generation_seconds_by_query[str(example.query_id)] = generation_seconds
+        if query_number == 1 or query_number % 10 == 0 or query_number == len(examples):
+            logger.info(
+                "HyDE generation progress queries=%d/%d cache_hits=%d",
+                query_number,
+                len(examples),
+                cached_queries,
+            )
 
+    if generate_only:
+        print(
+            json.dumps(
+                {
+                    "generated": True,
+                    "dataset": dataset_name,
+                    "queries": len(examples),
+                    "cache_hits": cached_queries,
+                    "hypothesis_cache": str(hypothesis_cache.path),
+                },
+                indent=2,
+            )
+        )
+        return []
+
+    # Release the large generation model before loading a dense retriever.  The
+    # matrix launcher also separates these phases into distinct processes.
+    generator = None
+    gc.collect()
+    try:
+        import torch
+
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+    except ImportError:
+        pass
+
+    max_top_k = max(top_ks)
+    embedding_root: Path | None = None
+    embedding_cache_hits = 0
+    document_embeddings: dict[str, np.ndarray] = {}
+    bm25_indexes: dict[str, BM25Index] = {}
+    encoder: Any | None = None
+    if selected_retriever.kind == "dense":
+        encoder = encoder_override or build_dense_encoder(
+            retriever_name,
+            config,
+            device=embedding_device,
+            device_map=embedding_device_map,
+            cache_dir=os.getenv("HF_HUB_CACHE"),
+        )
+        # Keep compatibility with the completed standalone Contriever cache.
+        embedding_root = work_dir / "document_embeddings"
+        if retriever_name != "contriever":
+            embedding_root = embedding_root / retriever_name
+        for doc_id, doc_chunks in chunks_by_doc.items():
+            embeddings, hit = load_or_encode_document(
+                encoder,
+                doc_chunks,
+                embedding_cache_path(embedding_root, doc_id),
+                force=force_embeddings,
+            )
+            document_embeddings[doc_id] = embeddings
+            embedding_cache_hits += int(hit)
+    else:
+        bm25_indexes = {
+            doc_id: BM25Index([chunk.raw_text for chunk in doc_chunks])
+            for doc_id, doc_chunks in chunks_by_doc.items()
+        }
+
+    hyde_cfg = dict(config.get("hyde", {}) or {})
+    include_original_query = bool(hyde_cfg.get("include_original_query", True))
+    aggregation = str(hyde_cfg.get("aggregation", "arithmetic_mean"))
+    if selected_retriever.kind == "dense" and aggregation != "arithmetic_mean":
+        raise ValueError(f"Unsupported dense HyDE aggregation={aggregation!r}")
+
+    results: list[RetrievalResult] = []
+    payload_rows: list[dict[str, Any]] = []
+    total_retrieval_seconds = 0.0
+    for query_number, example in enumerate(examples, 1):
+        hypotheses = hypotheses_by_query[str(example.query_id)]
+        variants = ([example.question] if include_original_query else []) + list(hypotheses)
         retrieval_started = time.perf_counter()
-        component_embeddings = encoder.encode([example.question, *hypotheses])
-        hyde_vector = combine_hyde_embeddings(component_embeddings)
+        if selected_retriever.kind == "dense":
+            assert encoder is not None
+            if hasattr(encoder, "encode_queries"):
+                component_embeddings = encoder.encode_queries(variants)
+            else:
+                component_embeddings = encoder.encode(variants)
+            hyde_vector = combine_hyde_embeddings(component_embeddings)
+            indices, scores = rank_embeddings(
+                hyde_vector,
+                document_embeddings[example.doc_id],
+                k=max_top_k,
+            )
+        else:
+            score_vector = bm25_indexes[example.doc_id].hyde_scores(
+                variants,
+                fusion=str(selected_retriever.score_fusion or "minmax_mean"),
+            )
+            indices, scores = rank_score_vector(score_vector, k=max_top_k)
         doc_chunks = chunks_by_doc[example.doc_id]
-        indices, scores = rank_embeddings(hyde_vector, document_embeddings[example.doc_id], k=max_top_k)
         retrieved_ids = [doc_chunks[index].chunk_id for index in indices]
         retrieval_seconds = time.perf_counter() - retrieval_started
         total_retrieval_seconds += retrieval_seconds
@@ -535,11 +655,11 @@ def run_experiment(
                 "query_id": example.query_id,
                 "doc_id": example.doc_id,
                 "question": example.question,
-                "prompt": prompt,
                 "hypothetical_documents": hypotheses,
                 "hypothesis_count": len(hypotheses),
-                "hypothesis_cache_hit": cache_hit,
-                "generation_seconds": round(generation_seconds, 6),
+                "hypothesis_cache_hit": generation_seconds_by_query[str(example.query_id)] == 0.0,
+                "generation_seconds": round(generation_seconds_by_query[str(example.query_id)], 6),
+                "retriever_name": retriever_name,
                 "retrieval_seconds": round(retrieval_seconds, 6),
                 "retrieved_chunk_ids": retrieved_ids,
                 "retrieved_indices": indices,
@@ -548,11 +668,18 @@ def run_experiment(
             }
         )
         if query_number == 1 or query_number % 10 == 0 or query_number == len(examples):
-            logger.info("HyDE progress queries=%d/%d cache_hits=%d", query_number, len(examples), cached_queries)
+            logger.info(
+                "HyDE retrieval progress retriever=%s queries=%d/%d",
+                retriever_name,
+                query_number,
+                len(examples),
+            )
 
     command_used = " ".join([Path(sys.argv[0]).name, *sys.argv[1:]])
     common_context = {
         "method_name": METHOD_NAME,
+        "retriever_name": retriever_name,
+        "retriever": retriever_metadata(selected_retriever),
         "dataset_name": dataset_name,
         "split": str(config.get("dataset", {}).get("split", "test")),
         "run_name": run_name,
@@ -562,11 +689,15 @@ def run_experiment(
         "generation": generation,
         "seed": seed,
         "model_snapshot": model_snapshot,
-        "embedding_model_name": encoder.model_name,
-        "embedding_model_revision": getattr(getattr(getattr(encoder, "model", None), "config", None), "_commit_hash", None),
+        "embedding_model_name": getattr(encoder, "model_name", None),
+        "embedding_model_revision": getattr(
+            getattr(getattr(encoder, "model", None), "config", None),
+            "_commit_hash",
+            None,
+        ),
         "embedding_device": getattr(encoder, "device", embedding_device),
         "hypothesis_cache": str(hypothesis_cache.path),
-        "document_embedding_cache_root": str(embedding_root),
+        "document_embedding_cache_root": str(embedding_root) if embedding_root is not None else None,
         "hypothesis_cache_hits": cached_queries,
         "document_embedding_cache_hits": embedding_cache_hits,
         "generation_seconds": round(total_generation_seconds, 3),
@@ -591,6 +722,7 @@ def run_experiment(
             results=truncated_results,
             payload_rows=truncated_payloads,
             dataset_name=dataset_name,
+            retriever_name=retriever_name,
             split=common_context["split"],
             run_name=run_name,
             k_values=k_values,

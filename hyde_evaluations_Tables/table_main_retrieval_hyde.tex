@@ -1,20 +1,18 @@
 % HyDE retrieval summary table.
-% Ranking metrics: NDCG@10 and Recall@10 over Gold/Silver-L/Union-L.
+% Ranking metrics: NDCG@5/@10 and Recall@5/@10 over Gold/Silver-L/Union-L.
 % Binary metrics: HR@5 and HR@10 over Gold/Silver-S/Union-S.
 \begin{table*}[t]
 \centering
 \caption{Main retrieval summary for HyDE. Values are percentages.}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{lllrrrrrrrrrrrr}
+\begin{tabular}{lllrrrrrrrrrrrrrrrrrr}
 \toprule
-Dataset & Retriever & Method & \multicolumn{6}{c}{Ranking Metrics} & \multicolumn{6}{c}{Binary Metrics} \\
-\cmidrule(lr){4-9}\cmidrule(lr){10-15}
-& & & \multicolumn{2}{c}{Gold} & \multicolumn{2}{c}{Silver-L} & \multicolumn{2}{c}{Union-L} & \multicolumn{2}{c}{Gold} & \multicolumn{2}{c}{Silver-S} & \multicolumn{2}{c}{Union-S} \\
-& & & NDCG@10 & Recall@10 & NDCG@10 & Recall@10 & NDCG@10 & Recall@10 & HR@5 & HR@10 & HR@5 & HR@10 & HR@5 & HR@10 \\
+Dataset & Retriever & Method & \multicolumn{12}{c}{Ranking Metrics} & \multicolumn{6}{c}{Binary Metrics} \\
+\cmidrule(lr){4-15}\cmidrule(lr){16-21}
+& & & \multicolumn{4}{c}{Gold} & \multicolumn{4}{c}{Silver-L} & \multicolumn{4}{c}{Union-L} & \multicolumn{2}{c}{Gold} & \multicolumn{2}{c}{Silver-S} & \multicolumn{2}{c}{Union-S} \\
+& & & NDCG@5 & Recall@5 & NDCG@10 & Recall@10 & NDCG@5 & Recall@5 & NDCG@10 & Recall@10 & NDCG@5 & Recall@5 & NDCG@10 & Recall@10 & HR@5 & HR@10 & HR@5 & HR@10 & HR@5 & HR@10 \\
 \midrule
-LooGLE & Contriever & HyDE & 58.4 & 81.1 & 37.8 & 50.0 & 58.2 & 80.9 & 71.1 & 81.7 & 25.0 & 25.0 & 70.8 & 81.3 \\
-\midrule
-QASPER & Contriever & HyDE & 69.3 & 100.0 & 71.4 & 100.0 & 71.8 & 100.0 & 97.4 & 100.0 & 64.3 & 100.0 & 97.5 & 100.0 \\
+LooGLE & Contriever & HyDE & 54.9 & 70.4 & 58.4 & 81.1 & 32.7 & 37.5 & 37.8 & 50.0 & 54.8 & 70.1 & 58.2 & 80.9 & 71.1 & 81.7 & 25.0 & 25.0 & 70.8 & 81.3 \\
 \bottomrule
 \end{tabular}%
 }

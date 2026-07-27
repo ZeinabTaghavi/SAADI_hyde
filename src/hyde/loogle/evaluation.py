@@ -89,6 +89,7 @@ def summarize_metrics(
     run_name: str,
     k_values: list[int],
     average_chunk_tokens: float | None,
+    retriever_name: str = "contriever",
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     ranking: dict[str, dict[str, float | None]] = {view: {} for view in RANKING_VIEWS}
     hits: dict[str, dict[str, float | None]] = {view: {} for view in HIT_VIEWS}
@@ -107,6 +108,7 @@ def summarize_metrics(
             hits[view][f"hit_rate@{k}"] = _mean(float(row[key]) for row in rows if row.get(key) is not None)
     common = {
         "method_name": METHOD_NAME,
+        "retriever_name": retriever_name,
         "dataset_name": dataset_name,
         "split": split,
         "run_name": run_name,

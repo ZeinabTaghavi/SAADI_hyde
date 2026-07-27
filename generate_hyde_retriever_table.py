@@ -22,16 +22,28 @@ DATASET_LABELS = {
     "novelhopqa": "NovelHopQA",
     "novelhub": "NovelHopQA",
 }
-RETRIEVER = "contriever"
-RETRIEVER_LABEL = "Contriever"
+RETRIEVER_LABELS = {
+    "bm25": "BM25",
+    "contriever": "Contriever",
+    "bge_m3": "BGE-M3",
+    "qwen": "Qwen",
+    "jina": "Jina",
+}
+RETRIEVER_ORDER = {name: index for index, name in enumerate(RETRIEVER_LABELS)}
 METHOD_LABEL = "HyDE"
 
 # Exact column order used by outputs/Tables/main/retrieval/table_main_retrieval.
 METRIC_FIELDS = (
+    "gold_ndcg@5",
+    "gold_recall@5",
     "gold_ndcg@10",
     "gold_recall@10",
+    "silver_loose_ndcg@5",
+    "silver_loose_recall@5",
     "silver_loose_ndcg@10",
     "silver_loose_recall@10",
+    "union_loose_ndcg@5",
+    "union_loose_recall@5",
     "union_loose_ndcg@10",
     "union_loose_recall@10",
     "gold_hit@5",
@@ -76,20 +88,37 @@ def _metric_value(payload: dict[str, Any], key: str) -> float | None:
     return None if value is None else float(value)
 
 
+def _is_retriever_scoped(path: Path, retriever: str) -> bool:
+    parts = path.parts
+    return any(
+        parts[index] == "hyde" and parts[index + 1] == retriever and parts[index + 2].startswith("top_")
+        for index in range(max(0, len(parts) - 2))
+    )
+
+
 def collect_records(input_root: Path) -> list[dict[str, Any]]:
     """Merge HyDE top-5/top-10 files into one main-table record per run."""
 
-    grouped: dict[tuple[str, str], list[tuple[int, Path, dict[str, Any]]]] = {}
+    grouped: dict[tuple[str, str, str], list[tuple[int, Path, dict[str, Any]]]] = {}
     for path in sorted(input_root.rglob("leaderboard_row.json")):
         payload = _read_json(path)
         if str(payload.get("method_name")) != "hyde":
             continue
         dataset = str(payload.get("dataset_name") or "").strip().lower()
+        retriever = str(payload.get("retriever_name") or "").strip().lower()
+        if not retriever:
+            # Backward compatibility for the completed legacy Contriever run.
+            retriever = "contriever"
         run_name = str(payload.get("run_name") or path.parent.name)
-        grouped.setdefault((dataset, run_name), []).append((_top_k(path), path, payload))
+        grouped.setdefault((dataset, retriever, run_name), []).append((_top_k(path), path, payload))
 
     records: list[dict[str, Any]] = []
-    for (dataset, run_name), candidates in grouped.items():
+    for (dataset, retriever, run_name), candidates in grouped.items():
+        scoped = [candidate for candidate in candidates if _is_retriever_scoped(candidate[1], retriever)]
+        if scoped:
+            # Prefer the new retriever-scoped layout over a legacy Contriever
+            # directory when both are present after an intentional rerun.
+            candidates = scoped
         merged: dict[str, Any] = {}
         source_path: Path | None = None
         for _, path, payload in sorted(candidates, key=lambda item: item[0]):
@@ -120,8 +149,8 @@ def collect_records(input_root: Path) -> list[dict[str, Any]]:
         record: dict[str, Any] = {
             "dataset": dataset,
             "dataset_label": DATASET_LABELS.get(dataset, dataset),
-            "retriever": RETRIEVER,
-            "retriever_label": RETRIEVER_LABEL,
+            "retriever": retriever,
+            "retriever_label": RETRIEVER_LABELS.get(retriever, retriever),
             "method": METHOD_LABEL,
             "split": str(merged.get("split") or ""),
             "run_name": run_name,
@@ -137,6 +166,8 @@ def collect_records(input_root: Path) -> list[dict[str, Any]]:
         key=lambda record: (
             DATASET_ORDER.get(str(record["dataset"]), 99),
             str(record["dataset"]),
+            RETRIEVER_ORDER.get(str(record["retriever"]), 99),
+            str(record["retriever"]),
             str(record["run_name"]),
         )
     )
@@ -151,7 +182,8 @@ def _validate_unique_records(records: list[dict[str, Any]]) -> None:
         source = str(record["source_path"])
         if key in seen:
             raise ValueError(
-                f"Multiple HyDE runs found for dataset={key[0]!r}: {seen[key]} and {source}. "
+                f"Multiple HyDE runs found for dataset={key[0]!r} retriever={key[1]!r}: "
+                f"{seen[key]} and {source}. "
                 "Use --input-root to select one completed run population."
             )
         seen[key] = source
@@ -183,10 +215,16 @@ def _write_markdown(path: Path, records: list[dict[str, Any]]) -> None:
         "Dataset",
         "Retriever",
         "Method",
+        "Gold nDCG@5",
+        "Gold Recall@5",
         "Gold nDCG@10",
         "Gold Recall@10",
+        "Silver-L nDCG@5",
+        "Silver-L Recall@5",
         "Silver-L nDCG@10",
         "Silver-L Recall@10",
+        "Union-L nDCG@5",
+        "Union-L Recall@5",
         "Union-L nDCG@10",
         "Union-L Recall@10",
         "Gold HR@5",
@@ -228,18 +266,18 @@ def _latex_escape(text: str) -> str:
 def build_main_retrieval_latex(records: list[dict[str, Any]]) -> str:
     lines = [
         "% HyDE retrieval summary table.",
-        "% Ranking metrics: NDCG@10 and Recall@10 over Gold/Silver-L/Union-L.",
+        "% Ranking metrics: NDCG@5/@10 and Recall@5/@10 over Gold/Silver-L/Union-L.",
         "% Binary metrics: HR@5 and HR@10 over Gold/Silver-S/Union-S.",
         r"\begin{table*}[t]",
         r"\centering",
         r"\caption{Main retrieval summary for HyDE. Values are percentages.}",
         r"\resizebox{\textwidth}{!}{%",
-        r"\begin{tabular}{lllrrrrrrrrrrrr}",
+        r"\begin{tabular}{lllrrrrrrrrrrrrrrrrrr}",
         r"\toprule",
-        r"Dataset & Retriever & Method & \multicolumn{6}{c}{Ranking Metrics} & \multicolumn{6}{c}{Binary Metrics} \\",
-        r"\cmidrule(lr){4-9}\cmidrule(lr){10-15}",
-        r"& & & \multicolumn{2}{c}{Gold} & \multicolumn{2}{c}{Silver-L} & \multicolumn{2}{c}{Union-L} & \multicolumn{2}{c}{Gold} & \multicolumn{2}{c}{Silver-S} & \multicolumn{2}{c}{Union-S} \\",
-        r"& & & NDCG@10 & Recall@10 & NDCG@10 & Recall@10 & NDCG@10 & Recall@10 & HR@5 & HR@10 & HR@5 & HR@10 & HR@5 & HR@10 \\",
+        r"Dataset & Retriever & Method & \multicolumn{12}{c}{Ranking Metrics} & \multicolumn{6}{c}{Binary Metrics} \\",
+        r"\cmidrule(lr){4-15}\cmidrule(lr){16-21}",
+        r"& & & \multicolumn{4}{c}{Gold} & \multicolumn{4}{c}{Silver-L} & \multicolumn{4}{c}{Union-L} & \multicolumn{2}{c}{Gold} & \multicolumn{2}{c}{Silver-S} & \multicolumn{2}{c}{Union-S} \\",
+        r"& & & NDCG@5 & Recall@5 & NDCG@10 & Recall@10 & NDCG@5 & Recall@5 & NDCG@10 & Recall@10 & NDCG@5 & Recall@5 & NDCG@10 & Recall@10 & HR@5 & HR@10 & HR@5 & HR@10 & HR@5 & HR@10 \\",
         r"\midrule",
     ]
     for index, record in enumerate(records):
