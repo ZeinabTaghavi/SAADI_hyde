@@ -51,11 +51,16 @@ HyDE generation matches `hyde-dl19.ipynb`: local `Qwen/Qwen3-30B-A3B-Instruct-25
 
 ### Installation on the experiment server
 
-Create an isolated environment and install a CUDA-compatible PyTorch build for that server. Then run:
+Create an isolated environment in this standalone folder and install a
+CUDA-compatible PyTorch build for that server. The launchers prefer
+`.venv/bin/python`, so installation and execution cannot accidentally use
+different Python environments:
 
 ```bash
-pip install -r requirements-loogle.txt
-pip install -e . --no-deps
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements-loogle.txt
+python -m pip install -e . --no-deps
 ```
 
 The second command installs this local package without reinstalling PyTorch. The LooGLE runner uses Transformers directly and does not require Java, Pyserini, or the DL19 index.
@@ -65,8 +70,13 @@ Configure the model and dataset caches. The launcher uses the same defaults as t
 ```bash
 export HF_TOKEN=<your-hugging-face-token>
 export SAADI_HF_CACHE_ROOT=/mnt/cache/taghavi
-export GPUS=4,5,6,7
 ```
+
+All launchers default to physical GPUs `0,1,2,3`, set both
+`CUDA_VISIBLE_DEVICES` and `GLOBAL_VISIBLE_DEVICES`, and verify that PyTorch can
+see all four GPUs before loading a model. Set `GPUS` only when an intentional
+override is needed. `HF_HOME`, `HF_HUB_CACHE`, `HF_DATASETS_CACHE`, and
+`TRANSFORMERS_CACHE` are derived from `SAADI_HF_CACHE_ROOT`.
 
 If every model and dataset file is already cached, offline mode is supported:
 
@@ -133,6 +143,17 @@ Run every missing experiment and regenerate the main-style table:
 ```bash
 ./run_all_hyde_retrievers.sh
 ```
+
+If the copied environment has not been populated yet, the matrix launcher can
+install into the exact Python interpreter that it will subsequently use:
+
+```bash
+bash ./run_all_hyde_retrievers.sh --install-deps
+```
+
+Before loading the dataset or a model, the launcher checks all required Python
+packages, cache writability, and GPU visibility. Missing packages are reported
+with an interpreter-specific repair command.
 
 Useful filters and controls:
 

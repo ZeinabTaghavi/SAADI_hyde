@@ -10,11 +10,11 @@
 #   OUTPUT_ROOT=/path/to/hyde_evaluations
 #   WORK_ROOT=/path/to/hyde_runs
 #   HYDE_QWEN_DEVICE_MAP=auto
+#   PYTHON_BIN=/path/to/python
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PYTHON_BIN="${PYTHON_BIN:-python}"
 OUTPUT_ROOT="${OUTPUT_ROOT:-${SCRIPT_DIR}/hyde_evaluations}"
 WORK_ROOT="${WORK_ROOT:-${SCRIPT_DIR}/hyde_runs}"
 TABLE_ROOT="${TABLE_ROOT:-${SCRIPT_DIR}/hyde_evaluations_Tables}"
@@ -24,9 +24,10 @@ RETRIEVERS_CSV="${RETRIEVERS_CSV:-bm25,contriever,bge_m3,qwen,jina}"
 CHECK_ONLY=0
 DRY_RUN=0
 FORCE=0
+INSTALL_DEPS=0
 
 usage() {
-  echo "Usage: $0 [--check-only] [--dry-run] [--force]"
+  echo "Usage: $0 [--check-only] [--dry-run] [--force] [--install-deps]"
 }
 
 while [[ $# -gt 0 ]]; do
@@ -39,6 +40,9 @@ while [[ $# -gt 0 ]]; do
       ;;
     --force)
       FORCE=1
+      ;;
+    --install-deps)
+      INSTALL_DEPS=1
       ;;
     -h|--help)
       usage
@@ -53,20 +57,12 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
-export CUDA_VISIBLE_DEVICES="${GPUS:-${CUDA_VISIBLE_DEVICES:-0,1,2,3}}"
-export TOKENIZERS_PARALLELISM="${TOKENIZERS_PARALLELISM:-false}"
-export PYTHONPATH="${SCRIPT_DIR}/src${PYTHONPATH:+:${PYTHONPATH}}"
+# shellcheck source=runtime_env.sh
+source "${SCRIPT_DIR}/runtime_env.sh"
+hyde_configure_runtime "${SCRIPT_DIR}"
 
-HF_CACHE_ROOT="${SAADI_HF_CACHE_ROOT:-${HF_HOME:-/mnt/cache/taghavi}}"
-export HF_HOME="${HF_HOME:-${HF_CACHE_ROOT}}"
-export HF_HUB_CACHE="${HF_HUB_CACHE:-${HF_HOME}/hub}"
-export HF_DATASETS_CACHE="${HF_DATASETS_CACHE:-${HF_HOME}/datasets}"
-export TRANSFORMERS_CACHE="${TRANSFORMERS_CACHE:-${HF_HOME}/transformers}"
-
-if [[ "${SAADI_HF_OFFLINE:-}" =~ ^(1|true|yes|on)$ ]]; then
-  export HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-1}"
-  export HF_DATASETS_OFFLINE="${HF_DATASETS_OFFLINE:-1}"
-  export TRANSFORMERS_OFFLINE="${TRANSFORMERS_OFFLINE:-1}"
+if [[ "${INSTALL_DEPS}" == "1" ]]; then
+  hyde_install_dependencies "${SCRIPT_DIR}"
 fi
 
 DEFAULT_BOOKS_ROOT="${SCRIPT_DIR}/../../novelhopqa/book-corpus-root"
@@ -185,7 +181,10 @@ echo "Standalone HyDE retriever matrix"
 echo "  datasets=${DATASETS_CSV}"
 echo "  retrievers=${RETRIEVERS_CSV}"
 echo "  chunk_size=500"
+echo "  PYTHON_BIN=${PYTHON_BIN}"
 echo "  CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}"
+echo "  GLOBAL_VISIBLE_DEVICES=${GLOBAL_VISIBLE_DEVICES}"
+echo "  HF_HOME=${HF_HOME}"
 echo "  OUTPUT_ROOT=${OUTPUT_ROOT}"
 echo "  WORK_ROOT=${WORK_ROOT}"
 echo
@@ -210,6 +209,11 @@ done
 
 if [[ "${CHECK_ONLY}" == "1" ]]; then
   exit 0
+fi
+if [[ "${DRY_RUN}" != "1" ]]; then
+  hyde_require_dependencies "${SCRIPT_DIR}"
+  hyde_prepare_cache
+  hyde_require_visible_gpus
 fi
 if [[ "${MISMATCHES}" == "1" && "${FORCE}" != "1" ]]; then
   echo "At least one existing artifact has a configuration mismatch." >&2

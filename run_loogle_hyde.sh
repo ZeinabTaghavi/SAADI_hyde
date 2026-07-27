@@ -2,17 +2,12 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PYTHON_BIN="${PYTHON_BIN:-python}"
-
-export CUDA_VISIBLE_DEVICES="${GPUS:-${CUDA_VISIBLE_DEVICES:-0,1,2,3}}"
-export TOKENIZERS_PARALLELISM="${TOKENIZERS_PARALLELISM:-false}"
-export PYTHONPATH="${SCRIPT_DIR}/src${PYTHONPATH:+:${PYTHONPATH}}"
-
-HF_CACHE_ROOT="${SAADI_HF_CACHE_ROOT:-${HF_HOME:-/mnt/cache/taghavi}}"
-export HF_HOME="${HF_HOME:-${HF_CACHE_ROOT}}"
-export HF_HUB_CACHE="${HF_HUB_CACHE:-${HF_HOME}/hub}"
-export HF_DATASETS_CACHE="${HF_DATASETS_CACHE:-${HF_HOME}/datasets}"
-export TRANSFORMERS_CACHE="${TRANSFORMERS_CACHE:-${HF_HOME}/transformers}"
+# shellcheck source=runtime_env.sh
+source "${SCRIPT_DIR}/runtime_env.sh"
+hyde_configure_runtime "${SCRIPT_DIR}"
+hyde_require_dependencies "${SCRIPT_DIR}"
+hyde_prepare_cache
+hyde_require_visible_gpus
 
 echo "HyDE–LooGLE standalone runner"
 echo "  CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}"
