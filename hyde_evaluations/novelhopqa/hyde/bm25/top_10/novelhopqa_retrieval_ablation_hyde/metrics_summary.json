@@ -1,0 +1,61 @@
+{
+  "method_name": "hyde",
+  "retriever_name": "bm25",
+  "dataset_name": "novelhopqa",
+  "split": "test",
+  "run_name": "novelhopqa_retrieval_ablation_hyde",
+  "average_chunk_tokens": 488.282187176836,
+  "n_queries": 985,
+  "k_values": [
+    5,
+    10
+  ],
+  "ranking_metrics_by_view": {
+    "gold": {
+      "recall@5": 0.443620178042,
+      "mrr@5": 0.296859545005,
+      "ndcg@5": 0.333183853835,
+      "recall@10": 0.522255192878,
+      "mrr@10": 0.307390137064,
+      "ndcg@10": 0.35865254863
+    },
+    "silver_loose": {
+      "recall@5": 0.142113325739,
+      "mrr@5": 0.217792068596,
+      "ndcg@5": 0.141145394177,
+      "recall@10": 0.178468720074,
+      "mrr@10": 0.22918899607,
+      "ndcg@10": 0.151840241338
+    },
+    "union_loose": {
+      "recall@5": 0.348423598279,
+      "mrr@5": 0.271895093063,
+      "ndcg@5": 0.272550390938,
+      "recall@10": 0.41370941314,
+      "mrr@10": 0.282699218435,
+      "ndcg@10": 0.293354449577
+    }
+  },
+  "hit_rate_metrics_by_view": {
+    "gold_hit": {
+      "hit_rate@5": 0.443620178042,
+      "hit_rate@10": 0.522255192878
+    },
+    "silver_strict_hit": {
+      "hit_rate@5": 0.041800643087,
+      "hit_rate@10": 0.061093247588
+    },
+    "strict_union_hit": {
+      "hit_rate@5": 0.316751269036,
+      "hit_rate@10": 0.376649746193
+    }
+  },
+  "eligible_queries_by_view": {
+    "gold": 674,
+    "silver_loose": 311,
+    "union_loose": 985,
+    "gold_hit": 674,
+    "silver_strict_hit": 311,
+    "strict_union_hit": 985
+  }
+}

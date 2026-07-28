@@ -1,0 +1,48 @@
+{
+  "method_name": "hyde",
+  "retriever_name": "qwen",
+  "dataset_name": "loogle",
+  "split": "test",
+  "run_name": "loogle_retrieval_ablation_hyde",
+  "average_chunk_tokens": 479.371362048894,
+  "n_queries": 534,
+  "k_values": [
+    5
+  ],
+  "ranking_metrics_by_view": {
+    "gold": {
+      "recall@5": 0.732438316401,
+      "mrr@5": 0.572264150943,
+      "ndcg@5": 0.612348395943
+    },
+    "silver_loose": {
+      "recall@5": 0.625,
+      "mrr@5": 0.458333333333,
+      "ndcg@5": 0.469303828835
+    },
+    "union_loose": {
+      "recall@5": 0.731633535004,
+      "mrr@5": 0.571410736579,
+      "ndcg@5": 0.611276901059
+    }
+  },
+  "hit_rate_metrics_by_view": {
+    "gold_hit": {
+      "hit_rate@5": 0.739622641509
+    },
+    "silver_strict_hit": {
+      "hit_rate@5": 0.5
+    },
+    "strict_union_hit": {
+      "hit_rate@5": 0.737827715356
+    }
+  },
+  "eligible_queries_by_view": {
+    "gold": 530,
+    "silver_loose": 4,
+    "union_loose": 534,
+    "gold_hit": 530,
+    "silver_strict_hit": 4,
+    "strict_union_hit": 534
+  }
+}

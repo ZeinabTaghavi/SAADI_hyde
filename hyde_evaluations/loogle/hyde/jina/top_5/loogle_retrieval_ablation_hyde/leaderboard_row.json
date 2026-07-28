@@ -1,0 +1,21 @@
+{
+  "method_name": "hyde",
+  "retriever_name": "jina",
+  "dataset_name": "loogle",
+  "split": "test",
+  "run_name": "loogle_retrieval_ablation_hyde",
+  "average_chunk_tokens": 479.371362048894,
+  "n_queries": 534,
+  "gold_recall@5": 0.682910014514,
+  "gold_mrr@5": 0.496194968553,
+  "gold_ndcg@5": 0.543520354767,
+  "silver_loose_recall@5": 0.625,
+  "silver_loose_mrr@5": 0.75,
+  "silver_loose_ndcg@5": 0.595803221862,
+  "union_loose_recall@5": 0.682476231634,
+  "union_loose_mrr@5": 0.498096129838,
+  "union_loose_ndcg@5": 0.543911986731,
+  "gold_hit@5": 0.690566037736,
+  "silver_strict_hit@5": 0.5,
+  "strict_union_hit@5": 0.689138576779
+}

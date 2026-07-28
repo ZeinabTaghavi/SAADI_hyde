@@ -1,0 +1,6 @@
+{
+  "method_name": "hyde",
+  "retriever_name": "bge_m3",
+  "n_chunks": 7736,
+  "average_chunk_tokens": 488.2821871768356
+}
