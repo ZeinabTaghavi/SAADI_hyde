@@ -71,6 +71,24 @@ def test_labeling_builds_gold_and_cross_chunk_silver_group():
     assert examples[1].silver_chunk_groups == [["d1:0", "d1:1"]]
 
 
+def test_expanded_population_can_retain_metric_ineligible_queries():
+    chunks = chunk_documents_grouped_records(["Alpha beta gamma."], doc_ids=["d1"], chunk_size=5)[0]
+    entries = [
+        {
+            "id": "qasper_64k::unanswerable",
+            "document_id": "d1",
+            "question": "Can this be answered?",
+            "answers": ["Yes"],
+            "retrieval_spans": [],
+        }
+    ]
+    assert build_retrieval_examples(entries, {"d1": chunks}) == []
+    retained = build_retrieval_examples(entries, {"d1": chunks}, include_unlabeled=True)
+    assert len(retained) == 1
+    assert retained[0].gold_chunk_ids == []
+    assert retained[0].silver_chunk_ids == []
+
+
 def test_window_labeling_matches_all_chunks_overlapped_by_context():
     chunks = chunk_documents_grouped_records(
         ["alpha beta gamma delta. epsilon zeta eta theta."], doc_ids=["book"], chunk_size=4

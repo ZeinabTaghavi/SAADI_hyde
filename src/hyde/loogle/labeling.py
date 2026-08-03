@@ -221,7 +221,10 @@ def _targets(
 
 
 def build_retrieval_examples(
-    qa_entries: list[dict[str, Any]], chunks_by_doc: dict[str, list[ChunkRecord]]
+    qa_entries: list[dict[str, Any]],
+    chunks_by_doc: dict[str, list[ChunkRecord]],
+    *,
+    include_unlabeled: bool = False,
 ) -> list[RetrievalExample]:
     entries_by_doc: dict[str, list[tuple[int, dict[str, Any]]]] = defaultdict(list)
     for index, entry in enumerate(qa_entries):
@@ -238,7 +241,7 @@ def build_retrieval_examples(
             if not question:
                 continue
             gold, silver, groups = _targets(entry, chunks, tokenized=tokenized, window_index=window_index)
-            if not (gold or silver):
+            if not include_unlabeled and not (gold or silver):
                 continue
             examples.append(
                 RetrievalExample(

@@ -15,12 +15,12 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 DEFAULT_INPUT_ROOT = SCRIPT_DIR / "hyde_evaluations"
 DEFAULT_OUTPUT_DIR = SCRIPT_DIR / "hyde_evaluations_Tables"
 
-DATASET_ORDER = {"loogle": 0, "qasper": 1, "novelhopqa": 2, "novelhub": 2}
+DATASET_ORDER = {"loogle": 0, "qasper_64k": 1, "musique_32k": 2, "novelhopqa": 3}
 DATASET_LABELS = {
     "loogle": "LooGLE",
-    "qasper": "QASPER",
+    "qasper_64k": "QASPER-64K",
+    "musique_32k": "MuSiQue-32K",
     "novelhopqa": "NovelHopQA",
-    "novelhub": "NovelHopQA",
 }
 RETRIEVER_LABELS = {
     "bm25": "BM25",
@@ -31,6 +31,12 @@ RETRIEVER_LABELS = {
 }
 RETRIEVER_ORDER = {name: index for index, name in enumerate(RETRIEVER_LABELS)}
 METHOD_LABEL = "HyDE"
+EXPECTED_QUERY_COUNTS = {
+    "loogle": 534,
+    "qasper_64k": 1_372,
+    "musique_32k": 900,
+    "novelhopqa": 985,
+}
 
 # Exact column order used by outputs/Tables/main/retrieval/table_main_retrieval.
 METRIC_FIELDS = (
@@ -105,6 +111,10 @@ def collect_records(input_root: Path) -> list[dict[str, Any]]:
         if str(payload.get("method_name")) != "hyde":
             continue
         dataset = str(payload.get("dataset_name") or "").strip().lower()
+        # The old 25-document QASPER run is intentionally excluded. The clean
+        # main table contains only the four finalized dataset variants.
+        if dataset not in DATASET_ORDER:
+            continue
         retriever = str(payload.get("retriever_name") or "").strip().lower()
         if not retriever:
             # Backward compatibility for the completed legacy Contriever run.
@@ -187,6 +197,44 @@ def _validate_unique_records(records: list[dict[str, Any]]) -> None:
                 "Use --input-root to select one completed run population."
             )
         seen[key] = source
+
+
+def validate_complete_main_grid(records: list[dict[str, Any]]) -> None:
+    expected = {
+        (dataset, retriever)
+        for dataset in DATASET_ORDER
+        for retriever in RETRIEVER_LABELS
+    }
+    actual = {(str(record["dataset"]), str(record["retriever"])) for record in records}
+    missing = sorted(expected - actual)
+    unexpected = sorted(actual - expected)
+    count_errors = [
+        (
+            str(record["dataset"]),
+            str(record["retriever"]),
+            record.get("n_queries"),
+            EXPECTED_QUERY_COUNTS[str(record["dataset"])],
+        )
+        for record in records
+        if record.get("n_queries") != EXPECTED_QUERY_COUNTS[str(record["dataset"])]
+    ]
+    if missing or unexpected or count_errors:
+        details: list[str] = []
+        if missing:
+            details.append("missing=" + ", ".join(f"{dataset}/{retriever}" for dataset, retriever in missing))
+        if unexpected:
+            details.append(
+                "unexpected=" + ", ".join(f"{dataset}/{retriever}" for dataset, retriever in unexpected)
+            )
+        if count_errors:
+            details.append(
+                "query_count_mismatches="
+                + ", ".join(
+                    f"{dataset}/{retriever}:{actual_count}!=expected_{expected_count}"
+                    for dataset, retriever, actual_count, expected_count in count_errors
+                )
+            )
+        raise ValueError("Incomplete HyDE main-table grid: " + "; ".join(details))
 
 
 def _format_pct(value: Any) -> str:
@@ -299,6 +347,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--input-root", type=Path, default=DEFAULT_INPUT_ROOT)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--prefix", default="table_main_retrieval_hyde")
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Require all 20 finalized dataset/retriever rows with exact query counts.",
+    )
     return parser.parse_args(argv)
 
 
@@ -308,6 +361,8 @@ def main(argv: list[str] | None = None) -> int:
     records = collect_records(input_root)
     if not records:
         raise FileNotFoundError(f"No HyDE leaderboard rows found under {input_root}")
+    if args.strict:
+        validate_complete_main_grid(records)
     output_dir = args.output_dir.expanduser().resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
     prefix = str(args.prefix)

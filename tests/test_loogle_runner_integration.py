@@ -133,3 +133,24 @@ def test_mocked_end_to_end_run_writes_top5_top10_and_tables(tmp_path, monkeypatc
     assert r"\begin{tabular}{lllrrrrrrrrrrrrrrrrrr}" in table
     assert "LooGLE & BM25 & HyDE" in table
     assert "LooGLE & Contriever & HyDE" in table
+
+
+def test_strict_table_requires_exact_twenty_row_grid():
+    records = [
+        {
+            "dataset": dataset,
+            "retriever": retriever,
+            "n_queries": table_generator.EXPECTED_QUERY_COUNTS[dataset],
+        }
+        for dataset in table_generator.DATASET_ORDER
+        for retriever in table_generator.RETRIEVER_LABELS
+    ]
+    table_generator.validate_complete_main_grid(records)
+
+    records.pop()
+    try:
+        table_generator.validate_complete_main_grid(records)
+    except ValueError as exc:
+        assert "Incomplete HyDE main-table grid" in str(exc)
+    else:
+        raise AssertionError("Strict table validation accepted a missing matrix cell")

@@ -36,7 +36,10 @@ The notebooks load Qwen locally with Transformers using `device_map="auto"`, so 
 
 ## Standalone HyDE benchmark runners
 
-The repository also contains standalone retrieval experiments for LooGLE, QASPER, and NovelHopQA. They do not import anything from the parent SAADI repository and can be copied to another server by themselves.
+The repository also contains standalone retrieval experiments for LooGLE,
+QASPER-64K, MuSiQue-32K, NovelHopQA, and the legacy unexpanded QASPER subset.
+They do not import anything from the parent SAADI repository and can be copied
+to another server by themselves.
 
 The default run reproduces the population in the saved HippoRAG comparison:
 
@@ -163,8 +166,43 @@ GPUS=0,1,2,3 HYDE_QWEN_DEVICE_MAP=auto ./run_all_hyde_retrievers.sh
 ./run_all_hyde_retrievers.sh --dry-run
 ```
 
-The launcher first runs a generation-only process for each dataset. It then
-runs each retriever in a separate process with `--retrieval-only`, preventing
+### QASPER-64K + MuSiQue-32K main-table matrix
+
+The exact expanded datasets used by the main SAADI table are bundled under
+`data/qasper_64k/` and `data/musique_32k/`. Every source file is validated
+against its frozen SHA-256 manifest before a run starts:
+
+- QASPER-64K: 23 expanded groups, 1,372 questions, 1,353 questions with
+  retrieval evidence
+- MuSiQue-32K: 45 expanded groups, 900 questions, with 300 questions from each
+  of the 2-hop, 3-hop, and 4-hop populations
+
+Run all five retrievers on physical GPUs 0, 1, 2, and 3 with:
+
+```bash
+CUDA_VISIBLE_DEVICES=0,1,2,3 \
+bash run_qasper64k_musique32k_hyde_gpu0_3.sh
+```
+
+The launcher first resumes the shared Qwen HyDE hypothesis cache for each
+dataset using all four GPUs. It then runs BM25, Contriever, BGE-M3, Jina, and
+Qwen retrieval in four independent GPU queues. Completed artifacts are skipped
+only after their manifests, configurations, populations, and top-5/top-10
+outputs validate. Useful controls are:
+
+```bash
+bash run_qasper64k_musique32k_hyde_gpu0_3.sh --check-only
+bash run_qasper64k_musique32k_hyde_gpu0_3.sh --dry-run
+bash run_qasper64k_musique32k_hyde_gpu0_3.sh --force
+```
+
+After all workers succeed, strict table generation requires exactly 20 rows:
+four finalized datasets times five retrievers. The legacy unexpanded QASPER
+subset is intentionally excluded. The final JSONL, CSV, Markdown, LaTeX, and
+text tables are written under `hyde_evaluations_Tables/`.
+
+Both matrix launchers first run a generation-only process for each dataset.
+They then run each retriever in a separate process with `--retrieval-only`, preventing
 the 30B generation model and dense retriever models from remaining loaded
 together. BM25 combines the original question and hypothetical passages by
 averaging their per-document min-max-normalized score vectors. Dense retrievers
@@ -185,7 +223,8 @@ Results are written to:
 ```text
 hyde_evaluations/loogle/hyde/<retriever>/top_5/loogle_retrieval_ablation_hyde/
 hyde_evaluations/loogle/hyde/<retriever>/top_10/loogle_retrieval_ablation_hyde/
-hyde_evaluations/qasper/hyde/<retriever>/top_10/qasper_retrieval_ablation_hyde/
+hyde_evaluations/qasper_64k/hyde/<retriever>/top_10/qasper_64k_retrieval_ablation_hyde/
+hyde_evaluations/musique_32k/hyde/<retriever>/top_10/musique_32k_retrieval_ablation_hyde/
 hyde_evaluations/novelhopqa/hyde/<retriever>/top_10/novelhopqa_retrieval_ablation_hyde/
 ```
 

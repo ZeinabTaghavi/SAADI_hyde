@@ -1,0 +1,63 @@
+dataset:
+  name: qasper_64k
+  split: test
+  config_name: expanded_64k
+  data_dir: ../data/qasper_64k
+
+chunking:
+  method: saadi_sentence_aware_words
+  chunk_size: 500
+  chunk_overlap: 0
+
+retrieval:
+  scope: per_document
+  top_ks: [5, 10]
+  retriever_configs:
+    bm25:
+      score_fusion: minmax_mean
+    contriever:
+      model_name: facebook/contriever
+      pooling: mean
+      normalize_embeddings: true
+      batch_size: 128
+      max_length: 512
+    bge_m3:
+      model_name: BAAI/bge-m3
+      pooling: cls
+      normalize_embeddings: true
+      batch_size: 16
+      max_length: 8192
+    qwen:
+      model_name: Qwen/Qwen3-Embedding-8B
+      pooling: last_token
+      normalize_embeddings: true
+      batch_size: 8
+      max_length: 512
+      trust_remote_code: true
+    jina:
+      model_name: jinaai/jina-embeddings-v3
+      pooling: mean
+      normalize_embeddings: true
+      batch_size: 32
+      max_length: 512
+      trust_remote_code: true
+
+hyde:
+  prompt_task: web search
+  include_original_query: true
+  aggregation: arithmetic_mean
+  generator:
+    backend: transformers
+    model_name: Qwen/Qwen3-30B-A3B-Instruct-2507
+    n: 8
+    max_new_tokens: 512
+    temperature: 0.7
+    top_p: 0.8
+    stop:
+      - "\n\n\n"
+    device_map: auto
+    torch_dtype: auto
+    trust_remote_code: true
+    attempts_per_hypothesis: 3
+
+seed: null

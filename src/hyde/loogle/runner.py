@@ -35,6 +35,7 @@ from .evaluation import HIT_VIEWS, METHOD_NAME, RANKING_VIEWS, result_to_query_m
 from .io import write_json, write_jsonl
 from .labeling import build_retrieval_examples
 from .novelhopqa import load_novelhopqa_bundle
+from .prepared_expanded import BUNDLE_SPECS, load_prepared_expanded_bundle, select_prepared_subset
 from .qasper import load_qasper_bundle
 from .retrievers import (
     BM25Index,
@@ -125,47 +126,68 @@ def prepare_data(
     dataset_name = str(dataset_cfg.get("name", "loogle")).strip().lower()
     if dataset_name in {"novelhop", "novelhop_qa"}:
         dataset_name = "novelhopqa"
-    if dataset_name not in {"loogle", "qasper", "novelhopqa"}:
+    if dataset_name not in {"loogle", "qasper", "qasper_64k", "musique_32k", "novelhopqa"}:
         raise ValueError(f"Unsupported standalone HyDE dataset={dataset_name!r}")
-    manifest_value = dataset_cfg.get("subset_manifest", f"{dataset_name}_hipporag_subset.json")
-    manifest_path = Path(str(manifest_value)).expanduser()
-    if not manifest_path.is_absolute():
-        manifest_path = (config_path.parent / manifest_path).resolve()
-    manifest = load_subset_manifest(manifest_path)
-    frozen_ids = [str(value) for value in manifest["document_ids"]]
-    allowed_ids = set(frozen_ids[:max_documents] if max_documents is not None else frozen_ids)
-    split = str(dataset_cfg.get("split", "test"))
-    config_name = dataset_cfg.get("config_name")
-    if dataset_name == "loogle":
-        documents, qa_entries, dataset_metadata = load_loogle_bundle(
+    if dataset_name in BUNDLE_SPECS:
+        split = str(dataset_cfg.get("split", BUNDLE_SPECS[dataset_name]["split"]))
+        documents, qa_entries, dataset_metadata = load_prepared_expanded_bundle(
+            dataset_variant=dataset_name,
             split=split,
-            config_name=str(config_name or "shortdep_qa"),
+            config_path=config_path,
+            data_dir=dataset_cfg.get("data_dir"),
         )
-    elif dataset_name == "qasper":
-        documents, qa_entries, dataset_metadata = load_qasper_bundle(
-            split=split,
-            config_name=str(config_name or "default"),
+        documents, qa_entries, selection_metadata = select_prepared_subset(
+            documents,
+            qa_entries,
+            max_documents=max_documents,
+            max_qa_entries=max_qa_entries,
         )
+        manifest_path = Path(dataset_metadata["prepared_manifest"])
+        expected = {
+            "documents": int(BUNDLE_SPECS[dataset_name]["documents"]),
+            "retrieval_examples": int(BUNDLE_SPECS[dataset_name]["queries"]),
+        }
     else:
-        books_root = dataset_cfg.get("books_root")
-        if books_root:
-            books_path = Path(str(books_root)).expanduser()
-            if not books_path.is_absolute():
-                books_path = (config_path.parent / books_path).resolve()
-            books_root = str(books_path)
-        documents, qa_entries, dataset_metadata = load_novelhopqa_bundle(
-            split=split,
-            config_name=str(config_name or "all"),
-            books_root=books_root,
-            allowed_doc_ids=allowed_ids,
+        manifest_value = dataset_cfg.get("subset_manifest", f"{dataset_name}_hipporag_subset.json")
+        manifest_path = Path(str(manifest_value)).expanduser()
+        if not manifest_path.is_absolute():
+            manifest_path = (config_path.parent / manifest_path).resolve()
+        manifest = load_subset_manifest(manifest_path)
+        frozen_ids = [str(value) for value in manifest["document_ids"]]
+        allowed_ids = set(frozen_ids[:max_documents] if max_documents is not None else frozen_ids)
+        split = str(dataset_cfg.get("split", "test"))
+        config_name = dataset_cfg.get("config_name")
+        if dataset_name == "loogle":
+            documents, qa_entries, dataset_metadata = load_loogle_bundle(
+                split=split,
+                config_name=str(config_name or "shortdep_qa"),
+            )
+        elif dataset_name == "qasper":
+            documents, qa_entries, dataset_metadata = load_qasper_bundle(
+                split=split,
+                config_name=str(config_name or "default"),
+            )
+        else:
+            books_root = dataset_cfg.get("books_root")
+            if books_root:
+                books_path = Path(str(books_root)).expanduser()
+                if not books_path.is_absolute():
+                    books_path = (config_path.parent / books_path).resolve()
+                books_root = str(books_path)
+            documents, qa_entries, dataset_metadata = load_novelhopqa_bundle(
+                split=split,
+                config_name=str(config_name or "all"),
+                books_root=books_root,
+                allowed_doc_ids=allowed_ids,
+            )
+        documents, qa_entries, selection_metadata = select_frozen_subset(
+            documents,
+            qa_entries,
+            manifest,
+            max_documents=max_documents,
+            max_qa_entries=max_qa_entries,
         )
-    documents, qa_entries, selection_metadata = select_frozen_subset(
-        documents,
-        qa_entries,
-        manifest,
-        max_documents=max_documents,
-        max_qa_entries=max_qa_entries,
-    )
+        expected = dict(manifest.get("expected", {}) or {})
 
     chunk_cfg = dict(config.get("chunking", {}) or {})
     chunk_size = int(chunk_cfg.get("chunk_size", 500))
@@ -179,12 +201,15 @@ def prepare_data(
     )
     chunks = [chunk for doc_chunks in grouped for chunk in doc_chunks]
     chunks_by_doc = {doc_id: doc_chunks for doc_id, doc_chunks in zip(doc_ids, grouped)}
-    examples = build_retrieval_examples(qa_entries, chunks_by_doc)
+    examples = build_retrieval_examples(
+        qa_entries,
+        chunks_by_doc,
+        include_unlabeled=dataset_name in BUNDLE_SPECS,
+    )
     if not examples:
         raise RuntimeError(f"No labeled {dataset_name} retrieval examples were built")
 
     limited = bool(selection_metadata["limited"])
-    expected = dict(manifest.get("expected", {}) or {})
     actual = {
         "documents": len(documents),
         "chunks": len(chunks),
