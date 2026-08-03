@@ -5,6 +5,7 @@ import importlib.util
 from pathlib import Path
 
 import numpy as np
+import pytest
 import yaml
 
 from hyde.loogle import runner
@@ -30,6 +31,24 @@ class FakeEncoder:
         for text in texts:
             rows.append([1.0, 0.0] if "alpha" in text.lower() else [0.0, 1.0])
         return np.asarray(rows, dtype=np.float32)
+
+
+class IncompatibleQwenGenerator:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    def generate(self, prompt: str) -> list[str]:
+        self.calls += 1
+        raise ValueError(
+            "The checkpoint has model type `qwen3_moe` but Transformers does not recognize this architecture"
+        )
+
+
+def test_qwen3_moe_compatibility_error_is_not_retried() -> None:
+    generator = IncompatibleQwenGenerator()
+    with pytest.raises(RuntimeError, match=r"transformers>=4\.51\.0"):
+        runner._generate_hypotheses(generator, "prompt", retries=3, expected_count=8)
+    assert generator.calls == 1
 
 
 def test_mocked_end_to_end_run_writes_top5_top10_and_tables(tmp_path, monkeypatch):

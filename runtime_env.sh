@@ -35,6 +35,16 @@ hyde_select_python() {
 
   PYTHON_BIN="${selected}"
   export PYTHON_BIN
+
+  local selected_real=""
+  local project_real=""
+  selected_real="$("${PYTHON_BIN}" -c 'import os, sys; print(os.path.realpath(sys.executable))')"
+  project_real="$(cd "${project_root}" && pwd -P)"
+  if [[ -n "${VIRTUAL_ENV:-}" && "${selected_real}" != "${project_real}/.venv/"* ]]; then
+    echo "Warning: selected Python is outside this standalone folder: ${selected_real}" >&2
+    echo "  Active VIRTUAL_ENV=${VIRTUAL_ENV}" >&2
+    echo "  A project-local ${project_real}/.venv is preferred when available." >&2
+  fi
 }
 
 hyde_configure_runtime() {
@@ -78,11 +88,13 @@ hyde_install_dependencies() {
 
 hyde_require_dependencies() {
   local project_root="$1"
-  local missing=""
+  local runtime_report=""
 
-  missing="$(
+  if runtime_report="$(
     "${PYTHON_BIN}" -c '
 import importlib.util
+import json
+import sys
 
 requirements = (
     ("accelerate", "accelerate"),
@@ -96,16 +108,42 @@ requirements = (
     ("tqdm", "tqdm"),
     ("transformers", "transformers"),
 )
-print(",".join(package for module, package in requirements if importlib.util.find_spec(module) is None))
-'
-  )"
+missing = [package for module, package in requirements if importlib.util.find_spec(module) is None]
+errors = []
+transformers_version = None
+qwen3_moe_supported = False
+if "transformers" not in missing:
+    import transformers
+    from transformers.models.auto.configuration_auto import CONFIG_MAPPING_NAMES
 
-  if [[ -n "${missing}" ]]; then
-    echo "Missing Python packages in ${PYTHON_BIN}: ${missing}" >&2
-    echo "Install them into this exact interpreter with:" >&2
+    transformers_version = transformers.__version__
+    qwen3_moe_supported = "qwen3_moe" in CONFIG_MAPPING_NAMES
+    if not qwen3_moe_supported:
+        errors.append(
+            "Transformers cannot load model_type=qwen3_moe; "
+            "Qwen/Qwen3-30B-A3B-Instruct-2507 requires transformers>=4.51.0"
+        )
+payload = {
+    "python": sys.executable,
+    "missing_packages": missing,
+    "transformers_version": transformers_version,
+    "qwen3_moe_supported": qwen3_moe_supported,
+    "errors": errors,
+}
+print(json.dumps(payload, sort_keys=True))
+raise SystemExit(0 if not missing and not errors else 1)
+'
+  )"; then
+    echo "  Runtime preflight=${runtime_report}"
+  else
+    echo "Standalone HyDE runtime preflight failed." >&2
+    echo "  ${runtime_report}" >&2
+    echo "The selected interpreter is ${PYTHON_BIN}." >&2
+    echo "Repair this exact interpreter with:" >&2
+    echo "  ${PYTHON_BIN} -m pip install --upgrade 'transformers>=4.51.0' 'accelerate>=0.30'" >&2
     echo "  ${PYTHON_BIN} -m pip install -r ${project_root}/requirements-loogle.txt" >&2
     echo "  ${PYTHON_BIN} -m pip install -e ${project_root} --no-deps" >&2
-    echo "Or run: bash ${project_root}/run_all_hyde_retrievers.sh --install-deps" >&2
+    echo "Or rerun the matrix launcher once with --install-deps." >&2
     return 2
   fi
 }

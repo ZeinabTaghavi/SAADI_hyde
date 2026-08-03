@@ -196,6 +196,16 @@ bash run_qasper64k_musique32k_hyde_gpu0_3.sh --dry-run
 bash run_qasper64k_musique32k_hyde_gpu0_3.sh --force
 ```
 
+The Qwen3-MoE generator requires `transformers>=4.51.0`. The runtime preflight
+checks architecture support in the selected interpreter before loading a model.
+If a copied folder inherits an older unrelated virtual environment, repair it
+and continue the resumable run with:
+
+```bash
+CUDA_VISIBLE_DEVICES=0,1,2,3 \
+bash run_qasper64k_musique32k_hyde_gpu0_3.sh --install-deps
+```
+
 After all workers succeed, strict table generation requires exactly 20 rows:
 four finalized datasets times five retrievers. The legacy unexpanded QASPER
 subset is intentionally excluded. The final JSONL, CSV, Markdown, LaTeX, and

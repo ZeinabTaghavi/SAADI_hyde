@@ -288,6 +288,20 @@ def _generate_hypotheses(generator: Any, prompt: str, *, retries: int, expected_
             last_error = RuntimeError(f"Generator returned {len(output)} non-validated hypotheses; expected {expected_count}")
         except Exception as exc:
             last_error = exc
+            error_chain: list[str] = []
+            current: BaseException | None = exc
+            while current is not None:
+                error_chain.append(str(current))
+                current = current.__cause__ or current.__context__
+            combined_error = " ".join(error_chain).lower()
+            if "qwen3_moe" in combined_error and (
+                "does not recognize" in combined_error or "keyerror" in combined_error
+            ):
+                raise RuntimeError(
+                    "The selected Python environment cannot load Qwen3-MoE. "
+                    f"Upgrade {sys.executable} to transformers>=4.51.0, or run the matrix "
+                    "launcher once with --install-deps. The hypothesis cache is unchanged."
+                ) from exc
         if attempt < retries:
             time.sleep(min(attempt, 5))
     raise RuntimeError(f"HyDE generation failed after {retries} attempts; the completed cache remains resumable") from last_error
