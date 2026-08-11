@@ -1,0 +1,21 @@
+{
+  "method_name": "hyde",
+  "retriever_name": "bge_m3",
+  "dataset_name": "qasper_64k",
+  "split": "test",
+  "run_name": "qasper_64k_retrieval_ablation_hyde",
+  "average_chunk_tokens": 487.155960370725,
+  "n_queries": 1372,
+  "gold_recall@5": 0.390472668022,
+  "gold_mrr@5": 0.30495948589,
+  "gold_ndcg@5": 0.304688265569,
+  "silver_loose_recall@5": 0.351525974026,
+  "silver_loose_mrr@5": 0.353371212121,
+  "silver_loose_ndcg@5": 0.2950009091,
+  "union_loose_recall@5": 0.37064010903,
+  "union_loose_mrr@5": 0.332850241546,
+  "union_loose_ndcg@5": 0.305437627405,
+  "gold_hit@5": 0.466051969824,
+  "silver_strict_hit@5": 0.195454545455,
+  "strict_union_hit@5": 0.446224256293
+}

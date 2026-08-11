@@ -1,0 +1,61 @@
+{
+  "method_name": "hyde",
+  "retriever_name": "bm25",
+  "dataset_name": "qasper_64k",
+  "split": "test",
+  "run_name": "qasper_64k_retrieval_ablation_hyde",
+  "average_chunk_tokens": 487.155960370725,
+  "n_queries": 1372,
+  "k_values": [
+    5,
+    10
+  ],
+  "ranking_metrics_by_view": {
+    "gold": {
+      "recall@5": 0.465952014963,
+      "mrr@5": 0.340053087455,
+      "ndcg@5": 0.352381904374,
+      "recall@10": 0.582761927119,
+      "mrr@10": 0.354104298886,
+      "ndcg@10": 0.393188654108
+    },
+    "silver_loose": {
+      "recall@5": 0.382819264069,
+      "mrr@5": 0.372613636364,
+      "ndcg@5": 0.315118505979,
+      "recall@10": 0.521977813853,
+      "mrr@10": 0.389356962482,
+      "ndcg@10": 0.370807206879
+    },
+    "union_loose": {
+      "recall@5": 0.437335208985,
+      "mrr@5": 0.367251461988,
+      "ndcg@5": 0.349499849316,
+      "recall@10": 0.558500901636,
+      "mrr@10": 0.381651895439,
+      "ndcg@10": 0.394335395168
+    }
+  },
+  "hit_rate_metrics_by_view": {
+    "gold_hit": {
+      "hit_rate@5": 0.528918692372,
+      "hit_rate@10": 0.634534786253
+    },
+    "silver_strict_hit": {
+      "hit_rate@5": 0.209090909091,
+      "hit_rate@10": 0.347727272727
+    },
+    "strict_union_hit": {
+      "hit_rate@5": 0.50114416476,
+      "hit_rate@10": 0.6117467582
+    }
+  },
+  "eligible_queries_by_view": {
+    "gold": 1193,
+    "silver_loose": 440,
+    "union_loose": 1311,
+    "gold_hit": 1193,
+    "silver_strict_hit": 440,
+    "strict_union_hit": 1311
+  }
+}

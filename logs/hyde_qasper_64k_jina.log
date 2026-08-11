@@ -1,0 +1,232 @@
+2026-08-06 14:42:50,060 | INFO | hyde.loogle.runner | Prepared frozen qasper_64k population documents=23 chunks=3129 labeled_queries=1372
+2026-08-06 14:42:50,140 | INFO | hyde.loogle.runner | HyDE generation progress queries=1/1372 cache_hits=1
+2026-08-06 14:42:50,140 | INFO | hyde.loogle.runner | HyDE generation progress queries=10/1372 cache_hits=10
+2026-08-06 14:42:50,140 | INFO | hyde.loogle.runner | HyDE generation progress queries=20/1372 cache_hits=20
+2026-08-06 14:42:50,140 | INFO | hyde.loogle.runner | HyDE generation progress queries=30/1372 cache_hits=30
+2026-08-06 14:42:50,140 | INFO | hyde.loogle.runner | HyDE generation progress queries=40/1372 cache_hits=40
+2026-08-06 14:42:50,140 | INFO | hyde.loogle.runner | HyDE generation progress queries=50/1372 cache_hits=50
+2026-08-06 14:42:50,141 | INFO | hyde.loogle.runner | HyDE generation progress queries=60/1372 cache_hits=60
+2026-08-06 14:42:50,141 | INFO | hyde.loogle.runner | HyDE generation progress queries=70/1372 cache_hits=70
+2026-08-06 14:42:50,141 | INFO | hyde.loogle.runner | HyDE generation progress queries=80/1372 cache_hits=80
+2026-08-06 14:42:50,141 | INFO | hyde.loogle.runner | HyDE generation progress queries=90/1372 cache_hits=90
+2026-08-06 14:42:50,141 | INFO | hyde.loogle.runner | HyDE generation progress queries=100/1372 cache_hits=100
+2026-08-06 14:42:50,141 | INFO | hyde.loogle.runner | HyDE generation progress queries=110/1372 cache_hits=110
+2026-08-06 14:42:50,141 | INFO | hyde.loogle.runner | HyDE generation progress queries=120/1372 cache_hits=120
+2026-08-06 14:42:50,141 | INFO | hyde.loogle.runner | HyDE generation progress queries=130/1372 cache_hits=130
+2026-08-06 14:42:50,141 | INFO | hyde.loogle.runner | HyDE generation progress queries=140/1372 cache_hits=140
+2026-08-06 14:42:50,141 | INFO | hyde.loogle.runner | HyDE generation progress queries=150/1372 cache_hits=150
+2026-08-06 14:42:50,141 | INFO | hyde.loogle.runner | HyDE generation progress queries=160/1372 cache_hits=160
+2026-08-06 14:42:50,141 | INFO | hyde.loogle.runner | HyDE generation progress queries=170/1372 cache_hits=170
+2026-08-06 14:42:50,141 | INFO | hyde.loogle.runner | HyDE generation progress queries=180/1372 cache_hits=180
+2026-08-06 14:42:50,142 | INFO | hyde.loogle.runner | HyDE generation progress queries=190/1372 cache_hits=190
+2026-08-06 14:42:50,142 | INFO | hyde.loogle.runner | HyDE generation progress queries=200/1372 cache_hits=200
+2026-08-06 14:42:50,142 | INFO | hyde.loogle.runner | HyDE generation progress queries=210/1372 cache_hits=210
+2026-08-06 14:42:50,142 | INFO | hyde.loogle.runner | HyDE generation progress queries=220/1372 cache_hits=220
+2026-08-06 14:42:50,142 | INFO | hyde.loogle.runner | HyDE generation progress queries=230/1372 cache_hits=230
+2026-08-06 14:42:50,142 | INFO | hyde.loogle.runner | HyDE generation progress queries=240/1372 cache_hits=240
+2026-08-06 14:42:50,142 | INFO | hyde.loogle.runner | HyDE generation progress queries=250/1372 cache_hits=250
+2026-08-06 14:42:50,142 | INFO | hyde.loogle.runner | HyDE generation progress queries=260/1372 cache_hits=260
+2026-08-06 14:42:50,142 | INFO | hyde.loogle.runner | HyDE generation progress queries=270/1372 cache_hits=270
+2026-08-06 14:42:50,142 | INFO | hyde.loogle.runner | HyDE generation progress queries=280/1372 cache_hits=280
+2026-08-06 14:42:50,142 | INFO | hyde.loogle.runner | HyDE generation progress queries=290/1372 cache_hits=290
+2026-08-06 14:42:50,142 | INFO | hyde.loogle.runner | HyDE generation progress queries=300/1372 cache_hits=300
+2026-08-06 14:42:50,142 | INFO | hyde.loogle.runner | HyDE generation progress queries=310/1372 cache_hits=310
+2026-08-06 14:42:50,142 | INFO | hyde.loogle.runner | HyDE generation progress queries=320/1372 cache_hits=320
+2026-08-06 14:42:50,143 | INFO | hyde.loogle.runner | HyDE generation progress queries=330/1372 cache_hits=330
+2026-08-06 14:42:50,143 | INFO | hyde.loogle.runner | HyDE generation progress queries=340/1372 cache_hits=340
+2026-08-06 14:42:50,143 | INFO | hyde.loogle.runner | HyDE generation progress queries=350/1372 cache_hits=350
+2026-08-06 14:42:50,143 | INFO | hyde.loogle.runner | HyDE generation progress queries=360/1372 cache_hits=360
+2026-08-06 14:42:50,143 | INFO | hyde.loogle.runner | HyDE generation progress queries=370/1372 cache_hits=370
+2026-08-06 14:42:50,143 | INFO | hyde.loogle.runner | HyDE generation progress queries=380/1372 cache_hits=380
+2026-08-06 14:42:50,143 | INFO | hyde.loogle.runner | HyDE generation progress queries=390/1372 cache_hits=390
+2026-08-06 14:42:50,143 | INFO | hyde.loogle.runner | HyDE generation progress queries=400/1372 cache_hits=400
+2026-08-06 14:42:50,143 | INFO | hyde.loogle.runner | HyDE generation progress queries=410/1372 cache_hits=410
+2026-08-06 14:42:50,143 | INFO | hyde.loogle.runner | HyDE generation progress queries=420/1372 cache_hits=420
+2026-08-06 14:42:50,143 | INFO | hyde.loogle.runner | HyDE generation progress queries=430/1372 cache_hits=430
+2026-08-06 14:42:50,143 | INFO | hyde.loogle.runner | HyDE generation progress queries=440/1372 cache_hits=440
+2026-08-06 14:42:50,143 | INFO | hyde.loogle.runner | HyDE generation progress queries=450/1372 cache_hits=450
+2026-08-06 14:42:50,143 | INFO | hyde.loogle.runner | HyDE generation progress queries=460/1372 cache_hits=460
+2026-08-06 14:42:50,143 | INFO | hyde.loogle.runner | HyDE generation progress queries=470/1372 cache_hits=470
+2026-08-06 14:42:50,144 | INFO | hyde.loogle.runner | HyDE generation progress queries=480/1372 cache_hits=480
+2026-08-06 14:42:50,144 | INFO | hyde.loogle.runner | HyDE generation progress queries=490/1372 cache_hits=490
+2026-08-06 14:42:50,144 | INFO | hyde.loogle.runner | HyDE generation progress queries=500/1372 cache_hits=500
+2026-08-06 14:42:50,144 | INFO | hyde.loogle.runner | HyDE generation progress queries=510/1372 cache_hits=510
+2026-08-06 14:42:50,144 | INFO | hyde.loogle.runner | HyDE generation progress queries=520/1372 cache_hits=520
+2026-08-06 14:42:50,144 | INFO | hyde.loogle.runner | HyDE generation progress queries=530/1372 cache_hits=530
+2026-08-06 14:42:50,144 | INFO | hyde.loogle.runner | HyDE generation progress queries=540/1372 cache_hits=540
+2026-08-06 14:42:50,144 | INFO | hyde.loogle.runner | HyDE generation progress queries=550/1372 cache_hits=550
+2026-08-06 14:42:50,144 | INFO | hyde.loogle.runner | HyDE generation progress queries=560/1372 cache_hits=560
+2026-08-06 14:42:50,144 | INFO | hyde.loogle.runner | HyDE generation progress queries=570/1372 cache_hits=570
+2026-08-06 14:42:50,144 | INFO | hyde.loogle.runner | HyDE generation progress queries=580/1372 cache_hits=580
+2026-08-06 14:42:50,144 | INFO | hyde.loogle.runner | HyDE generation progress queries=590/1372 cache_hits=590
+2026-08-06 14:42:50,144 | INFO | hyde.loogle.runner | HyDE generation progress queries=600/1372 cache_hits=600
+2026-08-06 14:42:50,144 | INFO | hyde.loogle.runner | HyDE generation progress queries=610/1372 cache_hits=610
+2026-08-06 14:42:50,144 | INFO | hyde.loogle.runner | HyDE generation progress queries=620/1372 cache_hits=620
+2026-08-06 14:42:50,144 | INFO | hyde.loogle.runner | HyDE generation progress queries=630/1372 cache_hits=630
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=640/1372 cache_hits=640
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=650/1372 cache_hits=650
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=660/1372 cache_hits=660
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=670/1372 cache_hits=670
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=680/1372 cache_hits=680
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=690/1372 cache_hits=690
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=700/1372 cache_hits=700
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=710/1372 cache_hits=710
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=720/1372 cache_hits=720
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=730/1372 cache_hits=730
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=740/1372 cache_hits=740
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=750/1372 cache_hits=750
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=760/1372 cache_hits=760
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=770/1372 cache_hits=770
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=780/1372 cache_hits=780
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=790/1372 cache_hits=790
+2026-08-06 14:42:50,145 | INFO | hyde.loogle.runner | HyDE generation progress queries=800/1372 cache_hits=800
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=810/1372 cache_hits=810
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=820/1372 cache_hits=820
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=830/1372 cache_hits=830
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=840/1372 cache_hits=840
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=850/1372 cache_hits=850
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=860/1372 cache_hits=860
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=870/1372 cache_hits=870
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=880/1372 cache_hits=880
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=890/1372 cache_hits=890
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=900/1372 cache_hits=900
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=910/1372 cache_hits=910
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=920/1372 cache_hits=920
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=930/1372 cache_hits=930
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=940/1372 cache_hits=940
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=950/1372 cache_hits=950
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=960/1372 cache_hits=960
+2026-08-06 14:42:50,146 | INFO | hyde.loogle.runner | HyDE generation progress queries=970/1372 cache_hits=970
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=980/1372 cache_hits=980
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=990/1372 cache_hits=990
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1000/1372 cache_hits=1000
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1010/1372 cache_hits=1010
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1020/1372 cache_hits=1020
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1030/1372 cache_hits=1030
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1040/1372 cache_hits=1040
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1050/1372 cache_hits=1050
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1060/1372 cache_hits=1060
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1070/1372 cache_hits=1070
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1080/1372 cache_hits=1080
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1090/1372 cache_hits=1090
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1100/1372 cache_hits=1100
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1110/1372 cache_hits=1110
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1120/1372 cache_hits=1120
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1130/1372 cache_hits=1130
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1140/1372 cache_hits=1140
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1150/1372 cache_hits=1150
+2026-08-06 14:42:50,147 | INFO | hyde.loogle.runner | HyDE generation progress queries=1160/1372 cache_hits=1160
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1170/1372 cache_hits=1170
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1180/1372 cache_hits=1180
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1190/1372 cache_hits=1190
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1200/1372 cache_hits=1200
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1210/1372 cache_hits=1210
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1220/1372 cache_hits=1220
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1230/1372 cache_hits=1230
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1240/1372 cache_hits=1240
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1250/1372 cache_hits=1250
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1260/1372 cache_hits=1260
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1270/1372 cache_hits=1270
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1280/1372 cache_hits=1280
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1290/1372 cache_hits=1290
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1300/1372 cache_hits=1300
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1310/1372 cache_hits=1310
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1320/1372 cache_hits=1320
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1330/1372 cache_hits=1330
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1340/1372 cache_hits=1340
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1350/1372 cache_hits=1350
+2026-08-06 14:42:50,148 | INFO | hyde.loogle.runner | HyDE generation progress queries=1360/1372 cache_hits=1360
+2026-08-06 14:42:50,149 | INFO | hyde.loogle.runner | HyDE generation progress queries=1370/1372 cache_hits=1370
+2026-08-06 14:42:50,149 | INFO | hyde.loogle.runner | HyDE generation progress queries=1372/1372 cache_hits=1372
+2026-08-06 14:42:54,466 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/agent-harnesses "HTTP/1.1 200 OK"
+2026-08-06 14:42:54,573 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/jinaai/jina-embeddings-v3/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-08-06 14:42:54,573 | WARNING | huggingface_hub.utils._http | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-08-06 14:42:54,579 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/jinaai/jina-embeddings-v3/ab036b023d30b4d1138c4c3bfa9f0c445ab455d6/config.json "HTTP/1.1 200 OK"
+2026-08-06 14:42:54,685 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/jinaai/xlm-roberta-flash-implementation/resolve/main/configuration_xlm_roberta.py "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 14:42:54,691 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/jinaai/xlm-roberta-flash-implementation/845308d0fd72a8406a3e378450e1a09522790419/configuration_xlm_roberta.py "HTTP/1.1 200 OK"
+2026-08-06 14:42:54,807 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/jinaai/jina-embeddings-v3/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 14:42:54,814 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/jinaai/jina-embeddings-v3/ab036b023d30b4d1138c4c3bfa9f0c445ab455d6/config.json "HTTP/1.1 200 OK"
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+2026-08-06 14:42:54,925 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/jinaai/jina-embeddings-v3/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 14:42:54,931 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/jinaai/jina-embeddings-v3/ab036b023d30b4d1138c4c3bfa9f0c445ab455d6/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-06 14:42:55,048 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/jinaai/jina-embeddings-v3/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-08-06 14:42:55,163 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/jinaai/jina-embeddings-v3/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-08-06 14:42:56,879 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/jinaai/jina-embeddings-v3 "HTTP/1.1 200 OK"
+2026-08-06 14:42:57,215 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/jinaai/jina-embeddings-v3/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 14:42:57,220 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/jinaai/jina-embeddings-v3/ab036b023d30b4d1138c4c3bfa9f0c445ab455d6/config.json "HTTP/1.1 200 OK"
+2026-08-06 14:42:57,328 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/jinaai/xlm-roberta-flash-implementation/resolve/main/configuration_xlm_roberta.py "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 14:42:57,335 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/jinaai/xlm-roberta-flash-implementation/845308d0fd72a8406a3e378450e1a09522790419/configuration_xlm_roberta.py "HTTP/1.1 200 OK"
+2026-08-06 14:42:57,449 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/jinaai/xlm-roberta-flash-implementation/resolve/main/modeling_lora.py "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 14:42:57,456 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/jinaai/xlm-roberta-flash-implementation/845308d0fd72a8406a3e378450e1a09522790419/modeling_lora.py "HTTP/1.1 200 OK"
+2026-08-06 14:42:57,642 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,642 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,645 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,647 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,649 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,651 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,653 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,655 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,657 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,659 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,661 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,663 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,665 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,667 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,669 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,671 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,673 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,675 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,677 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,679 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,681 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,682 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,685 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,687 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,689 | WARNING | transformers_modules.jinaai.xlm_hyphen_roberta_hyphen_flash_hyphen_implementation.845308d0fd72a8406a3e378450e1a09522790419.modeling_xlm_roberta | flash_attn is not installed. Using PyTorch native attention implementation.
+2026-08-06 14:42:57,838 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/jinaai/jina-embeddings-v3/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 14:42:57,846 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/jinaai/jina-embeddings-v3/ab036b023d30b4d1138c4c3bfa9f0c445ab455d6/config.json "HTTP/1.1 200 OK"
+2026-08-06 14:42:57,953 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/jinaai/xlm-roberta-flash-implementation/resolve/main/configuration_xlm_roberta.py "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 14:42:57,959 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/jinaai/xlm-roberta-flash-implementation/845308d0fd72a8406a3e378450e1a09522790419/configuration_xlm_roberta.py "HTTP/1.1 200 OK"
+2026-08-06 14:42:58,071 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/jinaai/jina-embeddings-v3/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 14:42:58,078 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/jinaai/jina-embeddings-v3/ab036b023d30b4d1138c4c3bfa9f0c445ab455d6/config.json "HTTP/1.1 200 OK"
+2026-08-06 14:42:58,191 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/jinaai/jina-embeddings-v3/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 14:42:58,198 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/jinaai/jina-embeddings-v3/ab036b023d30b4d1138c4c3bfa9f0c445ab455d6/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-06 14:42:58,312 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/jinaai/jina-embeddings-v3/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-08-06 14:42:58,428 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/jinaai/jina-embeddings-v3/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-08-06 14:43:00,255 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/jinaai/jina-embeddings-v3 "HTTP/1.1 200 OK"
+Loading weights:   0%|          | 0/492 [00:00<?, ?it/s]Loading weights:  90%|█████████ | 443/492 [00:00<00:00, 4428.04it/s]Loading weights: 100%|██████████| 492/492 [00:00<00:00, 4399.20it/s]
+2026-08-06 14:43:00,675 | ERROR | run_hyde | HyDE dataset run failed: 'XLMRobertaLoRA' object has no attribute 'all_tied_weights_keys'
+Traceback (most recent call last):
+  File "/home/iataghav/SAADI_hyde/run_loogle_hyde.py", line 76, in main
+    outputs = run_experiment(
+              ^^^^^^^^^^^^^^^
+  File "/home/iataghav/SAADI_hyde/src/hyde/loogle/runner.py", line 618, in run_experiment
+    encoder = encoder_override or build_dense_encoder(
+                                  ^^^^^^^^^^^^^^^^^^^^
+  File "/home/iataghav/SAADI_hyde/src/hyde/loogle/retrievers.py", line 295, in build_dense_encoder
+    return DenseRetrieverEncoder(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/iataghav/SAADI_hyde/src/hyde/loogle/retrievers.py", line 206, in __init__
+    self.model = AutoModel.from_pretrained(self.model_name, **model_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/iataghav/SAADI_hyde/.venv/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 385, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/cache/taghavi/modules/transformers_modules/jinaai/xlm_hyphen_roberta_hyphen_flash_hyphen_implementation/845308d0fd72a8406a3e378450e1a09522790419/modeling_lora.py", line 338, in from_pretrained
+    return super().from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/cache/taghavi/modules/transformers_modules/jinaai/xlm_hyphen_roberta_hyphen_flash_hyphen_implementation/845308d0fd72a8406a3e378450e1a09522790419/modeling_xlm_roberta.py", line 442, in from_pretrained
+    return super().from_pretrained(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/iataghav/SAADI_hyde/.venv/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4457, in from_pretrained
+    loading_info = cls._finalize_model_loading(model, load_config, loading_info)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/iataghav/SAADI_hyde/.venv/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4617, in _finalize_model_loading
+    model._move_missing_keys_from_meta_to_device(
+  File "/home/iataghav/SAADI_hyde/.venv/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4864, in _move_missing_keys_from_meta_to_device
+    for key in missing_keys - self.all_tied_weights_keys.keys():
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/iataghav/SAADI_hyde/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1967, in __getattr__
+    raise AttributeError(
+AttributeError: 'XLMRobertaLoRA' object has no attribute 'all_tied_weights_keys'. Did you mean: '_tied_weights_keys'?

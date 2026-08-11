@@ -1,0 +1,21 @@
+{
+  "method_name": "hyde",
+  "retriever_name": "contriever",
+  "dataset_name": "musique_32k",
+  "split": "validation",
+  "run_name": "musique_32k_retrieval_ablation_hyde",
+  "average_chunk_tokens": 482.636451612903,
+  "n_queries": 900,
+  "gold_recall@5": 0.839487220278,
+  "gold_mrr@5": 0.839309576837,
+  "gold_ndcg@5": 0.776599926811,
+  "silver_loose_recall@5": 0.77027027027,
+  "silver_loose_mrr@5": 0.74740990991,
+  "silver_loose_ndcg@5": 0.670014692862,
+  "union_loose_recall@5": 0.81621031746,
+  "union_loose_mrr@5": 0.890277777778,
+  "union_loose_ndcg@5": 0.79381299763,
+  "gold_hit@5": 0.983296213808,
+  "silver_strict_hit@5": 0.597972972973,
+  "strict_union_hit@5": 0.986666666667
+}

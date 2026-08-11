@@ -1,0 +1,61 @@
+{
+  "method_name": "hyde",
+  "retriever_name": "contriever",
+  "dataset_name": "musique_32k",
+  "split": "validation",
+  "run_name": "musique_32k_retrieval_ablation_hyde",
+  "average_chunk_tokens": 482.636451612903,
+  "n_queries": 900,
+  "k_values": [
+    5,
+    10
+  ],
+  "ranking_metrics_by_view": {
+    "gold": {
+      "recall@5": 0.839487220278,
+      "mrr@5": 0.839309576837,
+      "ndcg@5": 0.776599926811,
+      "recall@10": 0.934759783646,
+      "mrr@10": 0.840782868455,
+      "ndcg@10": 0.817997981074
+    },
+    "silver_loose": {
+      "recall@5": 0.77027027027,
+      "mrr@5": 0.74740990991,
+      "ndcg@5": 0.670014692862,
+      "recall@10": 0.869650900901,
+      "mrr@10": 0.749172833548,
+      "ndcg@10": 0.710108127311
+    },
+    "union_loose": {
+      "recall@5": 0.81621031746,
+      "mrr@5": 0.890277777778,
+      "ndcg@5": 0.79381299763,
+      "recall@10": 0.918007495591,
+      "mrr@10": 0.891153880071,
+      "ndcg@10": 0.837603104859
+    }
+  },
+  "hit_rate_metrics_by_view": {
+    "gold_hit": {
+      "hit_rate@5": 0.983296213808,
+      "hit_rate@10": 0.994432071269
+    },
+    "silver_strict_hit": {
+      "hit_rate@5": 0.597972972973,
+      "hit_rate@10": 0.763513513514
+    },
+    "strict_union_hit": {
+      "hit_rate@5": 0.986666666667,
+      "hit_rate@10": 0.995555555556
+    }
+  },
+  "eligible_queries_by_view": {
+    "gold": 898,
+    "silver_loose": 296,
+    "union_loose": 900,
+    "gold_hit": 898,
+    "silver_strict_hit": 296,
+    "strict_union_hit": 900
+  }
+}

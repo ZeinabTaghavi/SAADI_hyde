@@ -1,0 +1,330 @@
+{
+  "input_files_used": {
+    "config": "/home/iataghav/SAADI_hyde/configs/qasper_64k_hyde.yaml",
+    "subset_manifest": "/home/iataghav/SAADI_hyde/data/qasper_64k/manifest.json",
+    "chunk_index_jsonl": "/home/iataghav/SAADI_hyde/hyde_evaluations/qasper_64k/hyde/bm25/top_5/qasper_64k_retrieval_ablation_hyde/index/chunk_index.jsonl",
+    "index_stats_json": "/home/iataghav/SAADI_hyde/hyde_evaluations/qasper_64k/hyde/bm25/top_5/qasper_64k_retrieval_ablation_hyde/index/index_stats.json",
+    "retrieval_results_json": "/home/iataghav/SAADI_hyde/hyde_evaluations/qasper_64k/hyde/bm25/top_5/qasper_64k_retrieval_ablation_hyde/retrieval/retrieval_results.json",
+    "retrieval_examples_jsonl": "/home/iataghav/SAADI_hyde/hyde_evaluations/qasper_64k/hyde/bm25/top_5/qasper_64k_retrieval_ablation_hyde/retrieval/retrieval_examples.jsonl",
+    "retrieval_payloads_jsonl": "/home/iataghav/SAADI_hyde/hyde_evaluations/qasper_64k/hyde/bm25/top_5/qasper_64k_retrieval_ablation_hyde/retrieval/retrieval_payloads.jsonl",
+    "hypothesis_cache_jsonl": "/home/iataghav/SAADI_hyde/hyde_runs/qasper_64k/hyde/qasper_64k_retrieval_ablation_hyde/hypotheses.jsonl"
+  },
+  "output_files_written": {
+    "metrics_summary_json": "/home/iataghav/SAADI_hyde/hyde_evaluations/qasper_64k/hyde/bm25/top_5/qasper_64k_retrieval_ablation_hyde/metrics_summary.json",
+    "metrics_per_query_jsonl": "/home/iataghav/SAADI_hyde/hyde_evaluations/qasper_64k/hyde/bm25/top_5/qasper_64k_retrieval_ablation_hyde/metrics_per_query.jsonl",
+    "leaderboard_row_json": "/home/iataghav/SAADI_hyde/hyde_evaluations/qasper_64k/hyde/bm25/top_5/qasper_64k_retrieval_ablation_hyde/leaderboard_row.json",
+    "evaluation_manifest_json": "/home/iataghav/SAADI_hyde/hyde_evaluations/qasper_64k/hyde/bm25/top_5/qasper_64k_retrieval_ablation_hyde/evaluation_manifest.json"
+  },
+  "relevance_source_used": {
+    "labels_file": "/home/iataghav/SAADI_hyde/hyde_evaluations/qasper_64k/hyde/bm25/top_5/qasper_64k_retrieval_ablation_hyde/retrieval/retrieval_examples.jsonl",
+    "fields": [
+      "gold_chunk_ids",
+      "silver_chunk_ids",
+      "silver_chunk_groups"
+    ],
+    "label_rows_loaded": 1372
+  },
+  "metric_schema": {
+    "ranking_views": [
+      "gold",
+      "silver_loose",
+      "union_loose"
+    ],
+    "ranking_metrics": [
+      "recall",
+      "mrr",
+      "ndcg"
+    ],
+    "hit_rate_views": [
+      "gold_hit",
+      "silver_strict_hit",
+      "strict_union_hit"
+    ],
+    "hit_rate_metrics": [
+      "hit_rate"
+    ]
+  },
+  "assumptions": [
+    "Retrieval is restricted to chunks from the query's source document.",
+    "Dense HyDE retrieval averages normalized embeddings for the question and all hypothetical documents.",
+    "BM25 HyDE retrieval averages min-max-normalized score vectors for the same query variants.",
+    "Retrieved chunk IDs are deduplicated while preserving rank before metric calculation.",
+    "Silver-S Hit@K requires a complete silver_chunk_group; Union-S is Gold Hit@K OR Silver-S Hit@K."
+  ],
+  "missing_metrics": [],
+  "command_used": "run_loogle_hyde.py --config /home/iataghav/SAADI_hyde/configs/qasper_64k_hyde.yaml --output-root /home/iataghav/SAADI_hyde/hyde_evaluations --work-root /home/iataghav/SAADI_hyde/hyde_runs --run-name qasper_64k_retrieval_ablation_hyde --retriever bm25 --retrieval-only --embedding-device cuda:0 --top-ks 5 10",
+  "package_versions": {
+    "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
+    "platform": "Linux-6.8.0-111-generic-x86_64-with-glibc2.39",
+    "git_commit": "0d5ad8227211367484596f4cec3a3ead8179c47b",
+    "datasets": "5.0.1",
+    "numpy": "2.5.1",
+    "torch": "2.13.0",
+    "transformers": "5.14.1",
+    "huggingface_hub": "1.26.0"
+  },
+  "run_metadata": {
+    "method_name": "hyde",
+    "retriever_name": "bm25",
+    "retriever": {
+      "name": "bm25",
+      "label": "BM25",
+      "kind": "lexical",
+      "model_name": null,
+      "pooling": "mean",
+      "normalize_embeddings": true,
+      "query_prefix": "",
+      "document_prefix": "",
+      "batch_size": 64,
+      "max_length": 512,
+      "trust_remote_code": false,
+      "use_safetensors": null,
+      "score_fusion": "minmax_mean"
+    },
+    "dataset_name": "qasper_64k",
+    "split": "test",
+    "run_name": "qasper_64k_retrieval_ablation_hyde",
+    "retrieval_scope": "per_document",
+    "config": {
+      "dataset": {
+        "name": "qasper_64k",
+        "split": "test",
+        "config_name": "expanded_64k",
+        "data_dir": "../data/qasper_64k"
+      },
+      "chunking": {
+        "method": "saadi_sentence_aware_words",
+        "chunk_size": 500,
+        "chunk_overlap": 0
+      },
+      "retrieval": {
+        "scope": "per_document",
+        "top_ks": [
+          5,
+          10
+        ],
+        "retriever_configs": {
+          "bm25": {
+            "score_fusion": "minmax_mean"
+          },
+          "contriever": {
+            "model_name": "facebook/contriever",
+            "pooling": "mean",
+            "normalize_embeddings": true,
+            "batch_size": 128,
+            "max_length": 512
+          },
+          "bge_m3": {
+            "model_name": "BAAI/bge-m3",
+            "pooling": "cls",
+            "normalize_embeddings": true,
+            "batch_size": 16,
+            "max_length": 8192
+          },
+          "qwen": {
+            "model_name": "Qwen/Qwen3-Embedding-8B",
+            "pooling": "last_token",
+            "normalize_embeddings": true,
+            "batch_size": 8,
+            "max_length": 512,
+            "trust_remote_code": true
+          },
+          "jina": {
+            "model_name": "jinaai/jina-embeddings-v3",
+            "pooling": "mean",
+            "normalize_embeddings": true,
+            "batch_size": 32,
+            "max_length": 512,
+            "trust_remote_code": true
+          }
+        }
+      },
+      "hyde": {
+        "prompt_task": "web search",
+        "include_original_query": true,
+        "aggregation": "arithmetic_mean",
+        "generator": {
+          "backend": "transformers",
+          "model_name": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+          "n": 8,
+          "max_new_tokens": 512,
+          "temperature": 0.7,
+          "top_p": 0.8,
+          "stop": [
+            "\n\n\n"
+          ],
+          "device_map": "auto",
+          "torch_dtype": "auto",
+          "trust_remote_code": true,
+          "attempts_per_hypothesis": 3
+        }
+      },
+      "seed": null
+    },
+    "preparation": {
+      "dataset_name": "qasper_64k",
+      "dataset": {
+        "dataset_source": "prepared_main_saadi_expansion",
+        "dataset_name": "qasper_64k",
+        "source_dataset": "qasper",
+        "split": "test",
+        "target_context_tokens": 64000,
+        "documents": 23,
+        "qa_entries": 1372,
+        "queries_with_retrieval_spans": 1353,
+        "prepared_root": "/home/iataghav/SAADI_hyde/data/qasper_64k",
+        "prepared_manifest": "/home/iataghav/SAADI_hyde/data/qasper_64k/manifest.json",
+        "prepared_manifest_sha256": "a90998ad59ccace0e7369a42a49ec72a26035b1bb00fac252343f8ec2129cfd7",
+        "bundle_manifest": {
+          "format_version": 1,
+          "dataset_variant": "qasper_64k",
+          "dataset": "qasper",
+          "split": "test",
+          "target_context_tokens": 64000,
+          "selection": {
+            "max_source_documents": null,
+            "selected_source_documents": 416,
+            "qa_entries": 1372,
+            "prepared_documents": 23
+          },
+          "files": {
+            "context_expansion_metadata.json": {
+              "sha256": "9414435a815dffcb269f67d34a34d907cb8f7288333f90a51c739a72f10fe069"
+            },
+            "documents.json": {
+              "sha256": "66f9bc59f71ec643dc2d3dbd9062561b316b0732fc232d7b9d0df9b46f66e384"
+            },
+            "group_membership.json": {
+              "sha256": "bf8ddaea81f8773fba310dcfc9bdba8ce4a81127eae7ede450dad33bb13398c6"
+            },
+            "qa.json": {
+              "sha256": "b7ccfdcdd5ddc5bbeb84473c0c7e3d517e0e40bc99206b90107c045e0f613ca2"
+            }
+          }
+        },
+        "context_expansion_metadata": {
+          "dataset": "qasper",
+          "split": "test",
+          "mode": "random_document_groups",
+          "target_context_tokens": 64000,
+          "tolerance_tokens": 4000,
+          "expansion_seed": 42,
+          "max_source_documents": null,
+          "available_source_documents": 416,
+          "selected_source_documents": 416,
+          "available_qa_entries": 1372,
+          "qa_entries": 1372,
+          "prepared_documents": 23,
+          "document_id_mode": "expanded_group_id",
+          "token_counter": "whitespace",
+          "span_validation_mode": "existing_labeling_normalized_tokens",
+          "prepared_token_lengths": {
+            "min": 55342,
+            "median": 65765,
+            "max": 68000
+          },
+          "source": {
+            "dataset_source": "hf",
+            "dataset_name": "qasper",
+            "split": "test",
+            "docs_config_name": "default",
+            "qa_config_name": "default",
+            "cached": false
+          },
+          "source_group_count": 21,
+          "emitted_context_count": 23,
+          "groups_with_trimmed_variants": 2,
+          "qa_missing_documents": 0,
+          "spans_not_contained": 703,
+          "spans_not_matchable_by_labeling": 499,
+          "source_matchable_spans": 5175,
+          "source_matchable_spans_lost": 0,
+          "queries_with_labeling_span_match": 1310,
+          "queries_without_labeling_span_match": 43
+        }
+      },
+      "subset_manifest": "/home/iataghav/SAADI_hyde/data/qasper_64k/manifest.json",
+      "selection": {
+        "selected_document_ids": [
+          "group_001",
+          "group_002",
+          "group_003",
+          "group_004",
+          "group_005",
+          "group_006__variant_ab84194533",
+          "group_006__variant_8d880e5af9",
+          "group_007",
+          "group_008",
+          "group_009",
+          "group_010",
+          "group_011",
+          "group_012",
+          "group_013",
+          "group_014",
+          "group_015",
+          "group_016",
+          "group_017",
+          "group_018__variant_ea0eb825e2",
+          "group_018__variant_62176dfa97",
+          "group_019",
+          "group_020",
+          "group_021"
+        ],
+        "documents_selected": 23,
+        "qa_entries_selected": 1372,
+        "limited": false
+      },
+      "expected_population": {
+        "documents": 23,
+        "retrieval_examples": 1372
+      },
+      "actual_population": {
+        "documents": 23,
+        "chunks": 3129,
+        "retrieval_examples": 1372,
+        "average_chunk_tokens": 487.1559603707255
+      },
+      "chunk_size": 500,
+      "chunk_overlap": 0
+    },
+    "generation": {
+      "prompt_task": "web search",
+      "model_name": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "n": 8,
+      "max_new_tokens": 512,
+      "temperature": 0.7,
+      "top_p": 0.8,
+      "stop": [
+        "\n\n\n"
+      ],
+      "device_map": "auto",
+      "torch_dtype": "auto",
+      "trust_remote_code": true,
+      "attempts_per_hypothesis": 3
+    },
+    "seed": null,
+    "model_snapshot": null,
+    "embedding_model_name": null,
+    "embedding_model_revision": null,
+    "embedding_device": "cuda:0",
+    "hypothesis_cache": "/home/iataghav/SAADI_hyde/hyde_runs/qasper_64k/hyde/qasper_64k_retrieval_ablation_hyde/hypotheses.jsonl",
+    "document_embedding_cache_root": null,
+    "hypothesis_cache_hits": 1372,
+    "document_embedding_cache_hits": 0,
+    "generation_seconds": 0.0,
+    "embedding_and_retrieval_seconds": 61.226,
+    "elapsed_seconds": 173.403,
+    "top_k": 5
+  },
+  "counts": {
+    "queries_evaluated": 1372,
+    "eligible_queries_by_view": {
+      "gold": 1193,
+      "silver_loose": 440,
+      "union_loose": 1311,
+      "gold_hit": 1193,
+      "silver_strict_hit": 440,
+      "strict_union_hit": 1311
+    }
+  }
+}
