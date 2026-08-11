@@ -1,0 +1,21 @@
+{
+  "method_name": "hyde",
+  "retriever_name": "jina",
+  "dataset_name": "qasper_64k",
+  "split": "test",
+  "run_name": "qasper_64k_retrieval_ablation_hyde",
+  "average_chunk_tokens": 487.155960370725,
+  "n_queries": 1372,
+  "gold_recall@5": 0.369883437056,
+  "gold_mrr@5": 0.284087734004,
+  "gold_ndcg@5": 0.284303985714,
+  "silver_loose_recall@5": 0.31641504329,
+  "silver_loose_mrr@5": 0.316212121212,
+  "silver_loose_ndcg@5": 0.262445150787,
+  "union_loose_recall@5": 0.34312977708,
+  "union_loose_mrr@5": 0.30408085431,
+  "union_loose_ndcg@5": 0.279555559056,
+  "gold_hit@5": 0.446772841576,
+  "silver_strict_hit@5": 0.152272727273,
+  "strict_union_hit@5": 0.420289855072
+}

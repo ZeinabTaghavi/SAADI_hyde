@@ -1,0 +1,6 @@
+{
+  "method_name": "hyde",
+  "retriever_name": "jina",
+  "n_chunks": 3100,
+  "average_chunk_tokens": 482.6364516129032
+}

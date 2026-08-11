@@ -1,0 +1,61 @@
+{
+  "method_name": "hyde",
+  "retriever_name": "bge_m3",
+  "dataset_name": "musique_32k",
+  "split": "validation",
+  "run_name": "musique_32k_retrieval_ablation_hyde",
+  "average_chunk_tokens": 482.636451612903,
+  "n_queries": 900,
+  "k_values": [
+    5,
+    10
+  ],
+  "ranking_metrics_by_view": {
+    "gold": {
+      "recall@5": 0.892409057164,
+      "mrr@5": 0.87225315516,
+      "ndcg@5": 0.825362511699,
+      "recall@10": 0.966860218475,
+      "mrr@10": 0.873425071588,
+      "ndcg@10": 0.85890792339
+    },
+    "silver_loose": {
+      "recall@5": 0.837978603604,
+      "mrr@5": 0.792567567568,
+      "ndcg@5": 0.739471490583,
+      "recall@10": 0.926097972973,
+      "mrr@10": 0.793130630631,
+      "ndcg@10": 0.774573171513
+    },
+    "union_loose": {
+      "recall@5": 0.87433377425,
+      "mrr@5": 0.922611111111,
+      "ndcg@5": 0.846335826882,
+      "recall@10": 0.955125220459,
+      "mrr@10": 0.922981481481,
+      "ndcg@10": 0.881975388196
+    }
+  },
+  "hit_rate_metrics_by_view": {
+    "gold_hit": {
+      "hit_rate@5": 0.991091314031,
+      "hit_rate@10": 0.998886414254
+    },
+    "silver_strict_hit": {
+      "hit_rate@5": 0.695945945946,
+      "hit_rate@10": 0.864864864865
+    },
+    "strict_union_hit": {
+      "hit_rate@5": 0.995555555556,
+      "hit_rate@10": 0.998888888889
+    }
+  },
+  "eligible_queries_by_view": {
+    "gold": 898,
+    "silver_loose": 296,
+    "union_loose": 900,
+    "gold_hit": 898,
+    "silver_strict_hit": 296,
+    "strict_union_hit": 900
+  }
+}

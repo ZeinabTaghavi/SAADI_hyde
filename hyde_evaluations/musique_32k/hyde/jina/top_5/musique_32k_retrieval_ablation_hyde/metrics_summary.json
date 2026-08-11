@@ -1,0 +1,48 @@
+{
+  "method_name": "hyde",
+  "retriever_name": "jina",
+  "dataset_name": "musique_32k",
+  "split": "validation",
+  "run_name": "musique_32k_retrieval_ablation_hyde",
+  "average_chunk_tokens": 482.636451612903,
+  "n_queries": 900,
+  "k_values": [
+    5
+  ],
+  "ranking_metrics_by_view": {
+    "gold": {
+      "recall@5": 0.869652137024,
+      "mrr@5": 0.864550853749,
+      "ndcg@5": 0.806029968295
+    },
+    "silver_loose": {
+      "recall@5": 0.78223536036,
+      "mrr@5": 0.761993243243,
+      "ndcg@5": 0.690776517274
+    },
+    "union_loose": {
+      "recall@5": 0.843651234568,
+      "mrr@5": 0.914407407407,
+      "ndcg@5": 0.822903922987
+    }
+  },
+  "hit_rate_metrics_by_view": {
+    "gold_hit": {
+      "hit_rate@5": 0.991091314031
+    },
+    "silver_strict_hit": {
+      "hit_rate@5": 0.618243243243
+    },
+    "strict_union_hit": {
+      "hit_rate@5": 0.994444444444
+    }
+  },
+  "eligible_queries_by_view": {
+    "gold": 898,
+    "silver_loose": 296,
+    "union_loose": 900,
+    "gold_hit": 898,
+    "silver_strict_hit": 296,
+    "strict_union_hit": 900
+  }
+}

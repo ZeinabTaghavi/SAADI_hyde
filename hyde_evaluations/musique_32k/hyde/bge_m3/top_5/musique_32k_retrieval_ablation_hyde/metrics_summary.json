@@ -1,0 +1,48 @@
+{
+  "method_name": "hyde",
+  "retriever_name": "bge_m3",
+  "dataset_name": "musique_32k",
+  "split": "validation",
+  "run_name": "musique_32k_retrieval_ablation_hyde",
+  "average_chunk_tokens": 482.636451612903,
+  "n_queries": 900,
+  "k_values": [
+    5
+  ],
+  "ranking_metrics_by_view": {
+    "gold": {
+      "recall@5": 0.892409057164,
+      "mrr@5": 0.87225315516,
+      "ndcg@5": 0.825362511699
+    },
+    "silver_loose": {
+      "recall@5": 0.837978603604,
+      "mrr@5": 0.792567567568,
+      "ndcg@5": 0.739471490583
+    },
+    "union_loose": {
+      "recall@5": 0.87433377425,
+      "mrr@5": 0.922611111111,
+      "ndcg@5": 0.846335826882
+    }
+  },
+  "hit_rate_metrics_by_view": {
+    "gold_hit": {
+      "hit_rate@5": 0.991091314031
+    },
+    "silver_strict_hit": {
+      "hit_rate@5": 0.695945945946
+    },
+    "strict_union_hit": {
+      "hit_rate@5": 0.995555555556
+    }
+  },
+  "eligible_queries_by_view": {
+    "gold": 898,
+    "silver_loose": 296,
+    "union_loose": 900,
+    "gold_hit": 898,
+    "silver_strict_hit": 296,
+    "strict_union_hit": 900
+  }
+}
