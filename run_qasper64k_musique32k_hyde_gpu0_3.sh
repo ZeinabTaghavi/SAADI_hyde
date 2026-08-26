@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Run the exact main-SAADI QASPER-64K and MuSiQue-32K HyDE matrix.
+# Both expanded-dataset configs use the canonical 100-word chunk size.
 #
 # Default grid:
 #   datasets:   qasper_64k,musique_32k
@@ -36,6 +37,7 @@ TABLE_ROOT="${TABLE_ROOT:-${SCRIPT_DIR}/hyde_evaluations_Tables}"
 LOG_DIR="${LOG_DIR:-${SCRIPT_DIR}/logs}"
 DATASETS_CSV="${DATASETS_CSV:-qasper_64k,musique_32k}"
 RETRIEVERS_CSV="${RETRIEVERS_CSV:-bm25,contriever,bge_m3,jina,qwen}"
+GENERATE_TABLE="${GENERATE_TABLE:-1}"
 
 CHECK_ONLY=0
 DRY_RUN=0
@@ -171,6 +173,7 @@ printf '  datasets=%s\n' "${DATASETS_CSV}"
 printf '  retrievers=%s\n' "${RETRIEVERS_CSV}"
 printf '  output_root=%s\n' "${OUTPUT_ROOT}"
 printf '  work_root=%s\n' "${WORK_ROOT}"
+printf '  generate_table=%s\n' "${GENERATE_TABLE}"
 
 printf '%-14s %-14s %-10s\n' DATASET RETRIEVER STATUS
 printf '%-14s %-14s %-10s\n' ------- --------- ------
@@ -307,7 +310,7 @@ else
   fi
 fi
 
-if [[ "${DRY_RUN}" != "1" ]]; then
+if [[ "${DRY_RUN}" != "1" && "${GENERATE_TABLE}" == "1" ]]; then
   printf 'Generating strict four-dataset HyDE main table.\n'
   "${PYTHON_BIN}" -B "${SCRIPT_DIR}/generate_hyde_retriever_table.py" \
     --input-root "${OUTPUT_ROOT}" \
@@ -316,4 +319,8 @@ if [[ "${DRY_RUN}" != "1" ]]; then
 fi
 
 printf 'HyDE expanded-dataset matrix finished.\n'
-printf 'Table: %s/table_main_retrieval_hyde.txt\n' "${TABLE_ROOT}"
+if [[ "${GENERATE_TABLE}" == "1" ]]; then
+  printf 'Table: %s/table_main_retrieval_hyde.txt\n' "${TABLE_ROOT}"
+else
+  printf 'Results: %s\n' "${OUTPUT_ROOT}"
+fi

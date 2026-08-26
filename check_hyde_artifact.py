@@ -14,6 +14,7 @@ SRC_DIR = SCRIPT_DIR / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
+from hyde.loogle.chunking import DEFAULT_CHUNK_SIZE  # noqa: E402
 from hyde.loogle.runner import _generation_settings, load_config  # noqa: E402
 from hyde.loogle.retrievers import normalize_retriever_name, retriever_spec  # noqa: E402
 
@@ -45,6 +46,9 @@ def validate_artifact(
     context = dict(manifest.get("run_metadata", {}) or {})
     preparation = dict(context.get("preparation", {}) or {})
     config = load_config(config_path)
+    chunking = dict(config.get("chunking", {}) or {})
+    expected_chunk_size = int(chunking.get("chunk_size", DEFAULT_CHUNK_SIZE))
+    expected_chunk_overlap = int(chunking.get("chunk_overlap", 0))
     requested_retriever = normalize_retriever_name(retriever)
     spec = retriever_spec(requested_retriever, config)
 
@@ -58,10 +62,15 @@ def validate_artifact(
     if normalize_retriever_name(actual_retriever) != requested_retriever:
         errors.append(f"retriever={actual_retriever!r}, expected {requested_retriever!r}")
 
-    if int(preparation.get("chunk_size", -1)) != 500:
-        errors.append(f"chunk_size={preparation.get('chunk_size')!r}, expected 500")
-    if int(preparation.get("chunk_overlap", -1)) != 0:
-        errors.append(f"chunk_overlap={preparation.get('chunk_overlap')!r}, expected 0")
+    if int(preparation.get("chunk_size", -1)) != expected_chunk_size:
+        errors.append(
+            f"chunk_size={preparation.get('chunk_size')!r}, expected {expected_chunk_size}"
+        )
+    if int(preparation.get("chunk_overlap", -1)) != expected_chunk_overlap:
+        errors.append(
+            f"chunk_overlap={preparation.get('chunk_overlap')!r}, "
+            f"expected {expected_chunk_overlap}"
+        )
     if int(context.get("top_k", -1)) != int(top_k):
         errors.append(f"top_k={context.get('top_k')!r}, expected {top_k}")
     if str(context.get("retrieval_scope") or "") != "per_document":

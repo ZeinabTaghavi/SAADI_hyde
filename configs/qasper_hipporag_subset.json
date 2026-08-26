@@ -30,8 +30,8 @@
   ],
   "expected": {
     "documents": 25,
-    "chunks": 169,
+    "chunks": 880,
     "retrieval_examples": 80,
-    "average_chunk_tokens": 456.9822485207101
+    "average_chunk_tokens": 87.76136363636364
   }
 }

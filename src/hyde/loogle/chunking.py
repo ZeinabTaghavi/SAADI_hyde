@@ -9,6 +9,8 @@ from typing import Any
 from .dataset import coerce_to_text
 from .types import ChunkRecord
 
+DEFAULT_CHUNK_SIZE = 100
+
 _CLAUSE_BREAK_RE = re.compile(r"(?<=[;:])\s+")
 _SENTENCE_EXTRACT_RE = re.compile(r".+?(?:[.!?;:](?:[\"')\]]+)?|$)", flags=re.DOTALL)
 
@@ -57,7 +59,12 @@ def _units(text: str, chunk_size: int) -> list[_Unit]:
     return output
 
 
-def chunk_text(text: str, *, chunk_size: int = 500, chunk_overlap: int = 0) -> list[tuple[str, int, int]]:
+def chunk_text(
+    text: str,
+    *,
+    chunk_size: int = DEFAULT_CHUNK_SIZE,
+    chunk_overlap: int = 0,
+) -> list[tuple[str, int, int]]:
     if chunk_size <= 0:
         raise ValueError("chunk_size must be positive")
     if chunk_overlap < 0 or chunk_overlap >= chunk_size:
@@ -117,7 +124,7 @@ def chunk_documents_grouped_records(
     documents: list[Any],
     *,
     doc_ids: list[str],
-    chunk_size: int = 500,
+    chunk_size: int = DEFAULT_CHUNK_SIZE,
     chunk_overlap: int = 0,
 ) -> list[list[ChunkRecord]]:
     if len(documents) != len(doc_ids):

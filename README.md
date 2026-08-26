@@ -108,7 +108,11 @@ export NOVELHOPQA_BOOKS_ROOT=/path/to/novelhopqa/book-corpus-root
 ./run_novelhopqa_hyde.sh --validate-only
 ```
 
-QASPER must report 25 documents, 169 chunks, and 80 labeled queries. NovelHopQA must report 18 books, 7,736 chunks, and 985 labeled queries. NovelHopQA requires the external whole-book corpus containing `bookmeta.json` and `Books/`; the launcher automatically detects the parent repository corpus when it is available.
+QASPER must report 25 documents, 880 chunks, and 80 labeled queries with the
+canonical 100-word chunk size. NovelHopQA must report 18 books, 7,736 chunks,
+and 985 labeled queries. NovelHopQA requires the external whole-book corpus
+containing `bookmeta.json` and `Books/`; the launcher automatically detects the
+parent repository corpus when it is available.
 
 Run a small real-model smoke test:
 
@@ -126,6 +130,25 @@ Run the full HippoRAG-comparable experiment:
 ./run_qasper_hyde.sh
 ./run_novelhopqa_hyde.sh
 ```
+
+Run the expanded QASPER-64K and MuSiQue-32K matrix with SAADI's canonical
+100-word, zero-overlap chunking. `--force` replaces artifacts created with the
+old chunk configuration:
+
+```bash
+CUDA_VISIBLE_DEVICES=0,1,2,3 \
+./run_qasper64k_musique32k_hyde_gpu0_3.sh --force
+```
+
+To run only MuSiQue-32K:
+
+```bash
+CUDA_VISIBLE_DEVICES=0,1,2,3 \
+./run_musique32k_hyde_saadi_chunk100_gpu0_3.sh
+```
+
+This launcher reuses compatible HyDE hypotheses and force-regenerates the five
+retrievers' top-5/top-10 artifacts with 100-word chunks.
 
 Hypothetical documents are appended to `hyde_runs/<dataset>/hyde/<run-name>/hypotheses.jsonl` after every completed question. Document embeddings are cached beside them. If the process is interrupted, rerun the same command; resume is enabled by default. Use `--no-resume` to regenerate hypotheses, `--force-embeddings` to rebuild document embeddings, and `--force` to overwrite completed evaluation artifacts while retaining caches.
 

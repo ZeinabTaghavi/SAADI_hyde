@@ -7,7 +7,8 @@ dataset:
 
 chunking:
   method: saadi_sentence_aware_words
-  chunk_size: 500
+  # Canonical SAADI default for QASPER.
+  chunk_size: 100
   chunk_overlap: 0
 
 retrieval:

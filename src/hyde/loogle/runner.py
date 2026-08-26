@@ -23,7 +23,7 @@ from hyde.generator import TransformersGenerator
 from hyde.promptor import Promptor
 
 from .cache import HypothesisCache
-from .chunking import chunk_documents_grouped_records
+from .chunking import DEFAULT_CHUNK_SIZE, chunk_documents_grouped_records
 from .contriever import (
     combine_hyde_embeddings,
     embedding_cache_path,
@@ -190,7 +190,7 @@ def prepare_data(
         expected = dict(manifest.get("expected", {}) or {})
 
     chunk_cfg = dict(config.get("chunking", {}) or {})
-    chunk_size = int(chunk_cfg.get("chunk_size", 500))
+    chunk_size = int(chunk_cfg.get("chunk_size", DEFAULT_CHUNK_SIZE))
     chunk_overlap = int(chunk_cfg.get("chunk_overlap", 0))
     doc_ids = list(documents)
     grouped = chunk_documents_grouped_records(
