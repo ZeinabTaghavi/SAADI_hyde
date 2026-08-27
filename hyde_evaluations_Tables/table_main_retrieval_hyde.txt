@@ -1,0 +1,57 @@
+% HyDE retrieval summary table.
+% Ranking metrics: NDCG@5/@10 and Recall@5/@10 over Gold/Silver-L/Union-L.
+% Binary metrics: HR@5 and HR@10 over Gold/Silver-S/Union-S.
+\begin{table*}[t]
+\centering
+\caption{Main retrieval summary for HyDE. Values are percentages.}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllrrrrrrrrrrrrrrrrrr}
+\toprule
+Dataset & Retriever & Method & \multicolumn{12}{c}{Ranking Metrics} & \multicolumn{6}{c}{Binary Metrics} \\
+\cmidrule(lr){4-15}\cmidrule(lr){16-21}
+& & & \multicolumn{4}{c}{Gold} & \multicolumn{4}{c}{Silver-L} & \multicolumn{4}{c}{Union-L} & \multicolumn{2}{c}{Gold} & \multicolumn{2}{c}{Silver-S} & \multicolumn{2}{c}{Union-S} \\
+& & & NDCG@5 & Recall@5 & NDCG@10 & Recall@10 & NDCG@5 & Recall@5 & NDCG@10 & Recall@10 & NDCG@5 & Recall@5 & NDCG@10 & Recall@10 & HR@5 & HR@10 & HR@5 & HR@10 & HR@5 & HR@10 \\
+\midrule
+LooGLE & BM25 & HyDE & 74.7 & 87.1 & 77.0 & 94.2 & 63.3 & 62.5 & 68.8 & 75.0 & 74.6 & 86.9 & 77.0 & 94.1 & 87.7 & 94.9 & 50.0 & 75.0 & 87.5 & 94.8 \\
+\midrule
+LooGLE & Contriever & HyDE & 54.9 & 70.4 & 58.4 & 81.1 & 32.7 & 37.5 & 37.8 & 50.0 & 54.8 & 70.1 & 58.2 & 80.9 & 71.1 & 81.7 & 25.0 & 25.0 & 70.8 & 81.3 \\
+\midrule
+LooGLE & BGE-M3 & HyDE & 60.5 & 74.2 & 64.4 & 86.4 & 48.9 & 62.5 & 62.8 & 100.0 & 60.4 & 74.1 & 64.4 & 86.5 & 74.9 & 87.0 & 50.0 & 100.0 & 74.7 & 87.1 \\
+\midrule
+LooGLE & Qwen & HyDE & 61.2 & 73.2 & 64.9 & 84.6 & 46.9 & 62.5 & 46.9 & 62.5 & 61.1 & 73.2 & 64.8 & 84.5 & 74.0 & 85.1 & 50.0 & 50.0 & 73.8 & 84.8 \\
+\midrule
+LooGLE & Jina & HyDE & 54.4 & 68.3 & 58.7 & 81.8 & 59.6 & 62.5 & 64.2 & 75.0 & 54.4 & 68.2 & 58.7 & 81.8 & 69.1 & 82.5 & 50.0 & 50.0 & 68.9 & 82.2 \\
+\midrule
+QASPER-64K & BM25 & HyDE & 17.9 & 24.2 & 20.8 & 32.8 & 15.1 & 14.7 & 17.9 & 22.2 & 17.4 & 17.4 & 20.0 & 25.1 & 31.7 & 40.7 & 4.6 & 10.1 & 17.9 & 25.2 \\
+\midrule
+QASPER-64K & Contriever & HyDE & 12.9 & 16.7 & 16.8 & 28.0 & 12.9 & 12.2 & 15.3 & 19.1 & 14.5 & 14.2 & 17.2 & 22.1 & 23.8 & 36.0 & 4.1 & 9.0 & 14.1 & 22.6 \\
+\midrule
+QASPER-64K & BGE-M3 & HyDE & 17.2 & 23.2 & 20.4 & 31.8 & 14.9 & 14.2 & 17.2 & 20.5 & 17.2 & 17.4 & 19.6 & 24.3 & 30.1 & 39.9 & 5.8 & 10.5 & 18.4 & 25.3 \\
+\midrule
+QASPER-64K & Qwen & HyDE & 24.6 & 31.9 & 28.4 & 42.8 & 19.3 & 18.2 & 22.5 & 27.2 & 22.8 & 22.4 & 25.8 & 31.3 & 41.1 & 51.2 & 8.7 & 16.2 & 25.0 & 33.6 \\
+\midrule
+QASPER-64K & Jina & HyDE & 15.8 & 20.6 & 19.6 & 32.2 & 14.2 & 13.7 & 16.6 & 20.7 & 16.0 & 16.0 & 18.6 & 23.6 & 27.6 & 40.2 & 5.5 & 11.3 & 16.7 & 26.1 \\
+\midrule
+MuSiQue-32K & BM25 & HyDE & 44.4 & 55.2 & 50.3 & 71.0 & 43.5 & 38.1 & 48.6 & 54.4 & 54.0 & 43.4 & 58.1 & 59.4 & 67.9 & 81.5 & 25.8 & 48.7 & 66.0 & 83.3 \\
+\midrule
+MuSiQue-32K & Contriever & HyDE & 39.4 & 50.5 & 44.7 & 65.2 & 44.5 & 38.6 & 49.5 & 54.6 & 52.5 & 41.7 & 56.3 & 57.0 & 63.5 & 77.8 & 31.2 & 50.8 & 66.0 & 81.9 \\
+\midrule
+MuSiQue-32K & BGE-M3 & HyDE & 48.6 & 59.8 & 54.2 & 75.1 & 46.1 & 40.9 & 52.0 & 59.0 & 57.1 & 45.9 & 61.6 & 62.9 & 73.5 & 85.8 & 32.3 & 55.2 & 73.1 & 87.3 \\
+\midrule
+MuSiQue-32K & Qwen & HyDE & 52.2 & 63.8 & 58.4 & 80.7 & 48.8 & 43.5 & 54.0 & 60.9 & 60.8 & 48.7 & 64.8 & 65.8 & 76.6 & 89.0 & 35.4 & 57.8 & 76.2 & 89.3 \\
+\midrule
+MuSiQue-32K & Jina & HyDE & 52.8 & 62.0 & 57.9 & 75.7 & 47.3 & 41.9 & 52.7 & 59.6 & 59.5 & 46.8 & 63.2 & 63.4 & 75.4 & 85.3 & 34.0 & 56.0 & 75.4 & 88.2 \\
+\midrule
+NovelHopQA & BM25 & HyDE & 33.3 & 44.4 & 35.9 & 52.2 & 14.1 & 14.2 & 15.2 & 17.8 & 27.3 & 34.8 & 29.3 & 41.4 & 44.4 & 52.2 & 4.2 & 6.1 & 31.7 & 37.7 \\
+\midrule
+NovelHopQA & Contriever & HyDE & 23.7 & 33.2 & 26.6 & 42.3 & 10.5 & 10.2 & 11.6 & 13.9 & 19.5 & 26.0 & 21.8 & 33.3 & 33.2 & 42.3 & 3.5 & 5.1 & 23.9 & 30.6 \\
+\midrule
+NovelHopQA & BGE-M3 & HyDE & 25.7 & 34.0 & 29.3 & 45.1 & 14.4 & 14.6 & 15.9 & 19.3 & 22.1 & 27.8 & 25.1 & 37.0 & 34.0 & 45.1 & 6.1 & 9.6 & 25.2 & 33.9 \\
+\midrule
+NovelHopQA & Qwen & HyDE & 28.3 & 36.1 & 31.6 & 46.3 & 12.9 & 11.8 & 14.7 & 17.3 & 23.5 & 28.4 & 26.3 & 37.1 & 36.1 & 46.3 & 3.2 & 5.5 & 25.7 & 33.4 \\
+\midrule
+NovelHopQA & Jina & HyDE & 23.0 & 30.9 & 26.3 & 41.1 & 12.1 & 11.1 & 13.7 & 15.9 & 19.6 & 24.6 & 22.3 & 33.2 & 30.9 & 41.1 & 2.9 & 5.5 & 22.0 & 29.8 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

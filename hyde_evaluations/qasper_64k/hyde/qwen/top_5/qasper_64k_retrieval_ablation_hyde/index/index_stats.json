@@ -1,6 +1,6 @@
 {
   "method_name": "hyde",
   "retriever_name": "qwen",
-  "n_chunks": 3129,
-  "average_chunk_tokens": 487.1559603707255
+  "n_chunks": 17159,
+  "average_chunk_tokens": 88.8344891893467
 }

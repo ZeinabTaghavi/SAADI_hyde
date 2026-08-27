@@ -4,7 +4,7 @@
   "dataset_name": "musique_32k",
   "split": "validation",
   "run_name": "musique_32k_retrieval_ablation_hyde",
-  "average_chunk_tokens": 482.636451612903,
+  "average_chunk_tokens": 87.4852648813,
   "n_queries": 900,
   "k_values": [
     5,
@@ -12,50 +12,50 @@
   ],
   "ranking_metrics_by_view": {
     "gold": {
-      "recall@5": 0.892409057164,
-      "mrr@5": 0.87225315516,
-      "ndcg@5": 0.825362511699,
-      "recall@10": 0.966860218475,
-      "mrr@10": 0.873425071588,
-      "ndcg@10": 0.85890792339
+      "recall@5": 0.598255813953,
+      "mrr@5": 0.520227713178,
+      "ndcg@5": 0.485797723664,
+      "recall@10": 0.750847868217,
+      "mrr@10": 0.537401370432,
+      "ndcg@10": 0.542270732198
     },
     "silver_loose": {
-      "recall@5": 0.837978603604,
-      "mrr@5": 0.792567567568,
-      "ndcg@5": 0.739471490583,
-      "recall@10": 0.926097972973,
-      "mrr@10": 0.793130630631,
-      "ndcg@10": 0.774573171513
+      "recall@5": 0.409494344476,
+      "mrr@5": 0.647387606318,
+      "ndcg@5": 0.460810817992,
+      "recall@10": 0.590073908121,
+      "mrr@10": 0.659471253062,
+      "ndcg@10": 0.519824857788
     },
     "union_loose": {
-      "recall@5": 0.87433377425,
-      "mrr@5": 0.922611111111,
-      "ndcg@5": 0.846335826882,
-      "recall@10": 0.955125220459,
-      "mrr@10": 0.922981481481,
-      "ndcg@10": 0.881975388196
+      "recall@5": 0.459300149436,
+      "mrr@5": 0.820777777778,
+      "ndcg@5": 0.571345405956,
+      "recall@10": 0.628811751037,
+      "mrr@10": 0.82446031746,
+      "ndcg@10": 0.616201927003
     }
   },
   "hit_rate_metrics_by_view": {
     "gold_hit": {
-      "hit_rate@5": 0.991091314031,
-      "hit_rate@10": 0.998886414254
+      "hit_rate@5": 0.735465116279,
+      "hit_rate@10": 0.857558139535
     },
     "silver_strict_hit": {
-      "hit_rate@5": 0.695945945946,
-      "hit_rate@10": 0.864864864865
+      "hit_rate@5": 0.323207776428,
+      "hit_rate@10": 0.551640340219
     },
     "strict_union_hit": {
-      "hit_rate@5": 0.995555555556,
-      "hit_rate@10": 0.998888888889
+      "hit_rate@5": 0.731111111111,
+      "hit_rate@10": 0.873333333333
     }
   },
   "eligible_queries_by_view": {
-    "gold": 898,
-    "silver_loose": 296,
+    "gold": 688,
+    "silver_loose": 823,
     "union_loose": 900,
-    "gold_hit": 898,
-    "silver_strict_hit": 296,
+    "gold_hit": 688,
+    "silver_strict_hit": 823,
     "strict_union_hit": 900
   }
 }

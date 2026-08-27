@@ -52,11 +52,11 @@
     "Silver-S Hit@K requires a complete silver_chunk_group; Union-S is Gold Hit@K OR Silver-S Hit@K."
   ],
   "missing_metrics": [],
-  "command_used": "run_loogle_hyde.py --config /home/iataghav/SAADI_hyde/configs/qasper_64k_hyde.yaml --output-root /home/iataghav/SAADI_hyde/hyde_evaluations --work-root /home/iataghav/SAADI_hyde/hyde_runs --run-name qasper_64k_retrieval_ablation_hyde --retriever jina --retrieval-only --embedding-device cuda:0 --top-ks 5 10",
+  "command_used": "run_loogle_hyde.py --config /home/iataghav/SAADI_hyde/configs/qasper_64k_hyde.yaml --output-root /home/iataghav/SAADI_hyde/hyde_evaluations --work-root /home/iataghav/SAADI_hyde/hyde_runs --run-name qasper_64k_retrieval_ablation_hyde --retriever jina --retrieval-only --embedding-device cuda:0 --top-ks 5 10 --force",
   "package_versions": {
     "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
-    "platform": "Linux-6.8.0-111-generic-x86_64-with-glibc2.39",
-    "git_commit": "d83664303634cae7190783ce1047cf10ff3af21f",
+    "platform": "Linux-6.17.0-23-generic-x86_64-with-glibc2.39",
+    "git_commit": "126fa26c19b386b65cd8ff3d9a3f19178745f72f",
     "datasets": "5.0.1",
     "numpy": "2.5.1",
     "torch": "2.13.0",
@@ -94,7 +94,7 @@
       },
       "chunking": {
         "method": "saadi_sentence_aware_words",
-        "chunk_size": 500,
+        "chunk_size": 100,
         "chunk_overlap": 0
       },
       "retrieval": {
@@ -280,11 +280,11 @@
       },
       "actual_population": {
         "documents": 23,
-        "chunks": 3129,
+        "chunks": 17159,
         "retrieval_examples": 1372,
-        "average_chunk_tokens": 487.1559603707255
+        "average_chunk_tokens": 88.8344891893467
       },
-      "chunk_size": 500,
+      "chunk_size": 100,
       "chunk_overlap": 0
     },
     "generation": {
@@ -312,19 +312,19 @@
     "hypothesis_cache_hits": 1372,
     "document_embedding_cache_hits": 0,
     "generation_seconds": 0.0,
-    "embedding_and_retrieval_seconds": 51.099,
-    "elapsed_seconds": 199.934,
+    "embedding_and_retrieval_seconds": 58.09,
+    "elapsed_seconds": 594.216,
     "top_k": 10
   },
   "counts": {
     "queries_evaluated": 1372,
     "eligible_queries_by_view": {
-      "gold": 1193,
-      "silver_loose": 440,
-      "union_loose": 1311,
-      "gold_hit": 1193,
-      "silver_strict_hit": 440,
-      "strict_union_hit": 1311
+      "gold": 627,
+      "silver_loose": 1111,
+      "union_loose": 1315,
+      "gold_hit": 627,
+      "silver_strict_hit": 1111,
+      "strict_union_hit": 1315
     }
   }
 }
