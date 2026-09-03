@@ -3,7 +3,13 @@ dataset:
   hf_dataset: bigai-nlco/LooGLE
   config_name: shortdep_qa
   split: test
-  subset_manifest: loogle_hipporag_subset.json
+  # Evaluate the same complete LooGLE population used by the main SAADI table.
+  subset_manifest: null
+  expected:
+    documents: 105
+    chunks: 3346
+    retrieval_examples: 1832
+    average_chunk_tokens: 480.1628810520024
 
 chunking:
   method: saadi_sentence_aware_words

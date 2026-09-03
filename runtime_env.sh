@@ -49,18 +49,21 @@ hyde_select_python() {
 
 hyde_configure_runtime() {
   local project_root="$1"
-  local cache_root="${SAADI_HF_CACHE_ROOT:-/mnt/cache/taghavi}"
+  local cache_root="${SAADI_HF_CACHE_ROOT:-${project_root}/.cache/huggingface}"
 
   hyde_select_python "${project_root}"
 
-  # GPUS is the only opt-in override. An inherited CUDA_VISIBLE_DEVICES value
-  # cannot silently move this experiment away from physical GPUs 0,1,2,3.
-  export CUDA_VISIBLE_DEVICES="${GPUS:-0,1,2,3}"
+  # Prefer an explicit GPUS override, otherwise respect the server's existing
+  # CUDA visibility. The four-GPU value remains only a convenience default.
+  export CUDA_VISIBLE_DEVICES="${GPUS:-${CUDA_VISIBLE_DEVICES:-0,1,2,3}}"
   export GLOBAL_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES}"
   export TOKENIZERS_PARALLELISM="${TOKENIZERS_PARALLELISM:-false}"
-  export PYTHONPATH="${project_root}/src${PYTHONPATH:+:${PYTHONPATH}}"
+  # Keep imports hermetic to this checkout instead of inheriting a parent
+  # repository through the caller's PYTHONPATH.
+  export PYTHONPATH="${project_root}/src"
 
-  # Match the cache convention used by the main SAADI scripts.
+  # Keep the default cache inside the copied folder. Large/shared server caches
+  # can still be selected explicitly with SAADI_HF_CACHE_ROOT.
   export SAADI_HF_CACHE_ROOT="${cache_root}"
   export HF_HOME="${cache_root}"
   export HF_HUB_CACHE="${cache_root}/hub"

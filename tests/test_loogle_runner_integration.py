@@ -160,6 +160,8 @@ def test_strict_table_requires_exact_twenty_row_grid():
             "dataset": dataset,
             "retriever": retriever,
             "n_queries": table_generator.EXPECTED_QUERY_COUNTS[dataset],
+            "labeling_version": table_generator.LABELING_VERSION,
+            **table_generator.EXPECTED_DATASET_CONTRACTS[dataset],
         }
         for dataset in table_generator.DATASET_ORDER
         for retriever in table_generator.RETRIEVER_LABELS

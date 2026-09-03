@@ -32,10 +32,69 @@ RETRIEVER_LABELS = {
 RETRIEVER_ORDER = {name: index for index, name in enumerate(RETRIEVER_LABELS)}
 METHOD_LABEL = "HyDE"
 EXPECTED_QUERY_COUNTS = {
-    "loogle": 534,
-    "qasper_64k": 1_372,
+    "loogle": 1_832,
+    "qasper_64k": 1_333,
     "musique_32k": 900,
     "novelhopqa": 985,
+}
+LABELING_VERSION = "saadi_support_targets_v2"
+EXPECTED_DATASET_CONTRACTS = {
+    "loogle": {
+        "chunk_size": 500,
+        "chunk_overlap": 0,
+        "n_chunks": 3_346,
+        "average_chunk_tokens": 480.1628810520024,
+        "eligible_queries_by_view": {
+            "gold": 1_816,
+            "silver_loose": 16,
+            "union_loose": 1_832,
+            "gold_hit": 1_816,
+            "silver_strict_hit": 16,
+            "strict_union_hit": 1_832,
+        },
+    },
+    "qasper_64k": {
+        "chunk_size": 100,
+        "chunk_overlap": 0,
+        "n_chunks": 17_159,
+        "average_chunk_tokens": 88.8344891893467,
+        "eligible_queries_by_view": {
+            "gold": 645,
+            "silver_loose": 1_111,
+            "union_loose": 1_333,
+            "gold_hit": 645,
+            "silver_strict_hit": 1_111,
+            "strict_union_hit": 1_333,
+        },
+    },
+    "musique_32k": {
+        "chunk_size": 100,
+        "chunk_overlap": 0,
+        "n_chunks": 17_102,
+        "average_chunk_tokens": 87.48526488130044,
+        "eligible_queries_by_view": {
+            "gold": 688,
+            "silver_loose": 823,
+            "union_loose": 900,
+            "gold_hit": 688,
+            "silver_strict_hit": 823,
+            "strict_union_hit": 900,
+        },
+    },
+    "novelhopqa": {
+        "chunk_size": 500,
+        "chunk_overlap": 0,
+        "n_chunks": 7_736,
+        "average_chunk_tokens": 488.2821871768356,
+        "eligible_queries_by_view": {
+            "gold": 489,
+            "silver_loose": 496,
+            "union_loose": 985,
+            "gold_hit": 489,
+            "silver_strict_hit": 496,
+            "strict_union_hit": 985,
+        },
+    },
 }
 
 # Exact column order used by outputs/Tables/main/retrieval/table_main_retrieval.
@@ -70,6 +129,10 @@ CSV_FIELDS = (
     "run_name",
     "n_queries",
     "average_chunk_tokens",
+    "labeling_version",
+    "chunk_size",
+    "chunk_overlap",
+    "n_chunks",
 ) + METRIC_FIELDS + ("source_path",)
 
 
@@ -132,7 +195,19 @@ def collect_records(input_root: Path) -> list[dict[str, Any]]:
         merged: dict[str, Any] = {}
         source_path: Path | None = None
         for _, path, payload in sorted(candidates, key=lambda item: item[0]):
-            for field in ("dataset_name", "method_name", "split", "run_name", "n_queries", "average_chunk_tokens"):
+            for field in (
+                "dataset_name",
+                "method_name",
+                "split",
+                "run_name",
+                "n_queries",
+                "average_chunk_tokens",
+                "labeling_version",
+                "chunk_size",
+                "chunk_overlap",
+                "n_chunks",
+                "eligible_queries_by_view",
+            ):
                 previous = merged.get(field)
                 current = payload.get(field)
                 if previous is not None and current is not None and previous != current:
@@ -166,6 +241,11 @@ def collect_records(input_root: Path) -> list[dict[str, Any]]:
             "run_name": run_name,
             "n_queries": merged.get("n_queries"),
             "average_chunk_tokens": merged.get("average_chunk_tokens"),
+            "labeling_version": merged.get("labeling_version"),
+            "chunk_size": merged.get("chunk_size"),
+            "chunk_overlap": merged.get("chunk_overlap"),
+            "n_chunks": merged.get("n_chunks"),
+            "eligible_queries_by_view": merged.get("eligible_queries_by_view"),
             "source_path": str(source_path.relative_to(input_root)),
         }
         for key in METRIC_FIELDS:
@@ -218,7 +298,28 @@ def validate_complete_main_grid(records: list[dict[str, Any]]) -> None:
         for record in records
         if record.get("n_queries") != EXPECTED_QUERY_COUNTS[str(record["dataset"])]
     ]
-    if missing or unexpected or count_errors:
+    contract_errors: list[str] = []
+    for record in records:
+        dataset = str(record["dataset"])
+        contract = EXPECTED_DATASET_CONTRACTS[dataset]
+        if record.get("labeling_version") != LABELING_VERSION:
+            contract_errors.append(
+                f"{dataset}/{record['retriever']}:labeling_version="
+                f"{record.get('labeling_version')!r}!=expected_{LABELING_VERSION!r}"
+            )
+        for field in ("chunk_size", "chunk_overlap", "n_chunks", "eligible_queries_by_view"):
+            if record.get(field) != contract[field]:
+                contract_errors.append(
+                    f"{dataset}/{record['retriever']}:{field}="
+                    f"{record.get(field)!r}!=expected_{contract[field]!r}"
+                )
+        average = record.get("average_chunk_tokens")
+        if average is None or abs(float(average) - float(contract["average_chunk_tokens"])) > 1e-9:
+            contract_errors.append(
+                f"{dataset}/{record['retriever']}:average_chunk_tokens="
+                f"{average!r}!=expected_{contract['average_chunk_tokens']!r}"
+            )
+    if missing or unexpected or count_errors or contract_errors:
         details: list[str] = []
         if missing:
             details.append("missing=" + ", ".join(f"{dataset}/{retriever}" for dataset, retriever in missing))
@@ -234,6 +335,8 @@ def validate_complete_main_grid(records: list[dict[str, Any]]) -> None:
                     for dataset, retriever, actual_count, expected_count in count_errors
                 )
             )
+        if contract_errors:
+            details.append("contract_mismatches=" + ", ".join(contract_errors))
         raise ValueError("Incomplete HyDE main-table grid: " + "; ".join(details))
 
 
@@ -253,7 +356,12 @@ def _write_jsonl(path: Path, records: Iterable[dict[str, Any]]) -> None:
 
 def _write_csv(path: Path, records: list[dict[str, Any]]) -> None:
     with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(CSV_FIELDS), lineterminator="\n")
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=list(CSV_FIELDS),
+            extrasaction="ignore",
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(records)
 

@@ -41,12 +41,19 @@ QASPER-64K, MuSiQue-32K, NovelHopQA, and the legacy unexpanded QASPER subset.
 They do not import anything from the parent SAADI repository and can be copied
 to another server by themselves.
 
-The default run reproduces the population in the saved HippoRAG comparison:
+The benchmark code is standalone, but large external inputs are intentionally
+not vendored: Hugging Face supplies the models and the LooGLE/NovelHopQA
+question metadata, while the NovelHopQA whole-book corpus must be copied
+separately. The exact QASPER-64K and MuSiQue-32K prepared data are included
+under `data/`.
+
+The default LooGLE run uses the complete population evaluated by the main
+SAADI table:
 
 - LooGLE `shortdep_qa`, test split
-- the frozen set of 25 document IDs in `configs/loogle_hipporag_subset.json`
-- 859 sentence-aware chunks of at most 500 whitespace-delimited words, without overlap
-- 534 questions with chunk-level evidence labels
+- all 105 documents
+- 3,346 sentence-aware chunks of at most 500 whitespace-delimited words, without overlap
+- 1,832 questions with chunk-level evidence labels
 - per-document `facebook/contriever` retrieval
 - top-5 and top-10 metrics and table rows
 
@@ -68,17 +75,19 @@ python -m pip install -e . --no-deps
 
 The second command installs this local package without reinstalling PyTorch. The LooGLE runner uses Transformers directly and does not require Java, Pyserini, or the DL19 index.
 
-Configure the model and dataset caches. The launcher uses the same defaults as the working notebook, but every value can be overridden:
+By default, model and dataset caches are stored under
+`.cache/huggingface/` in this folder. To use a larger shared server cache,
+override that project-local default:
 
 ```bash
 export HF_TOKEN=<your-hugging-face-token>
-export SAADI_HF_CACHE_ROOT=/mnt/cache/taghavi
+export SAADI_HF_CACHE_ROOT=/path/to/writable/huggingface-cache
 ```
 
-All launchers default to physical GPUs `0,1,2,3`, set both
-`CUDA_VISIBLE_DEVICES` and `GLOBAL_VISIBLE_DEVICES`, and verify that PyTorch can
-see all four GPUs before loading a model. Set `GPUS` only when an intentional
-override is needed. `HF_HOME`, `HF_HUB_CACHE`, `HF_DATASETS_CACHE`, and
+All launchers use an existing `CUDA_VISIBLE_DEVICES` value when present and
+otherwise default to physical GPUs `0,1,2,3`. `GPUS` is an explicit override.
+The launchers set `GLOBAL_VISIBLE_DEVICES` and verify that PyTorch can see every
+selected GPU before loading a model. `HF_HOME`, `HF_HUB_CACHE`, `HF_DATASETS_CACHE`, and
 `TRANSFORMERS_CACHE` are derived from `SAADI_HF_CACHE_ROOT`.
 
 If every model and dataset file is already cached, offline mode is supported:
@@ -91,13 +100,15 @@ export TRANSFORMERS_OFFLINE=1
 
 ### Validation, smoke test, and full run
 
-First verify the frozen population without loading Qwen or Contriever:
+First verify the population without loading Qwen or Contriever:
 
 ```bash
 ./run_loogle_hyde.sh --validate-only
 ```
 
-This must report 25 documents, 859 chunks, 534 retrieval examples, and average chunk size `479.371362048894`. A mismatch stops the run before either model is loaded.
+This must report 105 documents, 3,346 chunks, 1,832 retrieval examples, and
+average chunk size `480.1628810520024`. A mismatch stops the run before either
+model is loaded.
 
 Validate the other frozen HippoRAG comparison populations with:
 
@@ -111,8 +122,9 @@ export NOVELHOPQA_BOOKS_ROOT=/path/to/novelhopqa/book-corpus-root
 QASPER must report 25 documents, 880 chunks, and 80 labeled queries with the
 canonical 100-word chunk size. NovelHopQA must report 18 books, 7,736 chunks,
 and 985 labeled queries. NovelHopQA requires the external whole-book corpus
-containing `bookmeta.json` and `Books/`; the launcher automatically detects the
-parent repository corpus when it is available.
+containing `bookmeta.json` and `Books/`. Either set `NOVELHOPQA_BOOKS_ROOT`, as
+above, or place the corpus inside this standalone folder at
+`data/novelhopqa/book-corpus-root/`.
 
 Run a small real-model smoke test:
 
@@ -123,7 +135,7 @@ Run a small real-model smoke test:
   --run-name loogle_hyde_smoke
 ```
 
-Run the full HippoRAG-comparable experiment:
+Run the complete SAADI-comparable experiment:
 
 ```bash
 ./run_loogle_hyde.sh
@@ -195,8 +207,8 @@ The exact expanded datasets used by the main SAADI table are bundled under
 `data/qasper_64k/` and `data/musique_32k/`. Every source file is validated
 against its frozen SHA-256 manifest before a run starts:
 
-- QASPER-64K: 23 expanded groups, 1,372 questions, 1,353 questions with
-  retrieval evidence
+- QASPER-64K: 23 expanded groups, 1,372 source questions and 1,333 canonical
+  SAADI retrieval examples after evidence/answer labeling
 - MuSiQue-32K: 45 expanded groups, 900 questions, with 300 questions from each
   of the 2-hop, 3-hop, and 4-hop populations
 
@@ -230,9 +242,24 @@ bash run_qasper64k_musique32k_hyde_gpu0_3.sh --install-deps
 ```
 
 After all workers succeed, strict table generation requires exactly 20 rows:
-four finalized datasets times five retrievers. The legacy unexpanded QASPER
-subset is intentionally excluded. The final JSONL, CSV, Markdown, LaTeX, and
-text tables are written under `hyde_evaluations_Tables/`.
+four finalized datasets times five retrievers. It also verifies the SAADI
+labeling version, chunk size, chunk count, average chunk length, query count,
+and eligible-query counts. Stale 500-word expanded-dataset artifacts are
+rejected. The legacy unexpanded QASPER subset is intentionally excluded. The
+final JSONL, CSV, Markdown, LaTeX, and text tables are written under
+`hyde_evaluations_Tables/`.
+
+To replace every legacy artifact and build the final validated table in one
+command, set the NovelHopQA book path and run:
+
+```bash
+export NOVELHOPQA_BOOKS_ROOT=/path/to/novelhopqa/book-corpus-root
+export CUDA_VISIBLE_DEVICES=0,1,2,3
+bash rerun_saadi_consistent_hyde.sh
+```
+
+Compatible hypothetical-document and document-embedding caches are reused.
+Changed chunk signatures are re-embedded automatically.
 
 Both matrix launchers first run a generation-only process for each dataset.
 They then run each retriever in a separate process with `--retrieval-only`, preventing

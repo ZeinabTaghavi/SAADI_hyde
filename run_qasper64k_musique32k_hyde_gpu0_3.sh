@@ -9,7 +9,7 @@
 #
 # The script validates the frozen bundles, resumes shared HyDE generation,
 # skips configuration-matching completed cells, distributes retrieval across
-# four GPUs, and writes one strict four-dataset main-style table.
+# the selected GPUs, and writes one strict four-dataset main-style table.
 #
 # Usage:
 #   CUDA_VISIBLE_DEVICES=0,1,2,3 \
@@ -24,7 +24,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
-REQUESTED_GPUS="${GPU_IDS_CSV:-${CUDA_VISIBLE_DEVICES:-${GPUS:-0,1,2,3}}}"
+REQUESTED_GPUS="${GPU_IDS_CSV:-${GPUS:-${CUDA_VISIBLE_DEVICES:-0,1,2,3}}}"
 export GPUS="${REQUESTED_GPUS}"
 
 # shellcheck source=runtime_env.sh
@@ -68,8 +68,8 @@ IFS=',' read -r -a GPU_IDS <<< "${REQUESTED_GPUS}"
 IFS=',' read -r -a DATASETS <<< "${DATASETS_CSV}"
 IFS=',' read -r -a RETRIEVERS <<< "${RETRIEVERS_CSV}"
 
-if [[ "${#GPU_IDS[@]}" -ne 4 ]]; then
-  printf 'Exactly four physical GPU IDs are required; got %s.\n' "${REQUESTED_GPUS}" >&2
+if [[ "${#GPU_IDS[@]}" -lt 1 || -z "${GPU_IDS[0]//[[:space:]]/}" ]]; then
+  printf 'At least one physical GPU ID is required; got %s.\n' "${REQUESTED_GPUS}" >&2
   exit 2
 fi
 

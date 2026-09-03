@@ -71,21 +71,23 @@ def test_labeling_builds_gold_and_cross_chunk_silver_group():
     assert examples[1].silver_chunk_groups == [["d1:0", "d1:1"]]
 
 
-def test_expanded_population_can_retain_metric_ineligible_queries():
+def test_empty_retrieval_spans_fall_back_to_answers_like_saadi():
     chunks = chunk_documents_grouped_records(["Alpha beta gamma."], doc_ids=["d1"], chunk_size=5)[0]
     entries = [
         {
             "id": "qasper_64k::unanswerable",
             "document_id": "d1",
             "question": "Can this be answered?",
-            "answers": ["Yes"],
+            "answers": ["Alpha beta"],
             "retrieval_spans": [],
         }
     ]
-    assert build_retrieval_examples(entries, {"d1": chunks}) == []
+    labeled = build_retrieval_examples(entries, {"d1": chunks})
+    assert len(labeled) == 1
+    assert labeled[0].gold_chunk_ids == ["d1:0"]
     retained = build_retrieval_examples(entries, {"d1": chunks}, include_unlabeled=True)
     assert len(retained) == 1
-    assert retained[0].gold_chunk_ids == []
+    assert retained[0].gold_chunk_ids == ["d1:0"]
     assert retained[0].silver_chunk_ids == []
 
 
@@ -105,6 +107,26 @@ def test_window_labeling_matches_all_chunks_overlapped_by_context():
         ],
         {"book": chunks},
     )
+    assert examples[0].silver_chunk_groups == [["book:0", "book:1"]]
+
+
+def test_window_labeling_matches_every_overlapping_occurrence_like_saadi():
+    chunks = chunk_documents_grouped_records(
+        ["alpha beta gamma delta. alpha beta gamma delta."], doc_ids=["book"], chunk_size=4
+    )[0]
+    examples = build_retrieval_examples(
+        [
+            {
+                "id": "hop_1:repeated",
+                "document_id": "book",
+                "question": "Where is the repeated window?",
+                "retrieval_span_mode": "window",
+                "retrieval_spans": ["alpha beta gamma delta"],
+            }
+        ],
+        {"book": chunks},
+    )
+    assert examples[0].gold_chunk_ids == []
     assert examples[0].silver_chunk_groups == [["book:0", "book:1"]]
 
 

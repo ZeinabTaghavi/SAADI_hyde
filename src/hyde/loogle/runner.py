@@ -33,7 +33,7 @@ from .contriever import (
 from .dataset import load_loogle_bundle, load_subset_manifest, select_frozen_subset
 from .evaluation import HIT_VIEWS, METHOD_NAME, RANKING_VIEWS, result_to_query_metrics, summarize_metrics
 from .io import write_json, write_jsonl
-from .labeling import build_retrieval_examples
+from .labeling import LABELING_VERSION, build_retrieval_examples
 from .novelhopqa import load_novelhopqa_bundle
 from .prepared_expanded import BUNDLE_SPECS, load_prepared_expanded_bundle, select_prepared_subset
 from .qasper import load_qasper_bundle
@@ -145,16 +145,20 @@ def prepare_data(
         manifest_path = Path(dataset_metadata["prepared_manifest"])
         expected = {
             "documents": int(BUNDLE_SPECS[dataset_name]["documents"]),
-            "retrieval_examples": int(BUNDLE_SPECS[dataset_name]["queries"]),
+            "retrieval_examples": int(BUNDLE_SPECS[dataset_name]["retrieval_examples"]),
         }
     else:
         manifest_value = dataset_cfg.get("subset_manifest", f"{dataset_name}_hipporag_subset.json")
-        manifest_path = Path(str(manifest_value)).expanduser()
-        if not manifest_path.is_absolute():
-            manifest_path = (config_path.parent / manifest_path).resolve()
-        manifest = load_subset_manifest(manifest_path)
-        frozen_ids = [str(value) for value in manifest["document_ids"]]
-        allowed_ids = set(frozen_ids[:max_documents] if max_documents is not None else frozen_ids)
+        manifest_path: Path | None = None
+        manifest: dict[str, Any] | None = None
+        allowed_ids: set[str] | None = None
+        if manifest_value:
+            manifest_path = Path(str(manifest_value)).expanduser()
+            if not manifest_path.is_absolute():
+                manifest_path = (config_path.parent / manifest_path).resolve()
+            manifest = load_subset_manifest(manifest_path)
+            frozen_ids = [str(value) for value in manifest["document_ids"]]
+            allowed_ids = set(frozen_ids[:max_documents] if max_documents is not None else frozen_ids)
         split = str(dataset_cfg.get("split", "test"))
         config_name = dataset_cfg.get("config_name")
         if dataset_name == "loogle":
@@ -180,14 +184,32 @@ def prepare_data(
                 books_root=books_root,
                 allowed_doc_ids=allowed_ids,
             )
-        documents, qa_entries, selection_metadata = select_frozen_subset(
-            documents,
-            qa_entries,
-            manifest,
-            max_documents=max_documents,
-            max_qa_entries=max_qa_entries,
-        )
-        expected = dict(manifest.get("expected", {}) or {})
+        if manifest is not None:
+            documents, qa_entries, selection_metadata = select_frozen_subset(
+                documents,
+                qa_entries,
+                manifest,
+                max_documents=max_documents,
+                max_qa_entries=max_qa_entries,
+            )
+            expected = dict(manifest.get("expected", {}) or {})
+        else:
+            doc_ids = list(documents)
+            if max_documents is not None:
+                doc_ids = doc_ids[:max_documents]
+            selected_ids = set(doc_ids)
+            qa_entries = [row for row in qa_entries if str(row.get("document_id")) in selected_ids]
+            if max_qa_entries is not None:
+                qa_entries = qa_entries[:max_qa_entries]
+            documents = {doc_id: documents[doc_id] for doc_id in doc_ids}
+            selection_metadata = {
+                "frozen_manifest_name": None,
+                "selected_document_ids": doc_ids,
+                "documents_selected": len(documents),
+                "qa_entries_selected": len(qa_entries),
+                "limited": max_documents is not None or max_qa_entries is not None,
+            }
+            expected = dict(dataset_cfg.get("expected", {}) or {})
 
     chunk_cfg = dict(config.get("chunking", {}) or {})
     chunk_size = int(chunk_cfg.get("chunk_size", DEFAULT_CHUNK_SIZE))
@@ -204,7 +226,7 @@ def prepare_data(
     examples = build_retrieval_examples(
         qa_entries,
         chunks_by_doc,
-        include_unlabeled=dataset_name in BUNDLE_SPECS,
+        include_unlabeled=False,
     )
     if not examples:
         raise RuntimeError(f"No labeled {dataset_name} retrieval examples were built")
@@ -233,7 +255,7 @@ def prepare_data(
     return chunks, chunks_by_doc, examples, {
         "dataset_name": dataset_name,
         "dataset": dataset_metadata,
-        "subset_manifest": str(manifest_path),
+        "subset_manifest": str(manifest_path) if manifest_path is not None else None,
         "selection": selection_metadata,
         "expected_population": expected,
         "actual_population": actual,
@@ -374,6 +396,15 @@ def _write_run_artifacts(
         average_chunk_tokens=average_tokens,
         retriever_name=retriever_name,
     )
+    artifact_contract = {
+        "labeling_version": LABELING_VERSION,
+        "chunk_size": int(context["preparation"]["chunk_size"]),
+        "chunk_overlap": int(context["preparation"]["chunk_overlap"]),
+        "n_chunks": len(chunks),
+        "eligible_queries_by_view": summary["eligible_queries_by_view"],
+    }
+    summary.update(artifact_contract)
+    leaderboard.update(artifact_contract)
     summary_path = write_json(run_dir / "metrics_summary.json", summary)
     per_query_path = write_jsonl(run_dir / "metrics_per_query.jsonl", per_query)
     leaderboard_path = write_json(run_dir / "leaderboard_row.json", leaderboard)

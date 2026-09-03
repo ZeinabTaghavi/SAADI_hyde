@@ -18,6 +18,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUTPUT_ROOT="${OUTPUT_ROOT:-${SCRIPT_DIR}/hyde_evaluations}"
 WORK_ROOT="${WORK_ROOT:-${SCRIPT_DIR}/hyde_runs}"
 TABLE_ROOT="${TABLE_ROOT:-${SCRIPT_DIR}/hyde_evaluations_Tables}"
+GENERATE_TABLE="${GENERATE_TABLE:-1}"
 DATASETS_CSV="${DATASETS_CSV:-loogle,novelhopqa}"
 RETRIEVERS_CSV="${RETRIEVERS_CSV:-bm25,contriever,bge_m3,qwen,jina}"
 
@@ -65,7 +66,7 @@ if [[ "${INSTALL_DEPS}" == "1" ]]; then
   hyde_install_dependencies "${SCRIPT_DIR}"
 fi
 
-DEFAULT_BOOKS_ROOT="${SCRIPT_DIR}/../../novelhopqa/book-corpus-root"
+DEFAULT_BOOKS_ROOT="${SCRIPT_DIR}/data/novelhopqa/book-corpus-root"
 if [[ -z "${NOVELHOPQA_BOOKS_ROOT:-}" && -f "${DEFAULT_BOOKS_ROOT}/bookmeta.json" ]]; then
   export NOVELHOPQA_BOOKS_ROOT="${DEFAULT_BOOKS_ROOT}"
 fi
@@ -271,11 +272,14 @@ for dataset in "${DATASETS[@]}"; do
   done
 done
 
-echo
-echo "Generating the main-style HyDE retrieval table"
-run_command \
-  "${PYTHON_BIN}" "${SCRIPT_DIR}/generate_hyde_retriever_table.py" \
-  --input-root "${OUTPUT_ROOT}" \
-  --output-dir "${TABLE_ROOT}"
+if [[ "${GENERATE_TABLE}" == "1" ]]; then
+  echo
+  echo "Generating the main-style HyDE retrieval table"
+  run_command \
+    "${PYTHON_BIN}" "${SCRIPT_DIR}/generate_hyde_retriever_table.py" \
+    --input-root "${OUTPUT_ROOT}" \
+    --output-dir "${TABLE_ROOT}" \
+    --strict
+fi
 
 echo "HyDE retrieval matrix finished."

@@ -1,4 +1,4 @@
-"""Map LooGLE evidence spans to SAADI-compatible gold and silver labels."""
+"""Map evidence spans to the canonical SAADI gold and silver labels."""
 
 from __future__ import annotations
 
@@ -8,6 +8,9 @@ from collections import defaultdict
 from typing import Any, Iterable
 
 from .types import ChunkRecord, RetrievalExample
+
+
+LABELING_VERSION = "saadi_support_targets_v2"
 
 
 def _tokens(text: str) -> list[str]:
@@ -105,44 +108,6 @@ def _suffix_prefix_overlap(text: list[str], prefix_source: list[str]) -> int:
     return matched
 
 
-def _build_window_index(
-    tokenized: list[tuple[ChunkRecord, list[str]]],
-) -> tuple[str, list[tuple[ChunkRecord, int, int]]]:
-    parts: list[str] = []
-    ranges: list[tuple[ChunkRecord, int, int]] = []
-    offset = 0
-    for chunk, tokens in tokenized:
-        text = " ".join(tokens)
-        start = offset
-        end = start + len(text)
-        parts.append(text)
-        ranges.append((chunk, start, end))
-        offset = end + 1
-    return " ".join(parts), ranges
-
-
-def _indexed_window_matches(
-    span_tokens: list[str],
-    window_index: tuple[str, list[tuple[ChunkRecord, int, int]]],
-) -> list[str]:
-    span_text = " ".join(span_tokens)
-    if not span_text:
-        return []
-    document_text, ranges = window_index
-    occurrence_ranges: list[tuple[int, int]] = []
-    start = document_text.find(span_text)
-    while start >= 0:
-        occurrence_ranges.append((start, start + len(span_text)))
-        start = document_text.find(span_text, start + 1)
-    if not occurrence_ranges:
-        return []
-    return _dedupe(
-        chunk.chunk_id
-        for chunk, chunk_start, chunk_end in ranges
-        if any(chunk_start < span_end and span_start < chunk_end for span_start, span_end in occurrence_ranges)
-    )
-
-
 def _classify(chunk_tokens: list[str], span_tokens: list[str]) -> str:
     if _contains(chunk_tokens, span_tokens) or _ordered_subsequence(chunk_tokens, span_tokens):
         return "full"
@@ -159,16 +124,39 @@ def _dedupe(values: Iterable[str]) -> list[str]:
     return output
 
 
-def _spans(entry: dict[str, Any]) -> list[str]:
+def _text_values(value: Any) -> list[str]:
+    if isinstance(value, str):
+        text = value.strip()
+        return [text] if text else []
+    if not isinstance(value, list):
+        return []
+    output: list[str] = []
+    for item in value:
+        if isinstance(item, str) and item.strip():
+            output.append(item.strip())
+        elif isinstance(item, dict):
+            text = item.get("text")
+            if isinstance(text, str) and text.strip():
+                output.append(text.strip())
+    return output
+
+
+def _spans(entry: dict[str, Any]) -> tuple[list[str], str]:
     raw = entry.get("retrieval_spans")
-    if isinstance(raw, str):
-        return [raw] if raw.strip() else []
-    if isinstance(raw, list):
-        return [str(value).strip() for value in raw if str(value).strip()]
-    answers = entry.get("answers")
-    if isinstance(answers, str):
-        return [answers] if answers.strip() else []
-    return [str(value).strip() for value in answers or [] if str(value).strip()]
+    spans = _text_values(raw)
+    mode = str(entry.get("retrieval_span_mode") or "text").strip().lower()
+    mode = {
+        "default": "text",
+        "legacy": "text",
+        "evidence": "text",
+        "window_text": "window",
+        "gold_window": "window",
+    }.get(mode, mode)
+    if spans:
+        return spans, mode
+    # Canonical SAADI falls back to answer text when retrieval spans are absent
+    # or explicitly empty, and answer fallback always uses ordinary text mode.
+    return _text_values(entry.get("answers")), "text"
 
 
 def _targets(
@@ -176,23 +164,22 @@ def _targets(
     chunks: list[ChunkRecord],
     *,
     tokenized: list[tuple[ChunkRecord, list[str]]] | None = None,
-    window_index: tuple[str, list[tuple[ChunkRecord, int, int]]] | None = None,
 ) -> tuple[list[str], list[str], list[list[str]]]:
     if tokenized is None:
         tokenized = [(chunk, _tokens(chunk.raw_text)) for chunk in chunks]
-    span_mode = str(entry.get("retrieval_span_mode") or "text").strip().lower()
+    spans, span_mode = _spans(entry)
+    if span_mode not in {"text", "window"}:
+        raise ValueError(f"Unsupported retrieval_span_mode={span_mode!r}")
     gold: list[str] = []
     silver: list[str] = []
     groups: list[list[str]] = []
     seen_groups: set[tuple[str, ...]] = set()
-    for span in _spans(entry):
+    for span in spans:
         span_tokens = _tokens(span)
         if span_mode == "window":
-            matches = _indexed_window_matches(span_tokens, window_index) if window_index is not None else []
-            if not matches:
-                matches = _dedupe(
-                    chunk.chunk_id for chunk, chunk_tokens in tokenized if _window_overlaps(chunk_tokens, span_tokens)
-                )
+            matches = _dedupe(
+                chunk.chunk_id for chunk, chunk_tokens in tokenized if _window_overlaps(chunk_tokens, span_tokens)
+            )
             if len(matches) == 1:
                 gold.extend(matches)
             elif len(matches) > 1:
@@ -202,8 +189,6 @@ def _targets(
                     seen_groups.add(group_key)
                 silver.extend(matches)
             continue
-        if span_mode != "text":
-            raise ValueError(f"Unsupported retrieval_span_mode={span_mode!r}")
         full = [chunk.chunk_id for chunk, chunk_tokens in tokenized if _classify(chunk_tokens, span_tokens) == "full"]
         if full:
             gold.extend(full)
@@ -235,12 +220,11 @@ def build_retrieval_examples(
         if not chunks:
             continue
         tokenized = [(chunk, _tokens(chunk.raw_text)) for chunk in chunks]
-        window_index = _build_window_index(tokenized)
         for fallback_index, entry in entries:
             question = str(entry.get("question", "")).strip()
             if not question:
                 continue
-            gold, silver, groups = _targets(entry, chunks, tokenized=tokenized, window_index=window_index)
+            gold, silver, groups = _targets(entry, chunks, tokenized=tokenized)
             if not include_unlabeled and not (gold or silver):
                 continue
             examples.append(

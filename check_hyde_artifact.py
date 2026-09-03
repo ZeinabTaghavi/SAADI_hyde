@@ -15,6 +15,7 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 from hyde.loogle.chunking import DEFAULT_CHUNK_SIZE  # noqa: E402
+from hyde.loogle.labeling import LABELING_VERSION  # noqa: E402
 from hyde.loogle.runner import _generation_settings, load_config  # noqa: E402
 from hyde.loogle.retrievers import normalize_retriever_name, retriever_spec  # noqa: E402
 
@@ -75,6 +76,11 @@ def validate_artifact(
         errors.append(f"top_k={context.get('top_k')!r}, expected {top_k}")
     if str(context.get("retrieval_scope") or "") != "per_document":
         errors.append(f"retrieval_scope={context.get('retrieval_scope')!r}, expected 'per_document'")
+    if leaderboard.get("labeling_version") != LABELING_VERSION:
+        errors.append(
+            f"labeling_version={leaderboard.get('labeling_version')!r}, "
+            f"expected {LABELING_VERSION!r}"
+        )
 
     expected_generation = _generation_settings(config)
     if context.get("generation") != expected_generation:
@@ -106,6 +112,13 @@ def validate_artifact(
             errors.append(
                 f"population {field}={actual_population.get(field)!r}, "
                 f"expected {expected_population.get(field)!r}"
+            )
+    configured_population = dict((config.get("dataset") or {}).get("expected", {}) or {})
+    for field in ("documents", "chunks", "retrieval_examples"):
+        if field in configured_population and actual_population.get(field) != configured_population[field]:
+            errors.append(
+                f"population {field}={actual_population.get(field)!r}, "
+                f"current config expects {configured_population[field]!r}"
             )
     expected_queries = actual_population.get("retrieval_examples")
     if expected_queries is not None and leaderboard.get("n_queries") != expected_queries:

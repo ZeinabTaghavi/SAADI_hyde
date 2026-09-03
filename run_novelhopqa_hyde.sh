@@ -9,7 +9,7 @@ hyde_require_dependencies "${SCRIPT_DIR}"
 hyde_prepare_cache
 hyde_require_visible_gpus
 
-DEFAULT_BOOKS_ROOT="${SCRIPT_DIR}/../../novelhopqa/book-corpus-root"
+DEFAULT_BOOKS_ROOT="${SCRIPT_DIR}/data/novelhopqa/book-corpus-root"
 if [[ -z "${NOVELHOPQA_BOOKS_ROOT:-}" && -f "${DEFAULT_BOOKS_ROOT}/bookmeta.json" ]]; then
   export NOVELHOPQA_BOOKS_ROOT="${DEFAULT_BOOKS_ROOT}"
 fi
