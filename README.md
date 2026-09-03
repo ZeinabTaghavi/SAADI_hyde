@@ -250,13 +250,18 @@ final JSONL, CSV, Markdown, LaTeX, and text tables are written under
 `hyde_evaluations_Tables/`.
 
 To replace every legacy artifact and build the final validated table in one
-command, set the NovelHopQA book path and run:
+command, run:
 
 ```bash
-export NOVELHOPQA_BOOKS_ROOT=/path/to/novelhopqa/book-corpus-root
-export CUDA_VISIBLE_DEVICES=0,1,2,3
 bash rerun_saadi_consistent_hyde.sh
 ```
+
+This all-in-one launcher uses the same deployment defaults as the other SAADI
+methods: `/mnt/cache/taghavi` for the Hugging Face cache,
+`/home/iataghav/data/passing_meta_tag/novelhopqa/book-corpus-root` for the
+NovelHopQA books, and GPUs `0,1,2,3`. Set `SAADI_HF_CACHE_ROOT`,
+`NOVELHOPQA_BOOKS_ROOT`, or `CUDA_VISIBLE_DEVICES` before launching to override
+any of them.
 
 Compatible hypothetical-document and document-embedding caches are reused.
 Changed chunk signatures are re-embedded automatically.

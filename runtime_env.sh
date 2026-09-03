@@ -65,10 +65,10 @@ hyde_configure_runtime() {
   # Keep the default cache inside the copied folder. Large/shared server caches
   # can still be selected explicitly with SAADI_HF_CACHE_ROOT.
   export SAADI_HF_CACHE_ROOT="${cache_root}"
-  export HF_HOME="${cache_root}"
-  export HF_HUB_CACHE="${cache_root}/hub"
-  export HF_DATASETS_CACHE="${cache_root}/datasets"
-  export TRANSFORMERS_CACHE="${cache_root}/transformers"
+  export HF_HOME="${HF_HOME:-${cache_root}}"
+  export HF_HUB_CACHE="${HF_HUB_CACHE:-${HF_HOME}/hub}"
+  export HF_DATASETS_CACHE="${HF_DATASETS_CACHE:-${HF_HOME}/datasets}"
+  export TRANSFORMERS_CACHE="${TRANSFORMERS_CACHE:-${HF_HOME}/transformers}"
 
   # Qwen generation already uses device_map=auto in the YAML. Use the same
   # default for the 8B Qwen embedding retriever so it may use all visible GPUs.
