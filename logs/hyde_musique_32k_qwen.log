@@ -1,200 +1,193 @@
-2026-08-06 14:45:26,241 | INFO | hyde.loogle.runner | Prepared frozen musique_32k population documents=45 chunks=3100 labeled_queries=900
-2026-08-06 14:45:26,294 | INFO | hyde.loogle.runner | HyDE generation progress queries=1/900 cache_hits=1
-2026-08-06 14:45:26,294 | INFO | hyde.loogle.runner | HyDE generation progress queries=10/900 cache_hits=10
-2026-08-06 14:45:26,294 | INFO | hyde.loogle.runner | HyDE generation progress queries=20/900 cache_hits=20
-2026-08-06 14:45:26,294 | INFO | hyde.loogle.runner | HyDE generation progress queries=30/900 cache_hits=30
-2026-08-06 14:45:26,294 | INFO | hyde.loogle.runner | HyDE generation progress queries=40/900 cache_hits=40
-2026-08-06 14:45:26,294 | INFO | hyde.loogle.runner | HyDE generation progress queries=50/900 cache_hits=50
-2026-08-06 14:45:26,294 | INFO | hyde.loogle.runner | HyDE generation progress queries=60/900 cache_hits=60
-2026-08-06 14:45:26,294 | INFO | hyde.loogle.runner | HyDE generation progress queries=70/900 cache_hits=70
-2026-08-06 14:45:26,294 | INFO | hyde.loogle.runner | HyDE generation progress queries=80/900 cache_hits=80
-2026-08-06 14:45:26,294 | INFO | hyde.loogle.runner | HyDE generation progress queries=90/900 cache_hits=90
-2026-08-06 14:45:26,294 | INFO | hyde.loogle.runner | HyDE generation progress queries=100/900 cache_hits=100
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=110/900 cache_hits=110
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=120/900 cache_hits=120
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=130/900 cache_hits=130
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=140/900 cache_hits=140
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=150/900 cache_hits=150
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=160/900 cache_hits=160
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=170/900 cache_hits=170
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=180/900 cache_hits=180
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=190/900 cache_hits=190
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=200/900 cache_hits=200
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=210/900 cache_hits=210
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=220/900 cache_hits=220
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=230/900 cache_hits=230
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=240/900 cache_hits=240
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=250/900 cache_hits=250
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=260/900 cache_hits=260
-2026-08-06 14:45:26,295 | INFO | hyde.loogle.runner | HyDE generation progress queries=270/900 cache_hits=270
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=280/900 cache_hits=280
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=290/900 cache_hits=290
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=300/900 cache_hits=300
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=310/900 cache_hits=310
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=320/900 cache_hits=320
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=330/900 cache_hits=330
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=340/900 cache_hits=340
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=350/900 cache_hits=350
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=360/900 cache_hits=360
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=370/900 cache_hits=370
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=380/900 cache_hits=380
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=390/900 cache_hits=390
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=400/900 cache_hits=400
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=410/900 cache_hits=410
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=420/900 cache_hits=420
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=430/900 cache_hits=430
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=440/900 cache_hits=440
-2026-08-06 14:45:26,296 | INFO | hyde.loogle.runner | HyDE generation progress queries=450/900 cache_hits=450
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=460/900 cache_hits=460
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=470/900 cache_hits=470
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=480/900 cache_hits=480
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=490/900 cache_hits=490
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=500/900 cache_hits=500
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=510/900 cache_hits=510
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=520/900 cache_hits=520
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=530/900 cache_hits=530
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=540/900 cache_hits=540
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=550/900 cache_hits=550
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=560/900 cache_hits=560
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=570/900 cache_hits=570
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=580/900 cache_hits=580
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=590/900 cache_hits=590
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=600/900 cache_hits=600
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=610/900 cache_hits=610
-2026-08-06 14:45:26,297 | INFO | hyde.loogle.runner | HyDE generation progress queries=620/900 cache_hits=620
-2026-08-06 14:45:26,298 | INFO | hyde.loogle.runner | HyDE generation progress queries=630/900 cache_hits=630
-2026-08-06 14:45:26,298 | INFO | hyde.loogle.runner | HyDE generation progress queries=640/900 cache_hits=640
-2026-08-06 14:45:26,298 | INFO | hyde.loogle.runner | HyDE generation progress queries=650/900 cache_hits=650
-2026-08-06 14:45:26,298 | INFO | hyde.loogle.runner | HyDE generation progress queries=660/900 cache_hits=660
-2026-08-06 14:45:26,298 | INFO | hyde.loogle.runner | HyDE generation progress queries=670/900 cache_hits=670
-2026-08-06 14:45:26,298 | INFO | hyde.loogle.runner | HyDE generation progress queries=680/900 cache_hits=680
-2026-08-06 14:45:26,298 | INFO | hyde.loogle.runner | HyDE generation progress queries=690/900 cache_hits=690
-2026-08-06 14:45:26,298 | INFO | hyde.loogle.runner | HyDE generation progress queries=700/900 cache_hits=700
-2026-08-06 14:45:26,298 | INFO | hyde.loogle.runner | HyDE generation progress queries=710/900 cache_hits=710
-2026-08-06 14:45:26,298 | INFO | hyde.loogle.runner | HyDE generation progress queries=720/900 cache_hits=720
-2026-08-06 14:45:26,298 | INFO | hyde.loogle.runner | HyDE generation progress queries=730/900 cache_hits=730
-2026-08-06 14:45:26,298 | INFO | hyde.loogle.runner | HyDE generation progress queries=740/900 cache_hits=740
-2026-08-06 14:45:26,298 | INFO | hyde.loogle.runner | HyDE generation progress queries=750/900 cache_hits=750
-2026-08-06 14:45:26,298 | INFO | hyde.loogle.runner | HyDE generation progress queries=760/900 cache_hits=760
-2026-08-06 14:45:26,298 | INFO | hyde.loogle.runner | HyDE generation progress queries=770/900 cache_hits=770
-2026-08-06 14:45:26,298 | INFO | hyde.loogle.runner | HyDE generation progress queries=780/900 cache_hits=780
-2026-08-06 14:45:26,299 | INFO | hyde.loogle.runner | HyDE generation progress queries=790/900 cache_hits=790
-2026-08-06 14:45:26,299 | INFO | hyde.loogle.runner | HyDE generation progress queries=800/900 cache_hits=800
-2026-08-06 14:45:26,299 | INFO | hyde.loogle.runner | HyDE generation progress queries=810/900 cache_hits=810
-2026-08-06 14:45:26,299 | INFO | hyde.loogle.runner | HyDE generation progress queries=820/900 cache_hits=820
-2026-08-06 14:45:26,299 | INFO | hyde.loogle.runner | HyDE generation progress queries=830/900 cache_hits=830
-2026-08-06 14:45:26,299 | INFO | hyde.loogle.runner | HyDE generation progress queries=840/900 cache_hits=840
-2026-08-06 14:45:26,299 | INFO | hyde.loogle.runner | HyDE generation progress queries=850/900 cache_hits=850
-2026-08-06 14:45:26,299 | INFO | hyde.loogle.runner | HyDE generation progress queries=860/900 cache_hits=860
-2026-08-06 14:45:26,299 | INFO | hyde.loogle.runner | HyDE generation progress queries=870/900 cache_hits=870
-2026-08-06 14:45:26,299 | INFO | hyde.loogle.runner | HyDE generation progress queries=880/900 cache_hits=880
-2026-08-06 14:45:26,299 | INFO | hyde.loogle.runner | HyDE generation progress queries=890/900 cache_hits=890
-2026-08-06 14:45:26,299 | INFO | hyde.loogle.runner | HyDE generation progress queries=900/900 cache_hits=900
-2026-08-06 14:45:30,098 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/Qwen/Qwen3-Embedding-8B/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-2026-08-06 14:45:30,098 | WARNING | huggingface_hub.utils._http | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-2026-08-06 14:45:30,105 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen3-Embedding-8B/1d8ad4ca9b3dd8059ad90a75d4983776a23d44af/config.json "HTTP/1.1 200 OK"
-2026-08-06 14:45:30,218 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/Qwen/Qwen3-Embedding-8B/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
-2026-08-06 14:45:30,224 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen3-Embedding-8B/1d8ad4ca9b3dd8059ad90a75d4983776a23d44af/tokenizer_config.json "HTTP/1.1 200 OK"
-2026-08-06 14:45:30,339 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/Qwen/Qwen3-Embedding-8B/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
-2026-08-06 14:45:30,452 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/Qwen/Qwen3-Embedding-8B/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-2026-08-06 14:45:31,126 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/Qwen/Qwen3-Embedding-8B "HTTP/1.1 200 OK"
-2026-08-06 14:45:31,234 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/Qwen/Qwen3-Embedding-8B/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
-2026-08-06 14:45:31,244 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen3-Embedding-8B/1d8ad4ca9b3dd8059ad90a75d4983776a23d44af/config.json "HTTP/1.1 200 OK"
-Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:   4%|▎         | 14/398 [00:00<00:02, 139.95it/s]Loading weights:  10%|▉         | 38/398 [00:00<00:01, 197.49it/s]Loading weights:  17%|█▋        | 69/398 [00:00<00:01, 248.25it/s]Loading weights:  26%|██▌       | 102/398 [00:00<00:01, 275.62it/s]Loading weights:  33%|███▎      | 130/398 [00:00<00:01, 265.26it/s]Loading weights:  40%|███▉      | 158/398 [00:00<00:00, 265.89it/s]Loading weights:  48%|████▊     | 191/398 [00:00<00:00, 283.05it/s]Loading weights:  55%|█████▌    | 220/398 [00:00<00:00, 282.80it/s]Loading weights:  63%|██████▎   | 249/398 [00:00<00:00, 280.87it/s]Loading weights:  70%|███████   | 279/398 [00:01<00:00, 283.64it/s]Loading weights:  78%|███████▊  | 311/398 [00:01<00:00, 292.03it/s]Loading weights:  86%|████████▌ | 341/398 [00:01<00:00, 292.03it/s]Loading weights:  93%|█████████▎| 371/398 [00:01<00:00, 289.38it/s]Loading weights: 100%|██████████| 398/398 [00:01<00:00, 277.40it/s]
-2026-08-06 14:50:05,434 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=1/900
-2026-08-06 14:50:08,330 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=10/900
-2026-08-06 14:50:11,636 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=20/900
-2026-08-06 14:50:14,298 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=30/900
-2026-08-06 14:50:18,124 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=40/900
-2026-08-06 14:50:21,131 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=50/900
-2026-08-06 14:50:24,007 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=60/900
-2026-08-06 14:50:27,111 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=70/900
-2026-08-06 14:50:30,573 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=80/900
-2026-08-06 14:50:34,104 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=90/900
-2026-08-06 14:50:37,146 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=100/900
-2026-08-06 14:50:39,673 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=110/900
-2026-08-06 14:50:42,462 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=120/900
-2026-08-06 14:50:45,407 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=130/900
-2026-08-06 14:50:48,846 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=140/900
-2026-08-06 14:50:52,067 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=150/900
-2026-08-06 14:50:55,588 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=160/900
-2026-08-06 14:50:58,137 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=170/900
-2026-08-06 14:51:01,049 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=180/900
-2026-08-06 14:51:04,456 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=190/900
-2026-08-06 14:51:08,549 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=200/900
-2026-08-06 14:51:11,511 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=210/900
-2026-08-06 14:51:14,513 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=220/900
-2026-08-06 14:51:16,890 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=230/900
-2026-08-06 14:51:20,218 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=240/900
-2026-08-06 14:51:23,248 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=250/900
-2026-08-06 14:51:25,808 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=260/900
-2026-08-06 14:51:28,879 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=270/900
-2026-08-06 14:51:31,716 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=280/900
-2026-08-06 14:51:34,934 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=290/900
-2026-08-06 14:51:38,764 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=300/900
-2026-08-06 14:51:41,226 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=310/900
-2026-08-06 14:51:43,897 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=320/900
-2026-08-06 14:51:47,310 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=330/900
-2026-08-06 14:51:50,781 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=340/900
-2026-08-06 14:51:54,475 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=350/900
-2026-08-06 14:51:56,831 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=360/900
-2026-08-06 14:52:00,403 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=370/900
-2026-08-06 14:52:03,348 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=380/900
-2026-08-06 14:52:05,520 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=390/900
-2026-08-06 14:52:08,574 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=400/900
-2026-08-06 14:52:11,459 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=410/900
-2026-08-06 14:52:14,045 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=420/900
-2026-08-06 14:52:17,752 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=430/900
-2026-08-06 14:52:20,623 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=440/900
-2026-08-06 14:52:23,749 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=450/900
-2026-08-06 14:52:26,678 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=460/900
-2026-08-06 14:52:30,167 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=470/900
-2026-08-06 14:52:33,840 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=480/900
-2026-08-06 14:52:37,300 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=490/900
-2026-08-06 14:52:40,303 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=500/900
-2026-08-06 14:52:43,898 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=510/900
-2026-08-06 14:52:47,128 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=520/900
-2026-08-06 14:52:49,670 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=530/900
-2026-08-06 14:52:52,143 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=540/900
-2026-08-06 14:52:55,940 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=550/900
-2026-08-06 14:52:59,587 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=560/900
-2026-08-06 14:53:02,618 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=570/900
-2026-08-06 14:53:06,165 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=580/900
-2026-08-06 14:53:09,131 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=590/900
-2026-08-06 14:53:12,636 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=600/900
-2026-08-06 14:53:14,936 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=610/900
-2026-08-06 14:53:18,442 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=620/900
-2026-08-06 14:53:21,427 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=630/900
-2026-08-06 14:53:24,437 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=640/900
-2026-08-06 14:53:27,243 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=650/900
-2026-08-06 14:53:30,198 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=660/900
-2026-08-06 14:53:32,560 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=670/900
-2026-08-06 14:53:35,929 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=680/900
-2026-08-06 14:53:38,695 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=690/900
-2026-08-06 14:53:41,891 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=700/900
-2026-08-06 14:53:44,940 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=710/900
-2026-08-06 14:53:48,805 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=720/900
-2026-08-06 14:53:51,561 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=730/900
-2026-08-06 14:53:54,824 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=740/900
-2026-08-06 14:53:57,513 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=750/900
-2026-08-06 14:54:00,856 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=760/900
-2026-08-06 14:54:04,367 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=770/900
-2026-08-06 14:54:07,758 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=780/900
-2026-08-06 14:54:10,665 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=790/900
-2026-08-06 14:54:13,587 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=800/900
-2026-08-06 14:54:16,758 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=810/900
-2026-08-06 14:54:20,589 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=820/900
-2026-08-06 14:54:23,483 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=830/900
-2026-08-06 14:54:26,680 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=840/900
-2026-08-06 14:54:30,082 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=850/900
-2026-08-06 14:54:33,130 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=860/900
-2026-08-06 14:54:36,095 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=870/900
-2026-08-06 14:54:39,827 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=880/900
-2026-08-06 14:54:42,910 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=890/900
-2026-08-06 14:54:46,220 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=900/900
-2026-08-06 14:54:46,847 | INFO | hyde.loogle.runner | Wrote HyDE evaluation artifacts: /home/iataghav/SAADI_hyde/hyde_evaluations/musique_32k/hyde/qwen/top_5/musique_32k_retrieval_ablation_hyde
-2026-08-06 14:54:47,649 | INFO | hyde.loogle.runner | Wrote HyDE evaluation artifacts: /home/iataghav/SAADI_hyde/hyde_evaluations/musique_32k/hyde/qwen/top_10/musique_32k_retrieval_ablation_hyde
+2026-08-26 15:34:18,029 | INFO | hyde.loogle.runner | Prepared frozen musique_32k population documents=45 chunks=17102 labeled_queries=900
+2026-08-26 15:34:18,070 | INFO | hyde.loogle.runner | HyDE generation progress queries=1/900 cache_hits=1
+2026-08-26 15:34:18,070 | INFO | hyde.loogle.runner | HyDE generation progress queries=10/900 cache_hits=10
+2026-08-26 15:34:18,070 | INFO | hyde.loogle.runner | HyDE generation progress queries=20/900 cache_hits=20
+2026-08-26 15:34:18,071 | INFO | hyde.loogle.runner | HyDE generation progress queries=30/900 cache_hits=30
+2026-08-26 15:34:18,071 | INFO | hyde.loogle.runner | HyDE generation progress queries=40/900 cache_hits=40
+2026-08-26 15:34:18,071 | INFO | hyde.loogle.runner | HyDE generation progress queries=50/900 cache_hits=50
+2026-08-26 15:34:18,071 | INFO | hyde.loogle.runner | HyDE generation progress queries=60/900 cache_hits=60
+2026-08-26 15:34:18,071 | INFO | hyde.loogle.runner | HyDE generation progress queries=70/900 cache_hits=70
+2026-08-26 15:34:18,071 | INFO | hyde.loogle.runner | HyDE generation progress queries=80/900 cache_hits=80
+2026-08-26 15:34:18,071 | INFO | hyde.loogle.runner | HyDE generation progress queries=90/900 cache_hits=90
+2026-08-26 15:34:18,071 | INFO | hyde.loogle.runner | HyDE generation progress queries=100/900 cache_hits=100
+2026-08-26 15:34:18,071 | INFO | hyde.loogle.runner | HyDE generation progress queries=110/900 cache_hits=110
+2026-08-26 15:34:18,071 | INFO | hyde.loogle.runner | HyDE generation progress queries=120/900 cache_hits=120
+2026-08-26 15:34:18,071 | INFO | hyde.loogle.runner | HyDE generation progress queries=130/900 cache_hits=130
+2026-08-26 15:34:18,071 | INFO | hyde.loogle.runner | HyDE generation progress queries=140/900 cache_hits=140
+2026-08-26 15:34:18,071 | INFO | hyde.loogle.runner | HyDE generation progress queries=150/900 cache_hits=150
+2026-08-26 15:34:18,071 | INFO | hyde.loogle.runner | HyDE generation progress queries=160/900 cache_hits=160
+2026-08-26 15:34:18,071 | INFO | hyde.loogle.runner | HyDE generation progress queries=170/900 cache_hits=170
+2026-08-26 15:34:18,072 | INFO | hyde.loogle.runner | HyDE generation progress queries=180/900 cache_hits=180
+2026-08-26 15:34:18,072 | INFO | hyde.loogle.runner | HyDE generation progress queries=190/900 cache_hits=190
+2026-08-26 15:34:18,072 | INFO | hyde.loogle.runner | HyDE generation progress queries=200/900 cache_hits=200
+2026-08-26 15:34:18,072 | INFO | hyde.loogle.runner | HyDE generation progress queries=210/900 cache_hits=210
+2026-08-26 15:34:18,072 | INFO | hyde.loogle.runner | HyDE generation progress queries=220/900 cache_hits=220
+2026-08-26 15:34:18,072 | INFO | hyde.loogle.runner | HyDE generation progress queries=230/900 cache_hits=230
+2026-08-26 15:34:18,072 | INFO | hyde.loogle.runner | HyDE generation progress queries=240/900 cache_hits=240
+2026-08-26 15:34:18,072 | INFO | hyde.loogle.runner | HyDE generation progress queries=250/900 cache_hits=250
+2026-08-26 15:34:18,072 | INFO | hyde.loogle.runner | HyDE generation progress queries=260/900 cache_hits=260
+2026-08-26 15:34:18,072 | INFO | hyde.loogle.runner | HyDE generation progress queries=270/900 cache_hits=270
+2026-08-26 15:34:18,072 | INFO | hyde.loogle.runner | HyDE generation progress queries=280/900 cache_hits=280
+2026-08-26 15:34:18,072 | INFO | hyde.loogle.runner | HyDE generation progress queries=290/900 cache_hits=290
+2026-08-26 15:34:18,072 | INFO | hyde.loogle.runner | HyDE generation progress queries=300/900 cache_hits=300
+2026-08-26 15:34:18,072 | INFO | hyde.loogle.runner | HyDE generation progress queries=310/900 cache_hits=310
+2026-08-26 15:34:18,072 | INFO | hyde.loogle.runner | HyDE generation progress queries=320/900 cache_hits=320
+2026-08-26 15:34:18,072 | INFO | hyde.loogle.runner | HyDE generation progress queries=330/900 cache_hits=330
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=340/900 cache_hits=340
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=350/900 cache_hits=350
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=360/900 cache_hits=360
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=370/900 cache_hits=370
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=380/900 cache_hits=380
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=390/900 cache_hits=390
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=400/900 cache_hits=400
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=410/900 cache_hits=410
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=420/900 cache_hits=420
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=430/900 cache_hits=430
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=440/900 cache_hits=440
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=450/900 cache_hits=450
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=460/900 cache_hits=460
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=470/900 cache_hits=470
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=480/900 cache_hits=480
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=490/900 cache_hits=490
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=500/900 cache_hits=500
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=510/900 cache_hits=510
+2026-08-26 15:34:18,073 | INFO | hyde.loogle.runner | HyDE generation progress queries=520/900 cache_hits=520
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=530/900 cache_hits=530
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=540/900 cache_hits=540
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=550/900 cache_hits=550
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=560/900 cache_hits=560
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=570/900 cache_hits=570
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=580/900 cache_hits=580
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=590/900 cache_hits=590
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=600/900 cache_hits=600
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=610/900 cache_hits=610
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=620/900 cache_hits=620
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=630/900 cache_hits=630
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=640/900 cache_hits=640
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=650/900 cache_hits=650
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=660/900 cache_hits=660
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=670/900 cache_hits=670
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=680/900 cache_hits=680
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=690/900 cache_hits=690
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=700/900 cache_hits=700
+2026-08-26 15:34:18,074 | INFO | hyde.loogle.runner | HyDE generation progress queries=710/900 cache_hits=710
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=720/900 cache_hits=720
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=730/900 cache_hits=730
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=740/900 cache_hits=740
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=750/900 cache_hits=750
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=760/900 cache_hits=760
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=770/900 cache_hits=770
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=780/900 cache_hits=780
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=790/900 cache_hits=790
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=800/900 cache_hits=800
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=810/900 cache_hits=810
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=820/900 cache_hits=820
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=830/900 cache_hits=830
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=840/900 cache_hits=840
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=850/900 cache_hits=850
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=860/900 cache_hits=860
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=870/900 cache_hits=870
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=880/900 cache_hits=880
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=890/900 cache_hits=890
+2026-08-26 15:34:18,075 | INFO | hyde.loogle.runner | HyDE generation progress queries=900/900 cache_hits=900
+/home/iataghav/SAADI_hyde/.venv/lib/python3.12/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+Fetching 4 files:   0%|          | 0/4 [00:00<?, ?it/s]Fetching 4 files:  25%|██▌       | 1/4 [00:45<02:15, 45.07s/it]Fetching 4 files:  50%|█████     | 2/4 [03:11<03:11, 95.72s/it]Fetching 4 files:  75%|███████▌  | 3/4 [03:20<01:06, 66.73s/it]Fetching 4 files: 100%|██████████| 4/4 [03:27<00:00, 51.97s/it]Fetching 4 files: 100%|██████████| 4/4 [03:27<00:00, 51.97s/it]
+2026-08-26 15:37:52,699 | INFO | accelerate.utils.modeling | We will use 90% of the memory on device 0 for storing the model, and 10% for the buffer to avoid OOM. You can set `max_memory` in to a higher value to use more memory (at your own risk).
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:01,  2.25it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:00<00:01,  1.97it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:01<00:00,  1.81it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:01<00:00,  2.43it/s]
+2026-08-26 16:17:32,845 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=1/900
+2026-08-26 16:17:45,864 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=10/900
+2026-08-26 16:18:00,807 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=20/900
+2026-08-26 16:18:11,788 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=30/900
+2026-08-26 16:18:29,158 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=40/900
+2026-08-26 16:18:42,566 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=50/900
+2026-08-26 16:18:55,507 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=60/900
+2026-08-26 16:19:09,103 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=70/900
+2026-08-26 16:19:24,855 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=80/900
+2026-08-26 16:19:40,771 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=90/900
+2026-08-26 16:19:54,248 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=100/900
+2026-08-26 16:20:04,879 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=110/900
+2026-08-26 16:20:17,159 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=120/900
+2026-08-26 16:20:29,564 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=130/900
+2026-08-26 16:20:45,164 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=140/900
+2026-08-26 16:20:59,460 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=150/900
+2026-08-26 16:21:15,515 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=160/900
+2026-08-26 16:21:26,557 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=170/900
+2026-08-26 16:21:39,293 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=180/900
+2026-08-26 16:21:54,668 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=190/900
+2026-08-26 16:22:13,217 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=200/900
+2026-08-26 16:22:26,098 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=210/900
+2026-08-26 16:22:39,326 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=220/900
+2026-08-26 16:22:49,599 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=230/900
+2026-08-26 16:23:04,407 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=240/900
+2026-08-26 16:23:17,753 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=250/900
+2026-08-26 16:23:28,889 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=260/900
+2026-08-26 16:23:42,354 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=270/900
+2026-08-26 16:23:54,961 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=280/900
+2026-08-26 16:24:09,236 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=290/900
+2026-08-26 16:24:26,589 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=300/900
+2026-08-26 16:24:37,314 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=310/900
+2026-08-26 16:24:48,922 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=320/900
+2026-08-26 16:25:04,310 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=330/900
+2026-08-26 16:25:20,094 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=340/900
+2026-08-26 16:25:36,570 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=350/900
+2026-08-26 16:25:46,811 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=360/900
+2026-08-26 16:26:02,851 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=370/900
+2026-08-26 16:26:16,169 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=380/900
+2026-08-26 16:26:25,259 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=390/900
+2026-08-26 16:26:38,870 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=400/900
+2026-08-26 16:26:51,486 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=410/900
+2026-08-26 16:27:02,624 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=420/900
+2026-08-26 16:27:19,239 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=430/900
+2026-08-26 16:27:31,994 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=440/900
+2026-08-26 16:27:46,128 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=450/900
+2026-08-26 16:27:58,976 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=460/900
+2026-08-26 16:28:14,644 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=470/900
+2026-08-26 16:28:31,257 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=480/900
+2026-08-26 16:28:46,793 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=490/900
+2026-08-26 16:28:59,987 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=500/900
+2026-08-26 16:29:16,182 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=510/900
+2026-08-26 16:29:30,586 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=520/900
+2026-08-26 16:29:41,660 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=530/900
+2026-08-26 16:29:52,424 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=540/900
+2026-08-26 16:30:09,401 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=550/900
+2026-08-26 16:30:25,755 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=560/900
+2026-08-26 16:30:39,206 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=570/900
+2026-08-26 16:30:55,188 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=580/900
+2026-08-26 16:31:08,353 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=590/900
+2026-08-26 16:31:24,186 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=600/900
+2026-08-26 16:31:34,146 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=610/900
+2026-08-26 16:31:50,072 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=620/900
+2026-08-26 16:32:03,536 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=630/900
+2026-08-26 16:32:16,902 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=640/900
+2026-08-26 16:32:29,231 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=650/900
+2026-08-26 16:32:42,229 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=660/900
+2026-08-26 16:32:52,259 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=670/900
+2026-08-26 16:33:07,493 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=680/900
+2026-08-26 16:33:19,615 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=690/900
+2026-08-26 16:33:33,664 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=700/900
+2026-08-26 16:33:47,011 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=710/900
+2026-08-26 16:34:04,718 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=720/900
+2026-08-26 16:34:16,907 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=730/900
+2026-08-26 16:34:31,348 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=740/900
+2026-08-26 16:34:43,208 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=750/900
+2026-08-26 16:34:58,283 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=760/900
+2026-08-26 16:35:14,047 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=770/900
+2026-08-26 16:35:29,325 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=780/900
+2026-08-26 16:35:42,236 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=790/900
+2026-08-26 16:35:55,356 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=800/900
+2026-08-26 16:36:09,414 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=810/900
+2026-08-26 16:36:26,737 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=820/900
+2026-08-26 16:36:39,592 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=830/900
+2026-08-26 16:36:53,892 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=840/900
+2026-08-26 16:37:09,255 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=850/900
+2026-08-26 16:37:23,015 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=860/900
+2026-08-26 16:37:36,358 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=870/900
+2026-08-26 16:37:53,251 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=880/900
+2026-08-26 16:38:07,197 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=890/900
+2026-08-26 16:38:21,965 | INFO | hyde.loogle.runner | HyDE retrieval progress retriever=qwen queries=900/900
+2026-08-26 16:38:22,672 | INFO | hyde.loogle.runner | Wrote HyDE evaluation artifacts: /home/iataghav/SAADI_hyde/hyde_evaluations/musique_32k/hyde/qwen/top_5/musique_32k_retrieval_ablation_hyde
+2026-08-26 16:38:23,639 | INFO | hyde.loogle.runner | Wrote HyDE evaluation artifacts: /home/iataghav/SAADI_hyde/hyde_evaluations/musique_32k/hyde/qwen/top_10/musique_32k_retrieval_ablation_hyde
 {
   "output_dirs": [
     "/home/iataghav/SAADI_hyde/hyde_evaluations/musique_32k/hyde/qwen/top_5/musique_32k_retrieval_ablation_hyde",
